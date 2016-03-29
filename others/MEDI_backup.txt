@@ -1,0 +1,84 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MEDI inversion
+iMag = abs(img_cmb);
+Mask = mask_lbv;
+matrix_size = size(Mask);
+voxel_size = voxelSize;
+merit = 0;
+smv = 0;
+radius = 5;
+data_weighting = 1;
+gradient_weighting = 1;
+pad = 0;
+matrix_size0 = 0;
+Debug_Mode = 'NoDebug';
+cg_max_iter = 100;
+cg_tol = 0.01;
+max_iter = 5;
+tol_norm_ratio = 0.1;
+data_weighting_mode = data_weighting;
+gradient_weighting_mode = gradient_weighting;
+grad = @cgrad;
+div = @cdiv;
+B0_dir = [0,0,1]';
+tempn = ones(size(Mask)); %%%%%%%%%%%%%%% need update
+D=dipole_kernel(matrix_size, voxel_size, B0_dir);
+m = dataterm_mask(data_weighting_mode, tempn, Mask);
+RDF = lfs_lbv; %%%%%%%%%%%%%%%%%%%%%% need unit update
+b0 = m.*exp(1i*RDF);
+wG = gradient_mask(gradient_weighting_mode, iMag, Mask, grad, voxel_size);
+iter=0;
+x = zeros(matrix_size);
+res_norm_ratio = Inf;
+cost_data_history = zeros(1,max_iter);
+cost_reg_history = zeros(1,max_iter);
+e=0.000001; %a very small number to avoid /0
+badpoint = zeros(matrix_size);
+
+lambda = 1000;
+while (res_norm_ratio>tol_norm_ratio)&&(iter<max_iter)
+%while iter<max_iter
+tic
+    iter=iter+1;
+    Vr = 1./sqrt(abs(wG.*grad(real(x),voxel_size)).^2+e);
+    w = m.*exp(1i*ifftn(D.*fftn(x)));
+    reg = @(dx) div(wG.*(Vr.*(wG.*grad(real(dx),voxel_size))),voxel_size);
+    fidelity = @(dx)2*lambda*real(ifftn(D.*fftn(conj(w).*w.*real(ifftn(D.*fftn(dx))))));
+
+    A =  @(dx) reg(dx) + fidelity(dx);       
+    b = reg(x) + 2*lambda*real(ifftn(D.*fftn( conj(w).*conj(1i).*(w-b0))));
+
+
+
+    dx = real(cgsolve(A, -b, cg_tol, cg_max_iter, 0));
+    res_norm_ratio = norm(dx(:))/norm(x(:));
+    x = x + dx;
+
+    wres=m.*exp(1i*(real(ifftn(D.*fftn(x))))) - b0;
+
+    cost_data_history(iter) = norm(wres(:),2);
+    cost=abs(wG.*grad(x));
+    cost_reg_history(iter) = sum(cost(:));
+
+    
+    if merit
+        wres = wres - mean(wres(Mask(:)==1));
+        a = wres(Mask(:)==1);
+        factor = std(abs(a))*6;
+        wres = abs(wres)/factor;
+        wres(wres<1) = 1;
+        badpoint(wres>1)=1;
+        N_std(Mask==1) = N_std(Mask==1).*wres(Mask==1).^2;
+        tempn = N_std;
+        if (smv)
+                tempn = sqrt(SMV(tempn.^2, matrix_size, voxel_size, radius)+tempn.^2);
+        end
+        m = dataterm_mask(data_weighting_mode, tempn, Mask);
+        b0 = m.*exp(1i*RDF);
+    end
+    
+toc
+end
+
+nii = make_nii(x,voxelSize);
+save_nii(nii,['x' num2str(lambda) '.nii']);
