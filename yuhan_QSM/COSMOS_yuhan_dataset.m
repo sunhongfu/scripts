@@ -3,42 +3,29 @@ load param
 
 
 % left rotation
-cd right
+cd straight
 
-nii = load_nii('gre_fc_mag_e1.nii');
+nii = load_nii('gre_mag_e1.nii');
 mag(:,:,:,1) = double(nii.img);
-nii = load_nii('gre_fc_mag_e2.nii');
+nii = load_nii('gre_mag_e2.nii');
 mag(:,:,:,2) = double(nii.img);
-nii = load_nii('gre_fc_mag_e3.nii');
+nii = load_nii('gre_mag_e3.nii');
 mag(:,:,:,3) = double(nii.img);
-nii = load_nii('gre_fc_mag_e4.nii');
+nii = load_nii('gre_mag_e4.nii');
 mag(:,:,:,4) = double(nii.img);
-nii = load_nii('gre_fc_mag_e5.nii');
+nii = load_nii('gre_mag_e5.nii');
 mag(:,:,:,5) = double(nii.img);
 
-nii = load_nii('gre_fc_phase_e1.nii');
+nii = load_nii('gre_phase_e1.nii');
 phase(:,:,:,1) = double(nii.img);
-nii = load_nii('gre_fc_phase_e2.nii');
+nii = load_nii('gre_phase_e2.nii');
 phase(:,:,:,2) = double(nii.img);
-nii = load_nii('gre_fc_phase_e3.nii');
+nii = load_nii('gre_phase_e3.nii');
 phase(:,:,:,3) = double(nii.img);
-nii = load_nii('gre_fc_phase_e4.nii');
+nii = load_nii('gre_phase_e4.nii');
 phase(:,:,:,4) = double(nii.img);
-nii = load_nii('gre_fc_phase_e5.nii');
+nii = load_nii('gre_phase_e5.nii');
 phase(:,:,:,5) = double(nii.img);
-
-
-
-bet_thr = 0.4;
-% generate mask from magnitude of the 1th echo
-disp('--> extract brain volume and generate mask ...');
-setenv('bet_thr',num2str(bet_thr));
-[status,cmdout] = unix('rm BET*');
-unix('bet2 gre_fc_mag_e1.nii BET -f ${bet_thr} -m -w 4');
-unix('gunzip -f BET.nii.gz');
-unix('gunzip -f BET_mask.nii.gz');
-nii = load_nii('BET_mask.nii');
-mask = double(nii.img);
 
 imsize = size(mag);
 
@@ -57,6 +44,17 @@ for echo = 1:imsize(4)
 end
 
 
+% brain extraction
+bet_thr = 0.4;
+% generate mask from magnitude of the 1th echo
+disp('--> extract brain volume and generate mask ...');
+setenv('bet_thr',num2str(bet_thr));
+[status,cmdout] = unix('rm BET*');
+unix('bet2 src/mag1.nii BET -f ${bet_thr} -m -w 4');
+unix('gunzip -f BET.nii.gz');
+unix('gunzip -f BET_mask.nii.gz');
+nii = load_nii('BET_mask.nii');
+mask = double(nii.img);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % phase unwrapping
@@ -130,14 +128,11 @@ bash_command = sprintf(['for ph in src/phase[1-$echo_num].nii\n' ...
 
 unix(bash_command);
 
-%for echo = 1:imsize(4)
-%    nii = load_nii(['unph' num2str(echo) '.nii']);
-%    tmp = double(nii.img);
-%    unph(:,:,:,echo) = mask.*(tmp - round(mean(tmp(mask==1))/(2*pi))*2*pi);
-%end
-%
-%nii = make_nii(unph,voxel_size);
-%save_nii(nii,'unph.nii');
+for echo = 1:imsize(4)
+   nii = load_nii(['unph' num2str(echo) '.nii']);
+   tmp = double(nii.img);
+   unph(:,:,:,echo) = mask.*(tmp - round(mean(tmp(mask==1))/(2*pi))*2*pi);
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -170,9 +165,14 @@ for echo = 2:imsize(4)
     unph(:,:,:,echo) = unph(:,:,:,echo) - njump*2*pi;
     unph(:,:,:,echo) = unph(:,:,:,echo).*mask;
 end
+
+
+nii = make_nii(unph,voxel_size);
+save_nii(nii,'unph.nii');
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+delta_TE = 0.008;
 
 % echo fitting
 % [tfs, fit_residual] = echofit(unph,mag,TE-TE(1),0); % zero intercept
@@ -216,32 +216,33 @@ save_nii(nii,'RESHARP/lfs_resharp.nii');
 
 % inversion of susceptibility on straight only
 disp('--> TV susceptibility inversion on RESHARP...');
-sus_resharp = tvdi(lfs_resharp, mask, voxel_size, tv_reg, ...
+sus_resharp = tvdi(lfs_resharp, mask_resharp, voxel_size, tv_reg, ...
     mag(:,:,:,end), [], inv_num); 
 
 
 % save nifti
-nii = make_nii(sus_resharp.*mask,voxel_size);
+nii = make_nii(sus_resharp.*mask_resharp,voxel_size);
 save_nii(nii,'RESHARP/sus_resharp.nii');
+
+save all.mat
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % register left and right images to straight with FLIRT
-/usr/share/fsl/5.0/bin/flirt -in /media/data/QSM_data/COSMOS/fc/left/src/mag1.nii -ref /media/data/QSM_data/COSMOS/fc/straight/src/mag1.nii -out /media/data/QSM_data/COSMOS/fc/left/src/mag_flirt.nii -omat /media/data/QSM_data/COSMOS/fc/left/src/mag_flirt.mat -bins 256 -cost corratio -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 6  -interp trilinear
-/usr/share/fsl/5.0/bin/flirt -in /media/data/QSM_data/COSMOS/fc/left/RESHARP/lfs_resharp.nii -applyxfm -init /media/data/QSM_data/COSMOS/fc/left/src/mag_flirt.mat -out /media/data/QSM_data/COSMOS/fc/left/RESHARP/lfs_resharp_left_flirt.nii -paddingsize 0.0 -interp trilinear -ref /media/data/QSM_data/COSMOS/fc/left/src/mag_flirt.nii.gz
-/usr/share/fsl/5.0/bin/flirt -in /media/data/QSM_data/COSMOS/fc/right/src/mag1.nii -ref /media/data/QSM_data/COSMOS/fc/straight/src/mag1.nii -out /media/data/QSM_data/COSMOS/fc/right/src/mag_flirt.nii -omat /media/data/QSM_data/COSMOS/fc/right/src/mag_flirt.mat -bins 256 -cost corratio -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 6  -interp trilinear
-/usr/share/fsl/5.0/bin/flirt -in /media/data/QSM_data/COSMOS/fc/right/RESHARP/lfs_resharp.nii -applyxfm -init /media/data/QSM_data/COSMOS/fc/right/src/mag_flirt.mat -out /media/data/QSM_data/COSMOS/fc/right/RESHARP/lfs_resharp_right_flirt.nii -paddingsize 0.0 -interp trilinear -ref /media/data/QSM_data/COSMOS/fc/right/src/mag_flirt.nii.gz
+/usr/share/fsl/5.0/bin/flirt -in /media/data/Hongfu/yuhan/COSMOS/fc/left/src/mag1.nii -ref /media/data/Hongfu/yuhan/COSMOS/fc/straight/src/mag1.nii -out /media/data/Hongfu/yuhan/COSMOS/fc/left/src/mag_flirt.nii -omat /media/data/Hongfu/yuhan/COSMOS/fc/left/src/mag_flirt.mat -bins 256 -cost corratio -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 6  -interp trilinear
+/usr/share/fsl/5.0/bin/flirt -in /media/data/Hongfu/yuhan/COSMOS/fc/left/RESHARP/lfs_resharp.nii -applyxfm -init /media/data/Hongfu/yuhan/COSMOS/fc/left/src/mag_flirt.mat -out /media/data/Hongfu/yuhan/COSMOS/fc/left/RESHARP/lfs_resharp_left_flirt.nii -paddingsize 0.0 -interp trilinear -ref /media/data/Hongfu/yuhan/COSMOS/fc/left/src/mag_flirt.nii.gz
+/usr/share/fsl/5.0/bin/flirt -in /media/data/Hongfu/yuhan/COSMOS/fc/right/src/mag1.nii -ref /media/data/Hongfu/yuhan/COSMOS/fc/straight/src/mag1.nii -out /media/data/Hongfu/yuhan/COSMOS/fc/right/src/mag_flirt.nii -omat /media/data/Hongfu/yuhan/COSMOS/fc/right/src/mag_flirt.mat -bins 256 -cost corratio -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 6  -interp trilinear
+/usr/share/fsl/5.0/bin/flirt -in /media/data/Hongfu/yuhan/COSMOS/fc/right/RESHARP/lfs_resharp.nii -applyxfm -init /media/data/Hongfu/yuhan/COSMOS/fc/right/src/mag_flirt.mat -out /media/data/Hongfu/yuhan/COSMOS/fc/right/RESHARP/lfs_resharp_right_flirt.nii -paddingsize 0.0 -interp trilinear -ref /media/data/Hongfu/yuhan/COSMOS/fc/right/src/mag_flirt.nii.gz
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % load in rotation matrix
-cd left/src
-load mag_flirt -ascii
+
+load left/src/mag_flirt.mat -ascii
 rot_mat_left = mag_flirt(1:3,1:3);
 
-cd ../..
-cd right/src
-load mag_flirt -ascii
+
+load right/src/mag_flirt.mat -ascii
 rot_mat_right = mag_flirt(1:3,1:3);
 
 
@@ -311,27 +312,22 @@ D_straight = fftshift(D_straight);
 
 
 %% COSMOS reconstruction with closed-form solution
-cd ../..
-cd straight/RESHARP
-nii = load_nii('lfs_resharp.nii');
+
+nii = load_nii('straight/RESHARP/lfs_resharp.nii');
 lfs_resharp_straight = double(nii.img);
-mask = and(lfs_resharp_straight,1);
 
-cd ../..
-cd left/RESHARP
-unix('gunzip -f *.gz');
-nii = load_nii('lfs_resharp_left_flirt.nii');
+
+unix('gunzip -f left/RESHARP/*.gz');
+nii = load_nii('left/RESHARP/lfs_resharp_left_flirt.nii');
 lfs_resharp_left = double(nii.img);
-mask = and(mask,lfs_resharp_left);
 
-cd ../..
-cd right/RESHARP
-unix('gunzip -f *.gz');
-nii = load_nii('lfs_resharp_right_flirt.nii');
+
+unix('gunzip -f right/RESHARP/*.gz');
+nii = load_nii('right/RESHARP/lfs_resharp_right_flirt.nii');
 lfs_resharp_right = double(nii.img);
-mask = and(mask,lfs_resharp_right);
 
-
+mask = and(and(lfs_resharp_straight,lfs_resharp_right),lfs_resharp_left);
+mask = double(mask);
 
 lfs_resharp = cat(4,lfs_resharp_left.*mask,lfs_resharp_straight.*mask,lfs_resharp_right.*mask);
 kernel = cat(4,D_left,D_straight,D_right);
@@ -346,9 +342,9 @@ chi_cosmos = real( ifftn( sum(kernel .* lfs_resharp_k, 4) ./ (eps + kernel_sum) 
 
 
 nii = make_nii(chi_cosmos,voxel_size);
-save_nii(nii,'chi_cosmos.nii');
+save_nii(nii,'chi_cosmos_3.nii');
 
-
+save all_cosmos.mat
 
 
 

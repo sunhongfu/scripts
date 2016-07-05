@@ -1,3 +1,5 @@
+%% !! The same mask from central position was used for all
+
 % generate mask for each orientation based on the registeration
 unix('/usr/share/fsl/5.0/bin/convert_xfm -omat /home/hongfu/Desktop/9175/QSM_SPGRE_LEFT/mask_flirt.mat -inverse /home/hongfu/Desktop/9175/QSM_SPGRE_LEFT/mag_flirt.mat');
 unix('/usr/share/fsl/5.0/bin/flirt -in /home/hongfu/Desktop/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/BET_mask.nii -applyxfm -init /home/hongfu/Desktop/9175/QSM_SPGRE_LEFT/mask_flirt.mat -out /home/hongfu/Desktop/9175/QSM_SPGRE_LEFT/mask_flirt.nii -paddingsize 0.0 -interp trilinear -ref /home/hongfu/Desktop/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/BET_mask.nii');
@@ -12,6 +14,7 @@ unix('/usr/share/fsl/5.0/bin/convert_xfm -omat /home/hongfu/Desktop/9175/QSM_SPG
 unix('/usr/share/fsl/5.0/bin/flirt -in /home/hongfu/Desktop/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/BET_mask.nii -applyxfm -init /home/hongfu/Desktop/9175/QSM_SPGRE_BACKWARD/mask_flirt.mat -out /home/hongfu/Desktop/9175/QSM_SPGRE_BACKWARD/mask_flirt.nii -paddingsize 0.0 -interp trilinear -ref /home/hongfu/Desktop/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/BET_mask.nii');
 
 
+%%%%%% do for each orientation
 load all.mat
 r_mask = 0;
 nii = load_nii('BET_mask.nii');
@@ -115,3 +118,12 @@ sus_resharp = tvdi(lfs_resharp,mask_resharp,vox,tv_reg,mag(:,:,:,end),z_prjs,inv
 % save nifti
 nii = make_nii(sus_resharp.*mask_resharp,vox);
 save_nii(nii,['RESHARP/sus_resharp_tik_', num2str(tik_reg), '_tv_', num2str(tv_reg), '_num_', num2str(inv_num), '.nii']);
+
+save all_new.mat
+
+%%%% finish recon of each orientation
+
+
+
+
+
