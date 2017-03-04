@@ -1,9 +1,68 @@
 load all.mat
 
+imsize = size(ph_corr);
 % laplacian unwrapping keeping the skulls
+mag1 = mag(:,:,:,1);
+mask = (mag1 > 0.2*median(mag1(logical(mask(:)))));
+
 for i = 1:8
-	unph_lap(:,:,:,i) = unwrapLaplacian(squeeze(ph_corr(:,:,:,i)), [256 256 128], vox);
+	unph(:,:,:,i) = unwrapLaplacian(squeeze(ph_corr(:,:,:,i)), imsize(1:3), vox);
 end
+
+
+nii = load_nii('unph_diff.nii');
+unph_diff = double(nii.img);
+if strcmpi('bipolar',readout)
+    unph_diff = unph_diff/2;
+end
+
+for echo = 2:imsize(4)
+    meandiff = unph(:,:,:,echo)-unph(:,:,:,1)-double(echo-1)*unph_diff;
+    meandiff = meandiff(mask==1);
+    meandiff = mean(meandiff(:));
+    njump = round(meandiff/(2*pi));
+    disp(['    ' num2str(njump) ' 2pi jumps for TE' num2str(echo)]);
+    unph(:,:,:,echo) = unph(:,:,:,echo) - njump*2*pi;
+    unph(:,:,:,echo) = unph(:,:,:,echo);
+end
+
+[tfs, fit_residual] = echofit(unph,mag,TE,0); 
+
+fit_thr = 10;
+
+% extra filtering according to fitting residuals
+if r_mask
+    % generate reliability map
+    fit_residual_blur = smooth3(fit_residual,'box',round(1./vox)*2+1); 
+    nii = make_nii(fit_residual_blur,vox);
+    save_nii(nii,'fit_residual_blur.nii');
+    R = ones(size(fit_residual_blur));
+    R(fit_residual_blur >= fit_thr) = 0;
+else
+    R = 1;
+end
+
+
+tfs = -tfs/(2.675e8*dicom_info.MagneticFieldStrength)*1e6; % unit ppm
+
+
+% % pad 10 zero slices at both sides
+% tfs = padarray(tfs,size(tfs)/2);
+% mask = padarray(mask,size(mask)/2);
+% %mask_whole(:,:,end-5:end) = 0;
+% %mask_whole = padarray(mask_whole,[0 0 10]);
+% R = padarray(R,size(R)/2);
+
+% total field inversion
+Tik_weight = 5e-4;
+TV_weight = 5e-4;
+[chi, res] = tfi_nlcg(tfs.*mask.*R, mask.*R, vox, z_prjs, Tik_weight, TV_weight, 1000);
+nii = make_nii(chi,vox);
+save_nii(nii,['chi_brain_Tik_' num2str(Tik_weight) '_TV_' num2str(TV) '.nii']);
+
+
+
+
 
 % complex fitting
 img_corr = mag.*exp(1j*ph_corr);

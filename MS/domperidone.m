@@ -10,6 +10,11 @@ for i = 1:length(folder_list)
 	current_folder
 	if strcmp(cmdout,'')
 		[status,cmdout] = system('find "${current_folder}" -name *ME_SPGRE*');
-		qsm_spgr_ge(strtrim(cmdout),current_folder);
+		cmdout = strsplit(cmdout,'\n');
+		for i = 1:size(cmdout)
+			if strcmp(cmdout(i),'')
+				qsm_spgr_ge(strtrim(cmdout(i)),current_folder);
+			end
+		end
 	end
 end
