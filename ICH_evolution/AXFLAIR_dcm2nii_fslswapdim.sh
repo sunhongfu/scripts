@@ -1,0 +1,93 @@
+cd /media/data/Hongfu/Project_Hemorrhage/ALL_DATA/ICH/1p5T
+
+dcm2nii "./TIAMISO_192/MRI_DICOM/2013.10.11-10.54.31/AXFLAIR_Series0006"
+dcm2nii "./ICHADAPT_II_013/MRI_DICOM/2013.08.20-10.20.49/AXFLAIR_Series0006"
+dcm2nii "./ICHADAPT_II_027/MRI_DICOM/2014.04.24-10.40.29/AXFLAIR_6"
+dcm2nii "./TIAMISO_208/MRI_DICOM/2014.09.23-13.44.43/AXFLAIR_7"
+dcm2nii "./ICHADAPT_II_048/MRI_DICOM/2015.03.23-13.02.40/AXFLAIR"
+dcm2nii "./ICHADAPT_II_048/MRI_DICOM/2015.02.19-11.18.57/AXFLAIR"
+dcm2nii "./TIAMISO_193/MRI_DICOM/2013.10.09-11.23.30/13_10_09_1105_Day30 - 1/AXFLAIR_7"
+dcm2nii "./ICHADAPT_II_035/MRI_DICOM/2014.06.06-15.24.37/AXFLAIR_4"
+dcm2nii "./ICHADAPT_II_038/MRI_DICOM/2015.02.27-13.15.33/AXFLAIR_7"
+dcm2nii "./TIAMISO_201/MRI_DICOM/2014.04.29-12.23.25/AXFLAIR_7"
+dcm2nii "./ICHADAPT_II_034/MRI_DICOM/2014.06.06-16.13.21/AXFLAIR"
+dcm2nii "./ICHADAPT_II_034/MRI_DICOM/2014.06.02-unknown-longTE/AXFLAIR_5"
+dcm2nii "./ICHADAPT_II_034/MRI_DICOM/2014.06.26-12.45.37/AXFLAIR_7"
+dcm2nii "./TIAMISO_198/MRI_DICOM/2013.11.18-15.57.02/AXFLAIR_Series0007"
+dcm2nii "./TIAMISO_198/MRI_DICOM/2013.11.26-12.16.07/AXFLAIR_Series0005"
+dcm2nii "./TIAMISO_212/MRI_DICOM/(no raw) 2015_03_31/AXFLAIR"
+dcm2nii "./TIAMISO_199/MRI_DICOM/2014.02.04-15.45.41/AXFLAIR_7"
+dcm2nii "./TIAMISO_199/MRI_DICOM/2014.02.10-11.14.05/AXFLAIR_5"
+dcm2nii "./TIAMISO_199/MRI_DICOM/2014.03.04-13.48.32/AXFLAIR_7"
+dcm2nii "./ICHADAPT_II_011/MRI_DICOM/2013.08.02-12.20.23/AXFLAIR_Series0007"
+dcm2nii "./SPOTLIGHT_4/MRI_DICOM/2015.02.05-13.43.16/AXFLAIR_Series_05"
+dcm2nii "./SPOTLIGHT_018002/MRI_DICOM/2014.07.23-14.19.19/AXFLAIR_4"
+dcm2nii "./SPOTLIGHT_018002/MRI_DICOM/2013.06.19-11.38.13/AXFLAIR_Series0007"
+dcm2nii "./TRASH/Ken_Butcher_Stroke_March2008 - 95813234/AXFLAIR_21"
+dcm2nii "./ICHADAPT_II_014/MRI_DICOM/2013.09.12-14.33.38/AXFLAIR_Series0005"
+dcm2nii "./ICHADAPT_II_014/MRI_DICOM/2013.09.19-15.05.17/AXFLAIR_Series0003"
+dcm2nii "./TIAMISO_191/MRI_DICOM/2013.09.09-14.49.54/AXFLAIR_Series0005"
+dcm2nii "./ICHADAPT_II_046/MRI_DICOM/2015.01.07-14.37.29/AXFLAIR_5"
+dcm2nii "./ICHADAPT_II_046/MRI_DICOM/2015.01.30-11.35.54/AXFLAIR_7"
+dcm2nii "./ICHADAPT_II_046/MRI_DICOM/2015.01.02-unknown/AXFLAIR_7"
+dcm2nii "./TIAMISO_203/MRI_DICOM/2014.06.06-13.52.12/AXFLAIR_7"
+dcm2nii "./TIAMISO_203/MRI_DICOM/2014.05.30-12.59.11/AXFLAIR_5"
+dcm2nii "./TIAMISO_200/MRI_DICOM/2014.03.12-09.53.09/AXFLAIR_6"
+dcm2nii "./TIAMISO_189/MRI_DICOM/2013.09.09-15.25.35/AXFLAIR_Series0006"
+dcm2nii "./TIAMISO_186/MRI_DICOM/2013.07.09-09.50.37/AXFLAIR_Series0006"
+dcm2nii "./ICHADAPT_II_016/MRI_DICOM/2013.11.26-11.07.13/AXFLAIR_5"
+dcm2nii "./ICHADAPT_II_016/MRI_DICOM/2013.11.01-14.02.15/AXFLAIR_Series0005"
+dcm2nii "./TIAMISO_190/MRI_DICOM/2013.08.20-14.49.01/AXFLAIR_6"
+dcm2nii "./TIAMISO_204/MRI_DICOM/2014.06.16-13.58.54/AXFLAIR_6"
+dcm2nii "./TIAMISO_204/MRI_DICOM/2014.09.16-12.21.49/AXFLAIR_post_gad_28"
+dcm2nii "./TIAMISO_204/MRI_DICOM/2014.09.16-12.21.49/AXFLAIR_5"
+dcm2nii "./ICHADAPT_II_043/MRI_DICOM/2014.12.05-14.32.37/AXFLAIR_7"
+
+
+
+cd "./TIAMISO_192/MRI_DICOM/2013.10.11-10.54.31/AXFLAIR_Series0006"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_013/MRI_DICOM/2013.08.20-10.20.49/AXFLAIR_Series0006"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_027/MRI_DICOM/2014.04.24-10.40.29/AXFLAIR_6"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_208/MRI_DICOM/2014.09.23-13.44.43/AXFLAIR_7"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_048/MRI_DICOM/2015.03.23-13.02.40/AXFLAIR"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_048/MRI_DICOM/2015.02.19-11.18.57/AXFLAIR"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_193/MRI_DICOM/2013.10.09-11.23.30/13_10_09_1105_Day30 - 1/AXFLAIR_7"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_035/MRI_DICOM/2014.06.06-15.24.37/AXFLAIR_4"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_038/MRI_DICOM/2015.02.27-13.15.33/AXFLAIR_7"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_201/MRI_DICOM/2014.04.29-12.23.25/AXFLAIR_7"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_034/MRI_DICOM/2014.06.06-16.13.21/AXFLAIR"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_034/MRI_DICOM/2014.06.02-unknown-longTE/AXFLAIR_5"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_034/MRI_DICOM/2014.06.26-12.45.37/AXFLAIR_7"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_198/MRI_DICOM/2013.11.18-15.57.02/AXFLAIR_Series0007"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_198/MRI_DICOM/2013.11.26-12.16.07/AXFLAIR_Series0005"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_212/MRI_DICOM/(no raw) 2015_03_31/AXFLAIR"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_199/MRI_DICOM/2014.02.04-15.45.41/AXFLAIR_7"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_199/MRI_DICOM/2014.02.10-11.14.05/AXFLAIR_5"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_199/MRI_DICOM/2014.03.04-13.48.32/AXFLAIR_7"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_011/MRI_DICOM/2013.08.02-12.20.23/AXFLAIR_Series0007"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./SPOTLIGHT_4/MRI_DICOM/2015.02.05-13.43.16/AXFLAIR_Series_05"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./SPOTLIGHT_018002/MRI_DICOM/2014.07.23-14.19.19/AXFLAIR_4"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./SPOTLIGHT_018002/MRI_DICOM/2013.06.19-11.38.13/AXFLAIR_Series0007"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TRASH/Ken_Butcher_Stroke_March2008 - 95813234/AXFLAIR_21"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_014/MRI_DICOM/2013.09.12-14.33.38/AXFLAIR_Series0005"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_014/MRI_DICOM/2013.09.19-15.05.17/AXFLAIR_Series0003"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_191/MRI_DICOM/2013.09.09-14.49.54/AXFLAIR_Series0005"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_046/MRI_DICOM/2015.01.07-14.37.29/AXFLAIR_5"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_046/MRI_DICOM/2015.01.30-11.35.54/AXFLAIR_7"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_046/MRI_DICOM/2015.01.02-unknown/AXFLAIR_7"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_203/MRI_DICOM/2014.06.06-13.52.12/AXFLAIR_7"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_203/MRI_DICOM/2014.05.30-12.59.11/AXFLAIR_5"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_200/MRI_DICOM/2014.03.12-09.53.09/AXFLAIR_6"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_189/MRI_DICOM/2013.09.09-15.25.35/AXFLAIR_Series0006"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_186/MRI_DICOM/2013.07.09-09.50.37/AXFLAIR_Series0006"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_016/MRI_DICOM/2013.11.26-11.07.13/AXFLAIR_5"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_016/MRI_DICOM/2013.11.01-14.02.15/AXFLAIR_Series0005"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_190/MRI_DICOM/2013.08.20-14.49.01/AXFLAIR_6"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_204/MRI_DICOM/2014.06.16-13.58.54/AXFLAIR_6"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_204/MRI_DICOM/2014.09.16-12.21.49/AXFLAIR_post_gad_28"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./TIAMISO_204/MRI_DICOM/2014.09.16-12.21.49/AXFLAIR_5"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+cd "./ICHADAPT_II_043/MRI_DICOM/2014.12.05-14.32.37/AXFLAIR_7"; fslswapdim *AXFLAIR*.nii.gz x -y z AXFLAIR_flipped.nii; cd -;
+
+
+
+

@@ -1,3 +1,4 @@
+clear
 path_dcm = pwd;
 
 % read in DICOMs into NIFTI
@@ -26,7 +27,7 @@ unix('elastix -f /media/data/Hongfu/Project_Hemorrhage/ALL_DATA/ICH/ICHADAPT_II_
 
 
 mkdir deform
-elastix -f /media/data/Hongfu/Project_Hemorrhage/ALL_DATA/ICH/TIAMISO_208/2014.09.23-13.44.43/QSM_SWI15/combine/mag_cmb.nii -m result.0.nii.gz -out deform -p ~/Documents/MATLAB/elastix/Deformable.txt
+elastix -f /media/data/3T/ICH-ADAPTII/ICHADAPT_II_084/2017_02_06/QSM_HEMO_PRISMA/src/mag.nii -m head_CT.nii -out deform -p ~/Documents/MATLAB/elastix/Deformable.txt
 
 
 
