@@ -1,17 +1,18 @@
-[iField voxel_size matrix_size TE delta_TE CF Affine3D B0_dir TR NumEcho] = Read_Bruker_raw(pwd);
-iField = iField(:,:,70:112,:);
-matrix_size(3) = 43;
+[iField voxel_size matrix_size TE delta_TE CF Affine3D B0_dir TR NumEcho] = Read_Bruker_raw_sun(pwd);
+% iField = iField(:,:,70:112,:);
+% matrix_size(3) = 43;
 
 mkdir src
-nii = make_nii(abs(iField),voxel_size);
+nii = make_nii(abs(iField)*10000,voxel_size); % need to be large so that can use N3 correction
+% how about change to N4 (ants?)
 save_nii(nii,'src/mag.nii');
 nii = make_nii(angle(iField),voxel_size);
 save_nii(nii,'src/ph.nii');
 
 imsize = size(iField);
 
-for i = 1:size(iField,4)
-	nii = make_nii(abs(iField(:,:,:,i)),voxel_size);
+for i = 1:imsize(4)
+	nii = make_nii(abs(iField(:,:,:,i))*10000,voxel_size);
 	save_nii(nii,['src/mag' num2str(i) '.nii']);
 
 	% N3 correction
@@ -20,10 +21,14 @@ for i = 1:size(iField,4)
 	unix('nu_correct src/mag${echonum}.mnc src/corr_mag${echonum}.mnc -V1.0 -distance 10');
 	unix('mnc2nii src/corr_mag${echonum}.mnc src/corr_mag${echonum}.nii');
 
-	nii = make_nii(angle(iField(:,:,:,i)),voxel_size);
-	save_nii(nii,['src/ph' num2str(i) '.nii']);
 end
 
+ph = angle(iField);
+
+for i = 1:imsize(4)
+	nii = make_nii(ph(:,:,:,i),voxel_size);
+	save_nii(nii,['src/ph' num2str(i) '.nii']);
+end
 
 mag = zeros(imsize);
 for echo = 1:imsize(4)
@@ -31,34 +36,31 @@ for echo = 1:imsize(4)
     mag(:,:,:,echo) = double(nii.img);
 end
 
-% % extract brain using itk-snap
-% nii = load_nii('mask.nii');
-% mask = double(nii.img);
+save raw.mat
 
-mask = zeros(imsize(1:3));
-mask(mag(:,:,:,1)>1.5) = 1;
 
-nii = make_nii(mask,voxel_size);
-save_nii(nii,'mask.nii');
+% extract brain using itk-snap
+nii = load_nii('mask.nii');
+mask = double(nii.img);
 
-% % phase offset correction?
-% ph_corr = geme_cmb(iField,voxel_size,TE,mask);
-% % save offset corrected phase niftis
-% for echo = 1:size(iField,4)
-%     nii = make_nii(ph_corr(:,:,:,echo),voxel_size);
-%     save_nii(nii,['src/corr_ph' num2str(echo) '.nii']);
-% end
+% phase offset correction?
+ph_corr = geme_cmb_mouse(mag.*exp(1j*ph),voxel_size,TE,mask);
+% save offset corrected phase niftis
+for echo = 1:imsize(4)
+    nii = make_nii(ph_corr(:,:,:,echo),voxel_size);
+    save_nii(nii,['src/corr_ph' num2str(echo) '.nii']);
+end
 
 !rm src/*.mnc
 % unwrap each echo
 disp('--> unwrap aliasing phase for all TEs using prelude...');
 setenv('echo_num',num2str(size(iField,4)));
-bash_command = sprintf(['for ph in src/ph[1-$echo_num].nii\n' ...
+bash_command = sprintf(['for ph in src/corr_ph[1-$echo_num].nii\n' ...
 'do\n' ...
 '   base=`basename $ph`;\n' ...
 '   dir=`dirname $ph`;\n' ...
-'   mag=$dir/"corr_mag"${base:2};\n' ...
-'   unph="unph"${base:2};\n' ...
+'   mag=$dir/"corr_mag"${base:7};\n' ...
+'   unph="unph"${base:7};\n' ...
 '   prelude -a $mag -p $ph -u $unph -m mask.nii -n 12&\n' ...
 'done\n' ...
 'wait\n' ...
@@ -73,17 +75,69 @@ for echo = 1:imsize(4)
 end
 
 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % detect and correct for 2pi jumps
+% clear tmps
+% idxs_try = [-5:5];
+% for i = 1:length(idxs_try)
+%     tmps(i) = abs(sum(col((unph(:,:,:,1) - 2*pi*idxs_try(i)).*mask)))
+% end
+% [~,idx_tmp] = min(tmps);
+% idx_wrap = idxs_try(idx_tmp)
+% unph(:,:,:,1) = unph(:,:,:,1) - 2*pi*idx_wrap;
+
+
+% clear tmps
+% for i = 1:length(idxs_try)
+%     tmps(i) = abs(sum(col((unph(:,:,:,2) - 2*pi*idxs_try(i)).*mask)));
+% end
+% [~,idx_tmp] = min(tmps);
+% idx_wrap = idxs_try(idx_tmp)
+% unph(:,:,:,2) = unph(:,:,:,2) - 2*pi*idx_wrap;
+
+
+% clear tmps
+% for i = 1:length(idxs_try)
+%     tmps(i) = abs(sum(col((unph(:,:,:,3) - 2*pi*idxs_try(i)).*mask)));
+% end
+
+% [~,idx_tmp] = min(tmps);
+% idx_wrap = idxs_try(idx_tmp)
+% unph(:,:,:,3) = unph(:,:,:,3) - 2*pi*idx_wrap;
+
+
+% clear tmps
+% for i = 1:length(idxs_try)
+%     tmps(i) = abs(sum(col((unph(:,:,:,4) - 2*pi*idxs_try(i)).*mask)));
+% end
+% [~,idx_tmp] = min(tmps);
+% idx_wrap = idxs_try(idx_tmp)
+% unph(:,:,:,4) = unph(:,:,:,4) - 2*pi*idx_wrap;
+
+
+% clear tmps
+% for i = 1:length(idxs_try)
+%     tmps(i) = abs(sum(col((unph(:,:,:,5) - 2*pi*idxs_try(i)).*mask)));
+% end
+% [~,idx_tmp] = min(tmps);
+% idx_wrap = idxs_try(idx_tmp)
+% unph(:,:,:,5) = unph(:,:,:,5) - 2*pi*idx_wrap;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % check and correct for 2pi jump between echoes
 disp('--> correct for potential 2pi jumps between TEs ...')
 
 
-unph(:,:,:,3) = unph(:,:,:,3)-2*pi;
-unph(:,:,:,4) = unph(:,:,:,4)-2*pi;
-unph(:,:,:,5) = unph(:,:,:,5)-4*pi;
+% unph(:,:,:,3) = unph(:,:,:,3)-2*pi;
+% unph(:,:,:,4) = unph(:,:,:,4)-2*pi;
+% unph(:,:,:,5) = unph(:,:,:,5)-4*pi;
 
-unph = unph.*repmat(mask,[1 1 1 5]);
-nii = make_nii(unph,voxel_size);
-save_nii(nii,'unph_prelude.nii');
+% unph = unph.*repmat(mask,[1 1 1 5]);
+% nii = make_nii(unph,voxel_size);
+% save_nii(nii,'unph_prelude.nii');
 
 
 
@@ -106,76 +160,89 @@ for echo = 2:imsize(4)
     unph(:,:,:,echo) = unph(:,:,:,echo).*mask;
 end
 
-
-
-
-% unwrap the phase using best path
-disp('--> unwrap aliasing phase using bestpath...');
-mask_unwrp = uint8(abs(mask)*255);
-fid = fopen('mask_unwrp.dat','w');
-fwrite(fid,mask_unwrp,'uchar');
-fclose(fid);
-
-[pathstr, ~, ~] = fileparts(which('3DSRNCP.m'));
-setenv('pathstr',pathstr);
-setenv('nv',num2str(imsize(1)));
-setenv('np',num2str(imsize(2)));
-setenv('ns',num2str(imsize(3)));
-
-unph = zeros(imsize);
-ph_corr = angle(iField);
-
-for echo_num = 1:imsize(4)
-    setenv('echo_num',num2str(echo_num));
-    fid = fopen(['wrapped_phase' num2str(echo_num) '.dat'],'w');
-    fwrite(fid,ph_corr(:,:,:,echo_num),'float');
-    fclose(fid);
-    if isdeployed
-        bash_script = ['~/bin/3DSRNCP wrapped_phase${echo_num}.dat mask_unwrp.dat ' ...
-        'unwrapped_phase${echo_num}.dat $nv $np $ns reliability${echo_num}.dat'];
-    else    
-        bash_script = ['${pathstr}/3DSRNCP wrapped_phase${echo_num}.dat mask_unwrp.dat ' ...
-        'unwrapped_phase${echo_num}.dat $nv $np $ns reliability${echo_num}.dat'];
-    end
-    unix(bash_script) ;
-
-    fid = fopen(['unwrapped_phase' num2str(echo_num) '.dat'],'r');
-    tmp = fread(fid,'float');
-    % tmp = tmp - tmp(1);
-    unph(:,:,:,echo_num) = reshape(tmp - round(mean(tmp(mask==1))/(2*pi))*2*pi ,imsize(1:3)).*mask;
-    fclose(fid);
-
-    fid = fopen(['reliability' num2str(echo_num) '.dat'],'r');
-    reliability_raw = fread(fid,'float');
-    reliability_raw = reshape(reliability_raw,imsize(1:3));
-    fclose(fid);
-
-    nii = make_nii(reliability_raw.*mask,voxel_size);
-    save_nii(nii,['reliability_raw' num2str(echo_num) '.nii']);
-end
-
-unph(:,:,:,3) = unph(:,:,:,3)-2*pi;
-unph(:,:,:,4) = unph(:,:,:,4)-2*pi;
-unph(:,:,:,5) = unph(:,:,:,5)-4*pi;
-
-unph = unph.*repmat(mask,[1 1 1 5]);
 nii = make_nii(unph,voxel_size);
-save_nii(nii,'unph_bestpath.nii');
+save_nii(nii,'unph.nii');
+
+
+
+
+% % unwrap the phase using best path
+% disp('--> unwrap aliasing phase using bestpath...');
+% mask_unwrp = uint8(abs(mask)*255);
+% fid = fopen('mask_unwrp.dat','w');
+% fwrite(fid,mask_unwrp,'uchar');
+% fclose(fid);
+
+% [pathstr, ~, ~] = fileparts(which('3DSRNCP.m'));
+% setenv('pathstr',pathstr);
+% setenv('nv',num2str(imsize(1)));
+% setenv('np',num2str(imsize(2)));
+% setenv('ns',num2str(imsize(3)));
+
+% unph = zeros(imsize);
+% ph_corr = angle(iField);
+
+% for echo_num = 1:imsize(4)
+%     setenv('echo_num',num2str(echo_num));
+%     fid = fopen(['wrapped_phase' num2str(echo_num) '.dat'],'w');
+%     fwrite(fid,ph_corr(:,:,:,echo_num),'float');
+%     fclose(fid);
+%     if isdeployed
+%         bash_script = ['~/bin/3DSRNCP wrapped_phase${echo_num}.dat mask_unwrp.dat ' ...
+%         'unwrapped_phase${echo_num}.dat $nv $np $ns reliability${echo_num}.dat'];
+%     else    
+%         bash_script = ['${pathstr}/3DSRNCP wrapped_phase${echo_num}.dat mask_unwrp.dat ' ...
+%         'unwrapped_phase${echo_num}.dat $nv $np $ns reliability${echo_num}.dat'];
+%     end
+%     unix(bash_script) ;
+
+%     fid = fopen(['unwrapped_phase' num2str(echo_num) '.dat'],'r');
+%     tmp = fread(fid,'float');
+%     % tmp = tmp - tmp(1);
+%     unph(:,:,:,echo_num) = reshape(tmp - round(mean(tmp(mask==1))/(2*pi))*2*pi ,imsize(1:3)).*mask;
+%     fclose(fid);
+
+%     fid = fopen(['reliability' num2str(echo_num) '.dat'],'r');
+%     reliability_raw = fread(fid,'float');
+%     reliability_raw = reshape(reliability_raw,imsize(1:3));
+%     fclose(fid);
+
+%     nii = make_nii(reliability_raw.*mask,voxel_size);
+%     save_nii(nii,['reliability_raw' num2str(echo_num) '.nii']);
+% end
+
+% unph(:,:,:,3) = unph(:,:,:,3)-2*pi;
+% unph(:,:,:,4) = unph(:,:,:,4)-2*pi;
+% unph(:,:,:,5) = unph(:,:,:,5)-4*pi;
+
+% unph = unph.*repmat(mask,[1 1 1 5]);
+% nii = make_nii(unph,voxel_size);
+% save_nii(nii,'unph_bestpath.nii');
 
 
 
 % fit phase images with echo times
 disp('--> magnitude weighted LS fit of phase to TE ...');
-[tfs, fit_residual] = echofit(unph,mag,TE,1); 
+[tfs0, fit_residual0] = echofit(unph,mag,TE,0); 
+nii = make_nii(tfs0,voxel_size);
+save_nii(nii,'tfs0.nii');
+nii = make_nii(fit_residual0,voxel_size);
+save_nii(nii,'fit_residual0.nii');
+
+% [tfs1, fit_residual1] = echofit(unph,mag,TE,1); 
+% nii = make_nii(tfs1,voxel_size);
+% save_nii(nii,'tfs1.nii');
+% nii = make_nii(fit_residual1,voxel_size);
+% save_nii(nii,'fit_residual1.nii');
 
 r_mask = 1;
-fit_thr = 0.5;
+fit_thr = 20;
 % extra filtering according to fitting residuals
 if r_mask
     % generate reliability map
-    fit_residual_blur = smooth3(fit_residual,'box',round(0.1./voxel_size)*2+1); 
+    fit_residual_blur = smooth3(fit_residual0,'box',round(0.1./voxel_size)*2+1); 
     nii = make_nii(fit_residual_blur,voxel_size);
-    save_nii(nii,'fit_residual_blur.nii');
+    save_nii(nii,'fit_residual_blur0.nii');
     R = ones(size(fit_residual_blur));
     R(fit_residual_blur >= fit_thr) = 0;
 else
@@ -187,7 +254,7 @@ end
 % ph = gamma*dB*TE
 % dB/B = ph/(gamma*TE*B0)
 % units: TE s, gamma 2.675e8 rad/(sT), B0 3T
-tfs = -tfs/(2.675e8*9.4)*1e6; % unit ppm
+tfs = -tfs0/(2.675e8*9.4)*1e6; % unit ppm
 
 nii = make_nii(tfs,voxel_size);
 save_nii(nii,'tfs.nii');
@@ -199,7 +266,7 @@ tik_reg = 5e-4;
 cgs_num = 500;
 tv_reg = 2e-4;
 z_prjs = B0_dir;
-inv_num = 5000;
+inv_num = 500;
 
 [lfs_resharp, mask_resharp] = resharp(tfs,mask.*R,voxel_size,smv_rad,tik_reg,cgs_num);
 % % 3D 2nd order polyfit to remove any residual background
@@ -208,16 +275,212 @@ inv_num = 5000;
 % save nifti
 [~,~,~] = mkdir('RESHARP');
 nii = make_nii(lfs_resharp,voxel_size);
-save_nii(nii,['RESHARP/lfs_resharp_tik_', num2str(tik_reg), '_num_', num2str(cgs_num), '.nii']);
+save_nii(nii,['RESHARP/lfs_resharp0_tik_', num2str(tik_reg), '_num_', num2str(cgs_num), '.nii']);
 
-% inversion of susceptibility 
-disp('--> TV susceptibility inversion on RESHARP...');
-sus_resharp = tvdi(lfs_resharp,mask_resharp,voxel_size,tv_reg,mag(:,:,:,end),z_prjs,inv_num); 
+% % inversion of susceptibility 
+% disp('--> TV susceptibility inversion on RESHARP...');
+% sus_resharp = tvdi(lfs_resharp,mask_resharp,voxel_size,tv_reg,mag(:,:,:,end),z_prjs,inv_num); 
+% % save nifti
+% nii = make_nii(sus_resharp.*mask_resharp,voxel_size);
+% save_nii(nii,['RESHARP/sus_resharp_tik_', num2str(tik_reg), '_tv_', num2str(tv_reg), '_num_', num2str(inv_num), '.nii']);
 
-% save nifti
-nii = make_nii(sus_resharp.*mask_resharp,voxel_size);
-save_nii(nii,['RESHARP/sus_resharp_tik_', num2str(tik_reg), '_tv_', num2str(tv_reg), '_num_', num2str(inv_num), '.nii']);
+% iLSQR method
+chi_iLSQR = QSM_iLSQR(lfs_resharp*(2.675e8*9.4)/1e6,mask_resharp,'H',z_prjs,'voxelsize',voxel_size,'niter',50,'TE',1000,'B0',9.4);
+nii = make_nii(chi_iLSQR,voxel_size);
+save_nii(nii,'RESHARP/chi_iLSQR.nii');
 
+
+% % MEDI
+% %%%%% normalize signal intensity by noise to get SNR %%%
+% %%%% Generate the Magnitude image %%%%
+% iMag = sqrt(sum(mag.^2,4));
+% matrix_size = single(imsize(1:3));
+% voxel_size = voxel_size;
+% delta_TE = TE(2) - TE(1);
+% B0_dir = z_prjs';
+% CF = 42.6036*9.4 *1e6;
+% iFreq = [];
+% N_std = 1;
+
+% RDF = lfs_resharp*2.675e8*9.4*delta_TE*1e-6;
+% Mask = mask_resharp;
+% save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
+%      voxel_size delta_TE CF B0_dir;
+% QSM = MEDI_L1('lambda',10000);
+% nii = make_nii(QSM.*Mask,voxel_size);
+% save_nii(nii,['RESHARP/MEDI10000_RESHARP_smvrad' num2str(smv_rad) '.nii']);
+
+
+
+% V-SHARP + iLSQR
+mkdir VSHARP
+B0 =9.4;
+voxelsize = voxel_size;
+padsize = [12 12 12];
+smvsize = 12;
+[TissuePhase3d, mask_vsharp] = V_SHARP(tfs ,single(mask.*R),'smvsize',smvsize,'voxelsize',voxelsize*10);
+nii = make_nii(TissuePhase3d,voxel_size);
+save_nii(nii,'VSHARP/VSHARP.nii');
+
+chi_iLSQR_vsharp = QSM_iLSQR(TissuePhase3d*(2.675e8*9.4)/1e6,mask_vsharp,'H',z_prjs,'voxelsize',voxel_size,'niter',50,'TE',1000,'B0',9.4);
+nii = make_nii(chi_iLSQR_vsharp,voxel_size);
+save_nii(nii,'VSHARP/chi_iLSQR_vsharp.nii');
+
+
+
+% TFI method
+    disp('TFI');
+    mkdir TFI
+    %%%% Generate the Magnitude image %%%%
+    iMag = sqrt(sum(mag.^2,4));
+    matrix_size = single(imsize(1:3));
+    voxel_size = voxelsize;
+    delta_TE = TE(2) - TE(1);
+    B0_dir = z_prjs';
+    CF = 42.6036*9.4 *1e6;
+    N_std = 1;
+
+    % (4) TFI of 3 voxels erosion
+    iFreq = tfs*2.675e8*9.4*delta_TE*1e-6;
+    % erode the mask (full mask to 3mm erosion)
+    % apply R
+    mask = mask.*R;
+    % mask_erosion
+    r = 1; 
+    [X,Y,Z] = ndgrid(-r:r,-r:r,-r:r);
+    h = (X.^2/r^2 + Y.^2/r^2 + Z.^2/r^2 <= 1);
+    ker = h/sum(h(:));
+    imsize = size(mask);
+    mask_tmp = convn(mask,ker,'same');
+    mask_ero1 = zeros(imsize);
+    mask_ero1(mask_tmp > 0.999999) = 1; % no error tolerance
+    r = 2; 
+    [X,Y,Z] = ndgrid(-r:r,-r:r,-r:r);
+    h = (X.^2/r^2 + Y.^2/r^2 + Z.^2/r^2 <= 1);
+    ker = h/sum(h(:));
+    imsize = size(mask);
+    mask_tmp = convn(mask,ker,'same');
+    mask_ero2 = zeros(imsize);
+    mask_ero2(mask_tmp > 0.999999) = 1; % no error tolerance
+    r = 3; 
+    [X,Y,Z] = ndgrid(-r:r,-r:r,-r:r);
+    h = (X.^2/r^2 + Y.^2/r^2 + Z.^2/r^2 <= 1);
+    ker = h/sum(h(:));
+    imsize = size(mask);
+    mask_tmp = convn(mask,ker,'same');
+    mask_ero3 = zeros(imsize);
+    mask_ero3(mask_tmp > 0.999999) = 1; % no error tolerance
+
+
+    Mask = mask;
+    Mask_G = Mask;
+    P_B = 30;
+    P = 1 * Mask + P_B * (1-Mask);
+    RDF = 0;
+    save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF
+    % QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 500);
+    % nii = make_nii(QSM.*Mask,vox);
+    % save_nii(nii,'TFI/TFI_lambda500_full.nii');
+    QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 20000);
+    nii = make_nii(QSM.*Mask,voxelsize);
+    save_nii(nii,'TFI/TFI_lambda20000_full.nii');
+    % QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 1500);
+    % nii = make_nii(QSM.*Mask,vox);
+    % save_nii(nii,'TFI/TFI_lambda1500_full.nii');
+    % QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 2000);
+    % nii = make_nii(QSM.*Mask,vox);
+    % save_nii(nii,'TFI/TFI_lambda2000_full.nii');
+
+
+    Mask = mask_ero1;
+    Mask_G = Mask;
+    P_B = 30;
+    P = 1 * Mask + P_B * (1-Mask);
+    RDF = 0;
+    save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF
+    % QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 500);
+    % nii = make_nii(QSM.*Mask,vox);
+    % save_nii(nii,'TFI/TFI_lambda500_ero1.nii');
+    QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 20000);
+    nii = make_nii(QSM.*Mask,voxelsize);
+    save_nii(nii,'TFI/TFI_lambda20000_ero1.nii');
+    % QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 1500);
+    % nii = make_nii(QSM.*Mask,vox);
+    % save_nii(nii,'TFI/TFI_lambda1500_ero1.nii');
+    % QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 2000);
+    % nii = make_nii(QSM.*Mask,vox);
+    % save_nii(nii,'TFI/TFI_lambda2000_ero1.nii');
+
+
+    Mask = mask_ero2;
+    Mask_G = Mask;
+    P_B = 30;
+    P = 1 * Mask + P_B * (1-Mask);
+    RDF = 0;
+    save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF
+    % QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 500);
+    % nii = make_nii(QSM.*Mask,vox);
+    % save_nii(nii,'TFI/TFI_lambda500_ero2.nii');
+    QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 20000);
+    nii = make_nii(QSM.*Mask,voxelsize);
+    save_nii(nii,'TFI/TFI_lambda20000_ero2.nii');
+    % QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 1500);
+    % nii = make_nii(QSM.*Mask,vox);
+    % save_nii(nii,'TFI/TFI_lambda1500_ero2.nii');
+    % QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 2000);
+    % nii = make_nii(QSM.*Mask,vox);
+    % save_nii(nii,'TFI/TFI_lambda2000_ero2.nii');
+
+
+    Mask = mask_ero3;
+    Mask_G = Mask;
+    P_B = 30;
+    P = 1 * Mask + P_B * (1-Mask);
+    RDF = 0;
+    save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF
+    % QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 500);
+    % nii = make_nii(QSM.*Mask,vox);
+    % save_nii(nii,'TFI/TFI_lambda500_ero3.nii');
+    QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 20000);
+    nii = make_nii(QSM.*Mask,voxelsize);
+    save_nii(nii,'TFI/TFI_lambda20000_ero3.nii');
+    % QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 1500);
+    % nii = make_nii(QSM.*Mask,vox);
+    % save_nii(nii,'TFI/TFI_lambda1500_ero3.nii');
+    % QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 2000);
+    % nii = make_nii(QSM.*Mask,vox);
+    % save_nii(nii,'TFI/TFI_lambda2000_ero3.nii');
+
+
+
+
+
+
+
+
+
+
+
+
+
+% % V-SHARP + iLSQR for each single echo
+% TissuePhase3d = zeros(size(mag));
+% mask_vsharp = TissuePhase3d;
+% chi_iLSQR_0 = mask_vsharp;
+
+% for echo = 1:5
+%     [TissuePhase3d(:,:,:,echo), mask_vsharp(:,:,:,echo)] = V_SHARP(-unph(:,:,:,echo) ,single(mask.*R),'smvsize',smvsize,'voxelsize',voxelsize*10);
+%     nii = make_nii(TissuePhase3d(:,:,:,echo),voxel_size);
+%     save_nii(nii,['VSHARP' num2str(echo) '.nii']);
+
+%     chi_iLSQR_0(:,:,:,echo) = QSM_iLSQR(TissuePhase3d(:,:,:,echo),mask_vsharp(:,:,:,echo),'H',z_prjs,'voxelsize',voxel_size,'niter',50,'TE',TE(echo)*1000,'B0',9.4);
+%     nii = make_nii(chi_iLSQR_0(:,:,:,echo),voxel_size);
+%     save_nii(nii,['chi_iLSQR_0_vsharp' num2str(echo) '.nii']);
+% end
+
+% chi_iLSQR_0_ave = mean(chi_iLSQR_0,4);
+% nii = make_nii(chi_iLSQR_0_ave,voxel_size);
+% save_nii(nii,'chi_iLSQR_0_ave.nii');
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -255,6 +518,8 @@ cd ..
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 [iFreq_raw N_std] = Fit_ppm_complex(iField);
 nii = make_nii(iFreq_raw,voxel_size);
@@ -262,18 +527,60 @@ save_nii(nii,'iFreq_raw.nii');
 
 
 % phase unwrapping using prelude
-!prelude -a mag1.nii -p iFreq_raw.nii -u iFreq_un -m mask.nii -n 8&\n' ...
-
+!prelude -a ../src/corr_mag1.nii -p iFreq_raw.nii -u iFreq_un -m ../mask.nii -n 8
+!gunzip iFreq_un.nii.gz
 nii = load_nii('iFreq_un.nii');
 iFreq = double(nii.img);
 
 
 % RESHARP background field removal
-[RDF, mask_resharp] = resharp(iFreq,mask,voxel_size,0.3,1e-4,200);
+[RDF, mask_resharp] = resharp(iFreq,mask,voxel_size,0.3,5e-4,500);
 nii = make_nii(RDF,voxel_size);
 save_nii(nii,'RDF_resharp.nii');
 
 lfs_resharp = RDF/(2.675e8*9.4*delta_TE*1e-6);
+
+
+% iLSQR method
+chi_iLSQR_0 = QSM_iLSQR(lfs_resharp*(2.675e8*9.4)/1e6,mask_resharp,'H',z_prjs,'voxelsize',voxel_size,'niter',50,'TE',1000,'B0',9.4);
+nii = make_nii(chi_iLSQR_0,voxel_size);
+save_nii(nii,'chi_iLSQR_0.nii');
+
+tfs = iFreq/(2.675e8*9.4*delta_TE*1e-6);
+
+% V-SHARP + iLSQR
+B0 =9.4;
+voxelsize = voxel_size;
+padsize = [12 12 12];
+smvsize = 12;
+[TissuePhase3d, mask_vsharp] = V_SHARP(tfs ,single(mask),'smvsize',smvsize,'voxelsize',voxelsize*10);
+nii = make_nii(TissuePhase3d,voxel_size);
+save_nii(nii,'VSHARP.nii');
+
+chi_iLSQR_0 = QSM_iLSQR(TissuePhase3d*(2.675e8*9.4)/1e6,mask_vsharp,'H',z_prjs,'voxelsize',voxel_size,'niter',50,'TE',1000,'B0',9.4);
+nii = make_nii(chi_iLSQR_0,voxel_size);
+save_nii(nii,'chi_iLSQR_0_vsharp.nii');
+
+
+% laplacian unwrapping + VSHARP +iLSQR
+Unwrapped_Phase = LaplacianPhaseUnwrap(squeeze(iFreq_raw),'voxelsize',voxelsize);
+nii = make_nii(Unwrapped_Phase,voxel_size);
+save_nii(nii,'lap_unph.nii');
+
+% V-SHARP + iLSQR
+B0 =9.4;
+voxelsize = voxel_size;
+padsize = [12 12 12];
+smvsize = 12;
+[TissuePhase3d, mask_vsharp] = V_SHARP(Unwrapped_Phase ,single(mask),'smvsize',smvsize,'voxelsize',voxelsize*10);
+nii = make_nii(TissuePhase3d,voxel_size);
+save_nii(nii,'VSHARP_lap.nii');
+
+chi_iLSQR_0 = QSM_iLSQR(TissuePhase3d,mask_vsharp,'H',z_prjs,'voxelsize',voxel_size,'niter',50,'TE',1000,'B0',9.4);
+nii = make_nii(chi_iLSQR_0,voxel_size);
+save_nii(nii,'chi_iLSQR_0_vsharp_lap.nii');
+
+
 
 % TVDI
 sus_resharp = tvdi(lfs_resharp,mask_resharp,voxel_size,5e-5,abs(iField(:,:,:,end)),B0_dir,500);
@@ -284,14 +591,13 @@ sus_resharp = tvdi(lfs_resharp,mask_resharp,voxel_size,1e-5,abs(iField(:,:,:,end
 nii = make_nii(sus_resharp.*mask_resharp,voxel_size);
 save_nii(nii,'QSM_resharp_1e-5.nii');
 
-sus_resharp = tvdi(lfs_resharp,mask_resharp,voxel_size,1e-4,abs(iField(:,:,:,end)),B0_dir,500);
+sus_resharp = tvdi(lfs_resharp,mask_resharp,voxel_size,2e-4,abs(iField(:,:,:,end)),B0_dir,500);
 nii = make_nii(sus_resharp.*mask_resharp,voxel_size);
-save_nii(nii,'QSM_resharp_1e-4.nii');
+save_nii(nii,'QSM_resharp_2e-4.nii');
 
 sus_resharp = tvdi(lfs_resharp,mask_resharp,voxel_size,1e-3,abs(iField(:,:,:,end)),B0_dir,500);
 nii = make_nii(sus_resharp.*mask_resharp,voxel_size);
 save_nii(nii,'QSM_resharp_1e-3.nii');
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

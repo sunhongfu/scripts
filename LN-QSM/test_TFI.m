@@ -11,7 +11,7 @@ end
 iField = iField/noise_level;
 %%%% Generate the Magnitude image %%%%
 iMag = sqrt(sum(abs(iField).^2,4));
-[iFreq_raw N_std] = Fit_ppm_complex(iField);
+% [iFreq_raw N_std] = Fit_ppm_complex(iField);
 matrix_size = single(imsize(1:3));
 voxel_size = vox;
 delta_TE = TE(2) - TE(1);
@@ -273,16 +273,16 @@ cd ..
 mkdir TFS_RESHARP_ERO2
 cd TFS_RESHARP_ERO2
 % (8) MEDI eroded brain with RESHARP (2 voxels erosion)
-[RDF, mask_resharp] = resharp(iFreq,mask,vox,2,1e-6,500);
+[RDF, mask_resharp] = resharp(iFreq,mask,vox,2,1e-4,500);
 nii = make_nii(RDF,voxel_size);
-save_nii(nii,'resharp_1e-6.nii');
+save_nii(nii,'resharp_1e-4.nii');
 Mask = mask_resharp;
 save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
      voxel_size delta_TE CF B0_dir;
 % run part of MEDI first
 QSM = MEDI_L1('lambda',1000);
 nii = make_nii(QSM.*Mask,vox);
-save_nii(nii,'MEDI_RESHARP_1e-6_ero2.nii');
+save_nii(nii,'MEDI_RESHARP_1e-4_ero2.nii');
 cd ..
 
 
@@ -290,16 +290,16 @@ cd ..
 mkdir TFS_RESHARP_ERO3
 cd TFS_RESHARP_ERO3
 % (9) MEDI eroded brain with RESHARP (3 voxels erosion)
-[RDF, mask_resharp] = resharp(iFreq,mask,vox,3,1e-6,500);
+[RDF, mask_resharp] = resharp(iFreq,mask,vox,3,1e-4,500);
 nii = make_nii(RDF,voxel_size);
-save_nii(nii,'resharp_1e-6.nii');
+save_nii(nii,'resharp_1e-4.nii');
 Mask = mask_resharp;
 save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
      voxel_size delta_TE CF B0_dir;
 % run part of MEDI first
 QSM = MEDI_L1('lambda',1000);
 nii = make_nii(QSM.*Mask,vox);
-save_nii(nii,'MEDI_RESHARP_1e-6_ero3.nii');
+save_nii(nii,'MEDI_RESHARP_1e-4_ero3.nii');
 cd ..
 
 
@@ -322,7 +322,7 @@ cd TFS_RESHARP_TV_ERO3
 % (11) TVDI eroded brain with RESHARP (3 voxels erosion)
 [RDF, mask_resharp] = resharp(iFreq,mask,vox,3,1e-6,500);
 lfs_resharp = RDF/(2.675e8*dicom_info.MagneticFieldStrength*delta_TE*1e-6);
-sus_resharp = tvdi(lfs_resharp,mask_resharp,vox,5e-4,iMag,z_prjs,500); 
+sus_resharp = tvdi(lfs_resharp,mask_resharp,vox,5e-4,iMag,z_prjs,1000); 
 nii = make_nii(sus_resharp.*mask_resharp,vox);
 save_nii(nii,'TV_RESHARP_1e-6_ero3.nii');
 cd ..
@@ -409,6 +409,13 @@ cd TFS_TIK_PRE_ERO3
 tfs_pad = padarray(iFreq/(2.675e8*dicom_info.MagneticFieldStrength*delta_TE*1e-6),[0 0 20]);
 mask_pad = padarray(mask_ero3,[0 0 20]);
 % R_pad = padarray(R,[0 0 20]);
+
+% add a polyfit
+tfs_pad_poly = (tfs_pad - poly3d(tfs_pad,mask_pad,2)).*mask_pad;
+tfs_pad = tfs_pad_poly;
+P = mask_pad + 60*(1 - mask_pad);
+
+
 r=3;
 Tik_weight = [1e-3];
 TV_weight = 4e-4;
@@ -422,9 +429,215 @@ for i = 1:length(Tik_weight)
 	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
 	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
 	% save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
-	chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 5000);
+	chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, P, z_prjs, 2000);
 	nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
-	save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_5000.nii']);
+	save_nii(nii,['poly2_TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
 end
 cd ..
+
+
+mkdir VSHARP_MEDI_ERO2
+cd VSHARP_MEDI_ERO2
+padsize = [12 12 12];
+smvsize = 12;
+RDF = V_SHARP(iFreq ,single(mask),'smvsize',smvsize,'voxelsize',voxel_size);
+nii = make_nii(RDF,voxel_size);
+save_nii(nii,'vsharp12.nii');
+Mask = ones(size(mask));
+Mask(RDF == 0) = 0;
+save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
+     voxel_size delta_TE CF B0_dir;
+% run part of MEDI first
+QSM = MEDI_L1('lambda',1000);
+nii = make_nii(QSM.*Mask,voxel_size);
+save_nii(nii,'MEDI_VSHARP_12_ero2.nii');
+cd ..
+
+
+mkdir VSHARP_MEDI_ERO3
+cd VSHARP_MEDI_ERO3
+padsize = [12 12 12];
+smvsize = 12;
+RDF = V_SHARP(iFreq ,single(mask_ero1),'smvsize',smvsize,'voxelsize',voxel_size);
+nii = make_nii(RDF,voxel_size);
+save_nii(nii,'vsharp12.nii');
+Mask = ones(size(mask));
+Mask(RDF == 0) = 0;
+save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
+     voxel_size delta_TE CF B0_dir;
+% run part of MEDI first
+QSM = MEDI_L1('lambda',1000);
+nii = make_nii(QSM.*Mask,voxel_size);
+save_nii(nii,'MEDI_VSHARP_12_ero3.nii');
+cd ..
+
+
+mkdir ESHARP_MEDI_ERO0
+cd ESHARP_MEDI_ERO0
+iFreq_odd = padarray(iFreq,[1 1 1],'post');
+mask_odd = padarray(mask,[1 1 1],'post');
+iFreq_odd = iFreq_odd.*mask_odd;
+%% Processing... (1) Determine SMV
+sharpOptions.radii              = [ 6 6 3 ] ;
+sharpOptions.thresholdParameter = 0.000001 ;
+gridDimensionVector = size( iFreq_odd ) ;
+midPoint            = ( gridDimensionVector + [1 1 1] ) / 2 ;
+midPoint            = sub2ind( gridDimensionVector, midPoint(1), midPoint(2), midPoint(3) ) ;
+reducedROI          = shaver( mask_odd, sharpOptions.radii ) ;
+sphere                  = createellipsoid( gridDimensionVector, sharpOptions.radii) ;
+numAveragingPoints      = sum( sphere(:) ) ;
+sharpFilter             = - sphere / numAveragingPoints ;
+sharpFilter( midPoint ) = sharpFilter( midPoint ) + 1 ;
+FFTSharpFilter = fftc( sharpFilter ) ;
+% Deconv.
+tmp            = fftc( reducedROI .* ifftc( fftc( sharpFilter ) .* fftc( iFreq_odd ) ) ) ./ FFTSharpFilter ;
+% Regularization
+tmpReg         = FFTSharpFilter < sharpOptions.thresholdParameter ;
+tmp( tmpReg )  = 0 ;
+localPhaseNoSVD       = reducedROI .* real( ifftc( tmp ) );
+backgroundPhaseNoSVD  = reducedROI .* (iFreq_odd - localPhaseNoSVD) ;
+%% (3) TAYLOR
+taylorOptions.name                = strcat(pwd, 'inVivo') ;
+taylorOptions.isSavingInterimVar  = 'true' ;
+taylorOptions.voxelSize           =  voxel_size;
+taylorOptions.expansionOrder      = 2 ;
+taylorOptions.numIterations       = 1 ;
+taylorOptions.numCPU              = 1 ;
+EdgeOut  = sharpedges( backgroundPhaseNoSVD, mask_odd, reducedROI, taylorOptions) ;
+%% (4) TSVD
+extendedBackgroundPhase = mask_odd .* ( EdgeOut.reducedBackgroundField + EdgeOut.extendedBackgroundField(:,:,:,3) ) ;
+tmpLocal       = mask_odd .* ( iFreq_odd - extendedBackgroundPhase ) ;
+fTmpLocal      = fftc( tmpLocal ) ;
+% Regularization
+sharpOptions.thresholdParameter = 0.05 ;
+tmpReg         = FFTSharpFilter < sharpOptions.thresholdParameter ;
+fTmpLocal( tmpReg )  = 0 ;
+localPhaseEsharp = mask_odd .* ifftc( fTmpLocal) ;
+RDF = localPhaseEsharp(1:end-1,1:end-1,1:end-1);
+nii = make_nii(localPhaseEsharp,voxel_size);
+save_nii(nii,'ESHARP.nii');
+
+Mask = ones(size(mask));
+Mask(RDF == 0) = 0;
+save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
+     voxel_size delta_TE CF B0_dir;
+% run part of MEDI first
+QSM = MEDI_L1('lambda',1000);
+nii = make_nii(QSM.*Mask,voxel_size);
+save_nii(nii,'MEDI_ESHARP_ERO0.nii');
+cd ..
+
+
+mkdir ESHARP_MEDI_ERO1
+cd ESHARP_MEDI_ERO1
+iFreq_odd = padarray(iFreq,[1 1 1],'post');
+mask_odd = padarray(mask_ero1,[1 1 1],'post');
+iFreq_odd = iFreq_odd.*mask_odd;
+%% Processing... (1) Determine SMV
+sharpOptions.radii              = [ 6 6 3 ] ;
+sharpOptions.thresholdParameter = 0.000001 ;
+gridDimensionVector = size( iFreq_odd ) ;
+midPoint            = ( gridDimensionVector + [1 1 1] ) / 2 ;
+midPoint            = sub2ind( gridDimensionVector, midPoint(1), midPoint(2), midPoint(3) ) ;
+reducedROI          = shaver( mask_odd, sharpOptions.radii ) ;
+sphere                  = createellipsoid( gridDimensionVector, sharpOptions.radii) ;
+numAveragingPoints      = sum( sphere(:) ) ;
+sharpFilter             = - sphere / numAveragingPoints ;
+sharpFilter( midPoint ) = sharpFilter( midPoint ) + 1 ;
+FFTSharpFilter = fftc( sharpFilter ) ;
+% Deconv.
+tmp            = fftc( reducedROI .* ifftc( fftc( sharpFilter ) .* fftc( iFreq_odd ) ) ) ./ FFTSharpFilter ;
+% Regularization
+tmpReg         = FFTSharpFilter < sharpOptions.thresholdParameter ;
+tmp( tmpReg )  = 0 ;
+localPhaseNoSVD       = reducedROI .* real( ifftc( tmp ) );
+backgroundPhaseNoSVD  = reducedROI .* (iFreq_odd - localPhaseNoSVD) ;
+%% (3) TAYLOR
+taylorOptions.name                = strcat(pwd, 'inVivo') ;
+taylorOptions.isSavingInterimVar  = 'true' ;
+taylorOptions.voxelSize           =  voxel_size;
+taylorOptions.expansionOrder      = 2 ;
+taylorOptions.numIterations       = 1 ;
+taylorOptions.numCPU              = 1 ;
+EdgeOut  = sharpedges( backgroundPhaseNoSVD, mask_odd, reducedROI, taylorOptions) ;
+%% (4) TSVD
+extendedBackgroundPhase = mask_odd .* ( EdgeOut.reducedBackgroundField + EdgeOut.extendedBackgroundField(:,:,:,3) ) ;
+tmpLocal       = mask_odd .* ( iFreq_odd - extendedBackgroundPhase ) ;
+fTmpLocal      = fftc( tmpLocal ) ;
+% Regularization
+sharpOptions.thresholdParameter = 0.05 ;
+tmpReg         = FFTSharpFilter < sharpOptions.thresholdParameter ;
+fTmpLocal( tmpReg )  = 0 ;
+localPhaseEsharp = mask_odd .* ifftc( fTmpLocal) ;
+RDF = localPhaseEsharp(1:end-1,1:end-1,1:end-1);
+nii = make_nii(localPhaseEsharp,voxel_size);
+save_nii(nii,'ESHARP.nii');
+
+Mask = ones(size(mask_ero1));
+Mask(RDF == 0) = 0;
+save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
+     voxel_size delta_TE CF B0_dir;
+% run part of MEDI first
+QSM = MEDI_L1('lambda',1000);
+nii = make_nii(QSM.*Mask,voxel_size);
+save_nii(nii,'MEDI_ESHARP_ERO1.nii');
+cd ..
+
+
+
+mkdir ESHARP_MEDI_ERO2
+cd ESHARP_MEDI_ERO2
+iFreq_odd = padarray(iFreq,[1 1 1],'post');
+mask_odd = padarray(mask_ero2,[1 1 1],'post');
+iFreq_odd = iFreq_odd.*mask_odd;
+%% Processing... (1) Determine SMV
+sharpOptions.radii              = [ 6 6 3 ] ;
+sharpOptions.thresholdParameter = 0.000001 ;
+gridDimensionVector = size( iFreq_odd ) ;
+midPoint            = ( gridDimensionVector + [1 1 1] ) / 2 ;
+midPoint            = sub2ind( gridDimensionVector, midPoint(1), midPoint(2), midPoint(3) ) ;
+reducedROI          = shaver( mask_odd, sharpOptions.radii ) ;
+sphere                  = createellipsoid( gridDimensionVector, sharpOptions.radii) ;
+numAveragingPoints      = sum( sphere(:) ) ;
+sharpFilter             = - sphere / numAveragingPoints ;
+sharpFilter( midPoint ) = sharpFilter( midPoint ) + 1 ;
+FFTSharpFilter = fftc( sharpFilter ) ;
+% Deconv.
+tmp            = fftc( reducedROI .* ifftc( fftc( sharpFilter ) .* fftc( iFreq_odd ) ) ) ./ FFTSharpFilter ;
+% Regularization
+tmpReg         = FFTSharpFilter < sharpOptions.thresholdParameter ;
+tmp( tmpReg )  = 0 ;
+localPhaseNoSVD       = reducedROI .* real( ifftc( tmp ) );
+backgroundPhaseNoSVD  = reducedROI .* (iFreq_odd - localPhaseNoSVD) ;
+%% (3) TAYLOR
+taylorOptions.name                = strcat(pwd, 'inVivo') ;
+taylorOptions.isSavingInterimVar  = 'true' ;
+taylorOptions.voxelSize           =  voxel_size;
+taylorOptions.expansionOrder      = 2 ;
+taylorOptions.numIterations       = 1 ;
+taylorOptions.numCPU              = 1 ;
+EdgeOut  = sharpedges( backgroundPhaseNoSVD, mask_odd, reducedROI, taylorOptions) ;
+%% (4) TSVD
+extendedBackgroundPhase = mask_odd .* ( EdgeOut.reducedBackgroundField + EdgeOut.extendedBackgroundField(:,:,:,3) ) ;
+tmpLocal       = mask_odd .* ( iFreq_odd - extendedBackgroundPhase ) ;
+fTmpLocal      = fftc( tmpLocal ) ;
+% Regularization
+sharpOptions.thresholdParameter = 0.05 ;
+tmpReg         = FFTSharpFilter < sharpOptions.thresholdParameter ;
+fTmpLocal( tmpReg )  = 0 ;
+localPhaseEsharp = mask_odd .* ifftc( fTmpLocal) ;
+RDF = localPhaseEsharp(1:end-1,1:end-1,1:end-1);
+nii = make_nii(localPhaseEsharp,voxel_size);
+save_nii(nii,'ESHARP.nii');
+
+Mask = ones(size(mask_ero2));
+Mask(RDF == 0) = 0;
+save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
+     voxel_size delta_TE CF B0_dir;
+% run part of MEDI first
+QSM = MEDI_L1('lambda',1000);
+nii = make_nii(QSM.*Mask,voxel_size);
+save_nii(nii,'MEDI_ESHARP_ERO2.nii');
+cd ..
+
 

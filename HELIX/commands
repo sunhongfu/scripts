@@ -1,0 +1,4 @@
+mcc -R -nodisplay -m -v -w enable -d deploy_folder/ function.m
+# sometimes need to manually include the dependencies by -a ***.m
+
+qsub -l nodes=1:ppn=2,walltime=48:00:00,mem=4gb 1119101_PRESCHOOL_1119101.pbs

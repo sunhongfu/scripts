@@ -8,7 +8,6 @@ mask_head = headmask;
 clear brmask headmask
 
 
-
 %%%%%%
 % undersample it to 128*128*128!
 % otherwise too big!
@@ -28,6 +27,23 @@ mask_head = downsample(permute(mask_head,[3 2 1]),4);
 mask_head = permute(mask_head,[2 3 1]);
 
 
+
+%%%%%%
+% add a layer of skull bone (susceptiblity = -2ppm)
+r = 4;
+[X,Y,Z] = ndgrid(-r:r,-r:r,-r:r);
+h = (X.^2/r^2 + Y.^2/r^2 + Z.^2/r^2 <= 1);
+ker = h/sum(h(:));
+imsize = size(mask_brain);
+mask_tmp = convn(mask_brain,ker,'same');
+mask_exp = zeros(imsize);
+mask_exp(mask_tmp > 0) = 1; % no error tolerance
+
+mask_skull = (mask_exp - mask_brain > 0) & (model == 0);
+model(mask_skull) = -2;
+%%%%%%%%%%%%
+
+
 vox = [1 1 1];
 z_prjs = [0 0 1];
 imsize = size(model);
@@ -35,6 +51,7 @@ imsize = size(model);
 mask_tissue = ones(imsize);
 mask_tissue(model == 9) =0;
 mask_tissue(model == -3) =0;
+mask_tissue(model == -2) =0;
 
 nii = make_nii(model,vox);
 save_nii(nii,'chi.nii');
@@ -71,8 +88,29 @@ nii = make_nii(field,vox);
 save_nii(nii,'field.nii');
 
 
+% add noise to field map
+% % add to imaginary part
+% field_noisy_real = awgn(real(field(:)),50,'measured');
+% field_noisy_imag = awgn(imag(field(:)),50,'measured');
+
+noise_real = 0.002*randn(size(field));
+noise_imag = 0.002*randn(size(field));
+
+field_noisy_real = real(field) + noise_real;
+field_noisy_imag = imag(field) + noise_imag;
+
+field_noisy = complex(field_noisy_real, field_noisy_imag);
+% field_noisy = reshape(field_noisy,size(field));
+
+% field_noisy = awgn(field(:),50,'measured');
+% field_noisy = reshape(field_noisy,size(field));
+nii = make_nii(field_noisy,vox);
+save_nii(nii,'field_noisy.nii');
+
+
+
 %% TFI of the whole head
-iFreq = field*2*pi*42.58*3*15e-3;
+iFreq = field_noisy*2*pi*42.58*3*15e-3;
 delta_TE = 15e-3;
 matrix_size = imsize;
 % CF = 1/(2*pi)*1e6;
@@ -84,39 +122,8 @@ N_std = 1;
 voxel_size = vox;
 B0_dir = z_prjs;
 
-mkdir TFS_TFI_ERO0
-cd TFS_TFI_ERO0
-% (1) TFI of 0 voxel erosion
-% only brain tissue, need whole head later
-P_B = 30;
-P = 1 * Mask + P_B * (1-Mask);
-Mask_G = 1 * Mask + 1/P_B * (~Mask & mask_head);
-% Mask_G = Mask;
-RDF = 0;
-wG = 1;
-save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF wG
-QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 600*2);
-nii = make_nii(QSM,voxel_size);
-save_nii(nii,'TFI_tissue_ero0.nii');
-cd ..
-
-
-%% TFI of the whole head
-iFreq = field*2*pi*42.58*3*15e-3;
-delta_TE = 15e-3;
-matrix_size = imsize;
-% CF = 1/(2*pi)*1e6;
-CF = 42.58*3e6;
-Mask = mask_tissue;
-iMag = Mask;
-% iMag = Mask.*model;
-N_std = 1;
-voxel_size = vox;
-B0_dir = z_prjs;
-
-
-mkdir TFS_TFI_ERO0
-cd TFS_TFI_ERO0
+mkdir TFI
+cd TFI
 % (1) TFI of 0 voxel erosion
 % only brain tissue, need whole head later
 P_B = 30;
@@ -128,63 +135,77 @@ wG = 1;
 save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF wG
 QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 600*2);
 nii = make_nii(QSM,voxel_size);
-save_nii(nii,'TFI_brain_ero0.nii');
+save_nii(nii,'TFI_tissue.nii');
+
+
+% 
+Mask_G = 1 * Mask + 1/P_B * (~Mask & mask_head);
+RDF = 0;
+wG = 1;
+save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF wG
+QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 600*2);
+nii = make_nii(QSM,voxel_size);
+save_nii(nii,'TFI_head.nii');
+
+% % 
+% Mask_G = mask_head;
+% RDF = 0;
+% wG = 1;
+% save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF wG
+% QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 600*2);
+% nii = make_nii(QSM,voxel_size);
+% save_nii(nii,'TFI_head_maskhead.nii');
 cd ..
 
 
 
 
 %%%% TIK-QSM
-iFreq = field;
-mkdir TFS_TIK_PRE_ERO0
-cd TFS_TIK_PRE_ERO0
-tfs_pad = padarray(iFreq,[0 0 20]);
-mask_pad = padarray(mask_tissue,[0 0 20]);
-mask_head_pad = padarray(mask_head,[0 0 20]);
-mask_brain_pad = padarray(mask_brain,[0 0 20]);
-% tfs_pad = iFreq;
-% mask_pad = mask_tissue;
-% mask_head_pad = mask_head;
-% mask_brain_pad = mask_brain;
-% R_pad = padarray(R,[0 0 20]);
-r=0;
-% Tik_weight = [1e-3, 2e-3];
-Tik_weight = 0;
-TV_weight = [1e-4, 2e-4];
+mkdir LN-QSM
+cd LN-QSM
+% tfs_pad = padarray(field,[0 0 20]);
+% mask_pad = padarray(mask_tissue,[0 0 20]);
+% mask_head_pad = padarray(mask_head,[0 0 20]);
+% mask_brain_pad = padarray(mask_brain,[0 0 20]);
+
+tfs_pad = field_noisy;
+mask_tissue_pad = mask_tissue;
+mask_head_pad = mask_head;
+mask_brain_pad = mask_brain;
+
+P = 1 * mask_tissue + 30 * (1 - mask_tissue);
+% P_pad = padarray(P,[0 0 20]);
+P_pad = P;
+% Pnew_pad = P_pad.*mask_head_pad;
+% Pnewnew_pad = Pnew_pad + 1/30*(1 - mask_head_pad);
+mask_TV = 1 * mask_tissue_pad + 1/30 * (~mask_tissue_pad & mask_head_pad);
+
+
+Tik_weight = [0, 5e-4, 1e-3];
+% Tik_weight = [1e-3, 0];
+TV_weight = [1e-4, 2e-4, 5e-4];
 for i = 1:length(Tik_weight)
 	for j = 1:length(TV_weight)
-	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_head_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
-	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_head_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
+		chi = tikhonov_qsm(tfs_pad, mask_tissue_pad, 1, mask_TV, mask_tissue_pad, 0, TV_weight(j), Tik_weight(i), 0, vox, P_pad, z_prjs, 2000);
+		% nii = make_nii(chi(:,:,21:end-20),vox);
+		nii = make_nii(chi,vox);
+		save_nii(nii,['TIK_hs_TV_' num2str(TV_weight(j)) '_Tik_' num2str(Tik_weight(i)) '_P30_2000_maskTV.nii']);
 
- %    chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_brain_pad, mask_brain_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
-	% nii = make_nii(chi(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_tissue_brain_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
+		chi = tikhonov_qsm(tfs_pad, mask_tissue_pad, 1, mask_head_pad, mask_tissue_pad, 0, TV_weight(j), Tik_weight(i), 0, vox, P_pad, z_prjs, 2000);
+		% nii = make_nii(chi(:,:,21:end-20),vox);
+		nii = make_nii(chi,vox);
+		save_nii(nii,['TIK_hs_TV_' num2str(TV_weight(j)) '_Tik_' num2str(Tik_weight(i)) '_P30_2000.nii']);
 
+		chi = tikhonov_qsm(tfs_pad, mask_tissue_pad, 1, mask_tissue_pad, mask_tissue_pad, 0, TV_weight(j), Tik_weight(i), 0, vox, P_pad, z_prjs, 200);
+		% nii = make_nii(chi(:,:,21:end-20),vox);
+		nii = make_nii(chi,vox);
+		save_nii(nii,['TIK_ss_TV_' num2str(TV_weight(j)) '_Tik_' num2str(Tik_weight(i)) '_P30_200.nii']);
 
-	chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight(j), Tik_weight(i), vox, z_prjs, 2000);
-	nii = make_nii(chi(:,:,21:end-20),vox);
-	save_nii(nii,['TIK_tissue_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
-
-
- %    chi = tikhonov_qsm(tfs_pad, mask_brain_pad, 1, mask_brain_pad, mask_brain_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
-	% nii = make_nii(chi(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_brain_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
-
-	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
-	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
-	
-	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 500);
-	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_500.nii']);
-	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
-	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
-	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 5000);
-	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_5000.nii']);
-end
+		chi = tikhonov_qsm(tfs_pad, mask_tissue_pad, 1, mask_tissue_pad, mask_tissue_pad, 0, TV_weight(j), Tik_weight(i), 0, vox, P_pad, z_prjs, 2000);
+		% nii = make_nii(chi(:,:,21:end-20),vox);
+		nii = make_nii(chi,vox);
+		save_nii(nii,['TIK_ss_TV_' num2str(TV_weight(j)) '_Tik_' num2str(Tik_weight(i)) '_P30_2000.nii']);
+	end
 end
 cd ..
 
@@ -192,185 +213,200 @@ cd ..
 
 
 
-%% wrap the phase and add noise?
-gamma = 2*pi*42.58;
-B0 = 3;
-TE = 15e-3;
-phase = gamma.*field.*B0.*TE;
-complexData = mask_tissue.*exp(1i.*phase);
-% complexData(:) = awgn(complexData(:), 100, 'measured');
-
-nii = make_nii(angle(complexData),vox);
-save_nii(nii,'phaseNoisy.nii');
-
-nii = make_nii(abs(complexData),vox);
-save_nii(nii,'magNoisy.nii');
-
-% unwrap the phase using graphic cut
-iFreq = unwrapping_gc(angle(complexData),mask_tissue,vox);
-nii = make_nii(iFreq,vox);
-save_nii(nii,'iFreq_gc.nii');
-
-% unwrap using prelude
-!prelude -a magNoisy.nii -p phaseNoisy.nii -u iFreq_pre.nii -m mask_brain.nii -n 12
-
-nii = load_nii('iFreq_pre.nii');
-unph_pre = double(nii.img)-2*pi;
 
 
-% laplacian unwrapping
-disp('--> unwrap aliasing phase using laplacian...');
-    imsize = size(complexData);
-    unph = unwrapLaplacian(angle(complexData), imsize,vox);
-    nii = make_nii(unph, vox);
-    save_nii(nii,'unph_lap.nii');
 
 
-%% TFI of the whole head
-iFreq = unph_pre;
-delta_TE = 15e-3;
-matrix_size = imsize;
-% CF = 1/(2*pi)*1e6;
-CF = 42.58*3e6;
-Mask = mask_tissue;
-iMag = Mask;
-% iMag = Mask.*model;
-N_std = 1;
-voxel_size = vox;
-B0_dir = z_prjs;
 
-mkdir TFS_TFI_ERO0
-cd TFS_TFI_ERO0
-% (1) TFI of 0 voxel erosion
-% only brain tissue, need whole head later
-P_B = 30;
-P = 1 * Mask + P_B * (1-Mask);
-Mask_G = 1 * Mask + 1/P_B * (~Mask & mask_head);
+
+
+
+
+
+
+
+
+
+
+% %% wrap the phase and add noise?
+% gamma = 2*pi*42.58;
+% B0 = 3;
+% TE = 15e-3;
+% phase = gamma.*field.*B0.*TE;
+% complexData = mask_tissue.*exp(1i.*phase);
+% % complexData(:) = awgn(complexData(:), 100, 'measured');
+
+% nii = make_nii(angle(complexData),vox);
+% save_nii(nii,'phaseNoisy.nii');
+
+% nii = make_nii(abs(complexData),vox);
+% save_nii(nii,'magNoisy.nii');
+
+% % unwrap the phase using graphic cut
+% iFreq = unwrapping_gc(angle(complexData),mask_tissue,vox);
+% nii = make_nii(iFreq,vox);
+% save_nii(nii,'iFreq_gc.nii');
+
+% % unwrap using prelude
+% !prelude -a magNoisy.nii -p phaseNoisy.nii -u iFreq_pre.nii -m mask_brain.nii -n 12
+
+% nii = load_nii('iFreq_pre.nii');
+% unph_pre = double(nii.img)-2*pi;
+
+
+% % laplacian unwrapping
+% disp('--> unwrap aliasing phase using laplacian...');
+%     imsize = size(complexData);
+%     unph = unwrapLaplacian(angle(complexData), imsize,vox);
+%     nii = make_nii(unph, vox);
+%     save_nii(nii,'unph_lap.nii');
+
+
+% %% TFI of the whole head
+% iFreq = unph_pre;
+% delta_TE = 15e-3;
+% matrix_size = imsize;
+% % CF = 1/(2*pi)*1e6;
+% CF = 42.58*3e6;
+% Mask = mask_tissue;
+% iMag = Mask;
+% % iMag = Mask.*model;
+% N_std = 1;
+% voxel_size = vox;
+% B0_dir = z_prjs;
+
+% mkdir TFS_TFI_ERO0
+% cd TFS_TFI_ERO0
+% % (1) TFI of 0 voxel erosion
+% % only brain tissue, need whole head later
+% P_B = 30;
+% P = 1 * Mask + P_B * (1-Mask);
+% Mask_G = 1 * Mask + 1/P_B * (~Mask & mask_head);
+% % Mask_G = Mask;
+% RDF = 0;
+% wG = 1;
+% save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF wG
+% QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 600*2);
+% nii = make_nii(QSM,voxel_size);
+% save_nii(nii,'TFI_pre_head_ero0.nii');
+% cd ..
+
+
+% %% TFI of the whole tissue
+% iFreq = unph;
+% delta_TE = 15e-3;
+% matrix_size = imsize;
+% % CF = 1/(2*pi)*1e6;
+% CF = 42.58*3e6;
+% Mask = mask_tissue;
+% iMag = Mask;
+% % iMag = Mask.*model;
+% N_std = 1;
+% voxel_size = vox;
+% B0_dir = z_prjs;
+
+
+% mkdir TFS_TFI_ERO0
+% cd TFS_TFI_ERO0
+% % (1) TFI of 0 voxel erosion
+% % only brain tissue, need whole head later
+% P_B = 30;
+% P = 1 * Mask + P_B * (1-Mask);
+% % Mask_G = 1 * Mask + 1/P_B * (~Mask & mask_head);
 % Mask_G = Mask;
-RDF = 0;
-wG = 1;
-save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF wG
-QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 600*2);
-nii = make_nii(QSM,voxel_size);
-save_nii(nii,'TFI_pre_head_ero0.nii');
-cd ..
+% RDF = 0;
+% wG = 1;
+% save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF wG
+% QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 600*2);
+% nii = make_nii(QSM,voxel_size);
+% save_nii(nii,'TFI_lap_tissue_ero0.nii');
+% cd ..
 
 
-%% TFI of the whole tissue
-iFreq = unph;
-delta_TE = 15e-3;
-matrix_size = imsize;
-% CF = 1/(2*pi)*1e6;
-CF = 42.58*3e6;
-Mask = mask_tissue;
-iMag = Mask;
-% iMag = Mask.*model;
-N_std = 1;
-voxel_size = vox;
-B0_dir = z_prjs;
+% %% TFI of the whole brain
+% iFreq = unph_pre;
+% delta_TE = 15e-3;
+% matrix_size = imsize;
+% % CF = 1/(2*pi)*1e6;
+% CF = 42.58*3e6;
+% Mask = mask_brain;
+% iMag = Mask;
+% % iMag = Mask.*model;
+% N_std = 1;
+% voxel_size = vox;
+% B0_dir = z_prjs;
 
 
-mkdir TFS_TFI_ERO0
-cd TFS_TFI_ERO0
-% (1) TFI of 0 voxel erosion
-% only brain tissue, need whole head later
-P_B = 30;
-P = 1 * Mask + P_B * (1-Mask);
-% Mask_G = 1 * Mask + 1/P_B * (~Mask & mask_head);
-Mask_G = Mask;
-RDF = 0;
-wG = 1;
-save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF wG
-QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 600*2);
-nii = make_nii(QSM,voxel_size);
-save_nii(nii,'TFI_lap_tissue_ero0.nii');
-cd ..
-
-
-%% TFI of the whole brain
-iFreq = unph_pre;
-delta_TE = 15e-3;
-matrix_size = imsize;
-% CF = 1/(2*pi)*1e6;
-CF = 42.58*3e6;
-Mask = mask_brain;
-iMag = Mask;
-% iMag = Mask.*model;
-N_std = 1;
-voxel_size = vox;
-B0_dir = z_prjs;
-
-
-mkdir TFS_TFI_ERO0
-cd TFS_TFI_ERO0
-% (1) TFI of 0 voxel erosion
-% only brain tissue, need whole head later
-P_B = 30;
-P = 1 * Mask + P_B * (1-Mask);
-% Mask_G = 1 * Mask + 1/P_B * (~Mask & mask_head);
-Mask_G = Mask;
-RDF = 0;
-wG = 1;
-save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF wG
-QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 600*2);
-nii = make_nii(QSM,voxel_size);
-save_nii(nii,'TFI_pre_brain_ero0.nii');
-cd ..
+% mkdir TFS_TFI_ERO0
+% cd TFS_TFI_ERO0
+% % (1) TFI of 0 voxel erosion
+% % only brain tissue, need whole head later
+% P_B = 30;
+% P = 1 * Mask + P_B * (1-Mask);
+% % Mask_G = 1 * Mask + 1/P_B * (~Mask & mask_head);
+% Mask_G = Mask;
+% RDF = 0;
+% wG = 1;
+% save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF wG
+% QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 600*2);
+% nii = make_nii(QSM,voxel_size);
+% save_nii(nii,'TFI_pre_brain_ero0.nii');
+% cd ..
 
 
 
 
 
-%%%% TIK-QSM
-iFreq = unph_pre/(gamma*B0*TE);
-mkdir TFS_TIK_PRE_ERO0
-cd TFS_TIK_PRE_ERO0
-tfs_pad = padarray(iFreq,[0 0 20]);
-mask_pad = padarray(mask_tissue,[0 0 20]);
-mask_head_pad = padarray(mask_head,[0 0 20]);
-mask_brain_pad = padarray(mask_brain,[0 0 20]);
-% tfs_pad = iFreq;
-% mask_pad = mask_tissue;
-% mask_head_pad = mask_head;
-% mask_brain_pad = mask_brain;
-% R_pad = padarray(R,[0 0 20]);
-r=0;
-% Tik_weight = [1e-3, 2e-3];
-Tik_weight = 1e-6;
-TV_weight = 2e-4;
-for i = 1:length(Tik_weight)
-	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_head_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
-	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_head_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
+% %%%% TIK-QSM
+% iFreq = unph_pre/(gamma*B0*TE);
+% mkdir TFS_TIK_PRE_ERO0
+% cd TFS_TIK_PRE_ERO0
+% tfs_pad = padarray(iFreq,[0 0 20]);
+% mask_pad = padarray(mask_tissue,[0 0 20]);
+% mask_head_pad = padarray(mask_head,[0 0 20]);
+% mask_brain_pad = padarray(mask_brain,[0 0 20]);
+% % tfs_pad = iFreq;
+% % mask_pad = mask_tissue;
+% % mask_head_pad = mask_head;
+% % mask_brain_pad = mask_brain;
+% % R_pad = padarray(R,[0 0 20]);
+% r=0;
+% % Tik_weight = [1e-3, 2e-3];
+% Tik_weight = 1e-6;
+% TV_weight = 2e-4;
+% for i = 1:length(Tik_weight)
+% 	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_head_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
+% 	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
+% 	% save_nii(nii,['TIK_head_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
 
- %    chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_brain_pad, mask_brain_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
-	% nii = make_nii(chi(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_tissue_brain_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
-
-
-	chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
-	nii = make_nii(chi(:,:,21:end-20),vox);
-	save_nii(nii,['TIK_pre_tissue_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
+%  %    chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_brain_pad, mask_brain_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
+% 	% nii = make_nii(chi(:,:,21:end-20),vox);
+% 	% save_nii(nii,['TIK_tissue_brain_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
 
 
- %    chi = tikhonov_qsm(tfs_pad, mask_brain_pad, 1, mask_brain_pad, mask_brain_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
-	% nii = make_nii(chi(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_brain_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
+% 	chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
+% 	nii = make_nii(chi(:,:,21:end-20),vox);
+% 	save_nii(nii,['TIK_pre_tissue_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
 
-	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
-	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
+
+%  %    chi = tikhonov_qsm(tfs_pad, mask_brain_pad, 1, mask_brain_pad, mask_brain_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
+% 	% nii = make_nii(chi(:,:,21:end-20),vox);
+% 	% save_nii(nii,['TIK_brain_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
+
+% 	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
+% 	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
+% 	% save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
 	
-	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 500);
-	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_500.nii']);
-	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
-	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
-	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 5000);
-	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
-	% save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_5000.nii']);
-end
-cd ..
+% 	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 500);
+% 	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
+% 	% save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_500.nii']);
+% 	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 2000);
+% 	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
+% 	% save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_2000.nii']);
+% 	% chi = tikhonov_qsm(tfs_pad, mask_pad, 1, mask_pad, mask_pad, TV_weight, Tik_weight(i), vox, z_prjs, 5000);
+% 	% nii = make_nii(chi(:,:,21:end-20).*mask_pad(:,:,21:end-20),vox);
+% 	% save_nii(nii,['TIK_ero' num2str(r) '_TV_' num2str(TV_weight) '_Tik_' num2str(Tik_weight(i)) '_PRE_5000.nii']);
+% end
+% cd ..
 
 
