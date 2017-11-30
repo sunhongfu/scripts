@@ -138,14 +138,17 @@ nii = make_nii(QSM,voxel_size);
 save_nii(nii,'TFI_tissue.nii');
 
 
-% 
-Mask_G = 1 * Mask + 1/P_B * (~Mask & mask_head);
-RDF = 0;
-wG = 1;
-save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF wG
-QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 600*2);
-nii = make_nii(QSM,voxel_size);
-save_nii(nii,'TFI_head.nii');
+for P_B = 10:10:100
+	% 
+	P = 1 * Mask + P_B * (1-Mask);
+	Mask_G = 1 * Mask + 1/P_B * (~Mask & mask_head);
+	RDF = 0;
+	wG = 1;
+	save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF wG
+	QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 600*2);
+	nii = make_nii(QSM,voxel_size);
+	save_nii(nii,['TFI_head_' num2str(P_B) '.nii']);
+end
 
 % % 
 % Mask_G = mask_head;

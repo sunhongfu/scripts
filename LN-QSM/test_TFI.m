@@ -11,7 +11,7 @@ end
 iField = iField/noise_level;
 %%%% Generate the Magnitude image %%%%
 iMag = sqrt(sum(abs(iField).^2,4));
-% [iFreq_raw N_std] = Fit_ppm_complex(iField);
+[iFreq_raw N_std] = Fit_ppm_complex(iField);
 matrix_size = single(imsize(1:3));
 voxel_size = vox;
 delta_TE = TE(2) - TE(1);
@@ -29,13 +29,30 @@ CF = dicom_info.ImagingFrequency *1e6;
 iFreq = tfs*2.675e8*dicom_info.MagneticFieldStrength*delta_TE*1e-6;
 
 load('all.mat','iFreq_raw','voxel_size','mask','R','delta_TE');
+
+mkdir SS
+cd SS
 save('ss.mat','iFreq_raw','voxel_size','mask','R','delta_TE');
 load('ss.mat');
 nii = make_nii(iFreq_raw,voxel_size);
 save_nii(nii,'iFreq_raw.nii');
 nii = make_nii(mask.*R,voxel_size);
 save_nii(nii,'mask.nii');
-!tgv_qsm  -p iFreq_raw.nii -m mask.nii -f 3 -t 0.0034 -o SS_QSM
+!tgv_qsm  -p iFreq_raw.nii -m mask.nii -f 3 -t 0.0034 -o SS_QSM --no-resampling
+
+
+!tgv_qsm  -p iFreq_raw.nii -m mask.nii -f 3 -t 0.0034 -o SS_QSM_new --alpha 0.0009 0.0003 --no-resampling
+
+% !tgv_qsm  -p iFreq_raw.nii -m mask.nii -f 3 -t 0.0034 -o SS_QSM_1 --alpha 0.0015 0.0005
+% !tgv_qsm  -p iFreq_raw.nii -m mask.nii -f 3 -t 0.0034 -o SS_QSM_2 --alpha 0.015 0.005
+% !tgv_qsm  -p iFreq_raw.nii -m mask.nii -f 3 -t 0.0034 -o SS_QSM_3 --alpha 0.00015 0.00005
+% !tgv_qsm  -p iFreq_raw.nii -m mask.nii -f 3 -t 0.0034 -o SS_QSM_5 --alpha 0.00075 0.00025
+% !tgv_qsm  -p iFreq_raw.nii -m mask.nii -f 3 -t 0.0034 -o SS_QSM_6 --alpha 0.00012 0.00004
+% !tgv_qsm  -p iFreq_raw.nii -m mask.nii -f 3 -t 0.0034 -o SS_QSM_7 --alpha 0.0003 0.0001
+
+%% !!! cannot run from MATLAB, need to run in shell
+
+cd ..
 
 save all.mat
 clear
@@ -85,6 +102,26 @@ save_nii(nii,'mask_ero3.nii');
 % or from traditional tfs (prelude+fitting)
 iFreq = tfs*2.675e8*dicom_info.MagneticFieldStrength*delta_TE*1e-6;
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+mkdir TFS_LNQSM
+% pad 40 zeros
+tfs_pad = padarray(tfs,[0 0 40]);
+mask_pad = padarray(mask,[0 0 40]);
+
+P = mask_pad + 30*(1 - mask_pad);
+Res_wt = iMag./mean(iMag(mask>0));
+Res_wt = padarray(Res_wt,[0 0 40]);
+
+
+chi_ero0_masked_500 = tikhonov_qsm(tfs_pad, Res_wt.*mask_pad, 1, mask_pad, mask_pad, 0, 5e-4, 0.001, 0, vox, P, z_prjs, 500);
+nii = make_nii(chi_ero0_masked_500,vox);
+save_nii(nii,['chi_ero0_mm_1e-3_wt_fitmask_masked_500.nii']);
+
+
+chi_ero0_masked_2000 = tikhonov_qsm(tfs_pad, Res_wt.*mask_pad, 1, mask_pad, mask_pad, 0, 5e-4, 0.001, 0, vox, P, z_prjs, 2000);
+nii = make_nii(chi_ero0_masked_2000,vox);
+save_nii(nii,['chi_ero0_mm_1e-3_wt_fitmask_masked_2000.nii']);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 mkdir TFS_TFI_ERO0
@@ -273,16 +310,16 @@ cd ..
 mkdir TFS_RESHARP_ERO2
 cd TFS_RESHARP_ERO2
 % (8) MEDI eroded brain with RESHARP (2 voxels erosion)
-[RDF, mask_resharp] = resharp(iFreq,mask,vox,2,1e-4,500);
+[RDF, mask_resharp] = resharp(iFreq,mask,vox,2,1e-6,500);
 nii = make_nii(RDF,voxel_size);
-save_nii(nii,'resharp_1e-4.nii');
+save_nii(nii,'resharp_1e-6.nii');
 Mask = mask_resharp;
 save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
      voxel_size delta_TE CF B0_dir;
 % run part of MEDI first
 QSM = MEDI_L1('lambda',1000);
 nii = make_nii(QSM.*Mask,vox);
-save_nii(nii,'MEDI_RESHARP_1e-4_ero2.nii');
+save_nii(nii,'MEDI_RESHARP_1e-6_ero2.nii');
 cd ..
 
 
@@ -290,16 +327,16 @@ cd ..
 mkdir TFS_RESHARP_ERO3
 cd TFS_RESHARP_ERO3
 % (9) MEDI eroded brain with RESHARP (3 voxels erosion)
-[RDF, mask_resharp] = resharp(iFreq,mask,vox,3,1e-4,500);
+[RDF, mask_resharp] = resharp(iFreq,mask,vox,3,1e-6,500);
 nii = make_nii(RDF,voxel_size);
-save_nii(nii,'resharp_1e-4.nii');
+save_nii(nii,'resharp_1e-6.nii');
 Mask = mask_resharp;
 save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
      voxel_size delta_TE CF B0_dir;
 % run part of MEDI first
 QSM = MEDI_L1('lambda',1000);
 nii = make_nii(QSM.*Mask,vox);
-save_nii(nii,'MEDI_RESHARP_1e-4_ero3.nii');
+save_nii(nii,'MEDI_RESHARP_1e-6_ero3.nii');
 cd ..
 
 
@@ -322,7 +359,7 @@ cd TFS_RESHARP_TV_ERO3
 % (11) TVDI eroded brain with RESHARP (3 voxels erosion)
 [RDF, mask_resharp] = resharp(iFreq,mask,vox,3,1e-6,500);
 lfs_resharp = RDF/(2.675e8*dicom_info.MagneticFieldStrength*delta_TE*1e-6);
-sus_resharp = tvdi(lfs_resharp,mask_resharp,vox,5e-4,iMag,z_prjs,1000); 
+sus_resharp = tvdi(lfs_resharp,mask_resharp,vox,5e-4,iMag,z_prjs,500); 
 nii = make_nii(sus_resharp.*mask_resharp,vox);
 save_nii(nii,'TV_RESHARP_1e-6_ero3.nii');
 cd ..
