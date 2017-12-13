@@ -165,14 +165,14 @@ for i = 1:length(Tik_weights)
 	for j = 1: length(TV_weights)
 		Tik = str2num(Tik_weights{i});
 		TV = str2num(TV_weights{j});
-		nii = load_nii(['TIK_hs_TV_' num2str(TV) '_Tik_' num2str(Tik) '_P30_2000_maskTV.nii']);
+		nii = load_nii(['TIK_hs_TV_' num2str(TV) '_Tik_' num2str(Tik) '_P30_5000_maskTV.nii']);
 		chi_LN = double(nii.img);
 
 		% set CSF = -0.014
 		chi_LN = chi_LN - mean(chi_LN(ROI_CSF>0)) - 0.014;
 
 		nii = make_nii(chi_LN);
-		save_nii(nii,['TIK_hs_TV_' num2str(TV) '_Tik_' num2str(Tik) '_P30_2000_maskTV_CSF.nii'])
+		save_nii(nii,['TIK_hs_TV_' num2str(TV) '_Tik_' num2str(Tik) '_P30_5000_maskTV_CSF.nii'])
 
 		diff = chi_LN - chi;
 		diff_brain = diff(mask_brain>0);

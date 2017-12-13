@@ -147,6 +147,8 @@ P = 1 * mask_tissue + 30 * (1 - mask_tissue);
 % P_pad = padarray(P,[0 0 20]);
 P_pad = P;
 
+% P_pad = 1;
+
 mask_TV = 1 * mask_tissue_pad + 1/30 * (~mask_tissue_pad & mask_head_pad);
 
 
@@ -154,25 +156,25 @@ mask_TV = 1 * mask_tissue_pad + 1/30 * (~mask_tissue_pad & mask_head_pad);
 % TV_weight = [1e-4, 2e-4, 5e-4];
 for i = 1:length(Tik_weight)
 	for j = 1:length(TV_weight)
-		chi = tikhonov_qsm(tfs_pad, mask_tissue_pad, 1, mask_TV, mask_tissue_pad, 0, TV_weight(j), Tik_weight(i), 0, vox, P_pad, z_prjs, 2000);
+		chi = tikhonov_qsm(tfs_pad, mask_tissue_pad, 1, mask_TV, mask_tissue_pad, 0, TV_weight(j), Tik_weight(i), 0, vox, P_pad, z_prjs, 5000);
 		% nii = make_nii(chi(:,:,21:end-20),vox);
 		nii = make_nii(chi,vox);
-		save_nii(nii,['TIK_hs_TV_' num2str(TV_weight(j)) '_Tik_' num2str(Tik_weight(i)) '_P30_2000_maskTV.nii']);
+		save_nii(nii,['TIK_hs_TV_' num2str(TV_weight(j)) '_Tik_' num2str(Tik_weight(i)) '_P30_5000_maskTV.nii']);
 
-		chi = tikhonov_qsm(tfs_pad, mask_tissue_pad, 1, mask_head_pad, mask_tissue_pad, 0, TV_weight(j), Tik_weight(i), 0, vox, P_pad, z_prjs, 2000);
+		chi = tikhonov_qsm(tfs_pad, mask_tissue_pad, 1, mask_head_pad, mask_tissue_pad, 0, TV_weight(j), Tik_weight(i), 0, vox, P_pad, z_prjs, 5000);
 		% nii = make_nii(chi(:,:,21:end-20),vox);
 		nii = make_nii(chi,vox);
-		save_nii(nii,['TIK_hs_TV_' num2str(TV_weight(j)) '_Tik_' num2str(Tik_weight(i)) '_P30_2000.nii']);
+		save_nii(nii,['TIK_hs_TV_' num2str(TV_weight(j)) '_Tik_' num2str(Tik_weight(i)) '_P30_5000.nii']);
 
-		chi = tikhonov_qsm(tfs_pad, mask_tissue_pad, 1, mask_tissue_pad, mask_tissue_pad, 0, TV_weight(j), Tik_weight(i), 0, vox, P_pad, z_prjs, 200);
-		% nii = make_nii(chi(:,:,21:end-20),vox);
-		nii = make_nii(chi,vox);
-		save_nii(nii,['TIK_ss_TV_' num2str(TV_weight(j)) '_Tik_' num2str(Tik_weight(i)) '_P30_200.nii']);
+		% chi = tikhonov_qsm(tfs_pad, mask_tissue_pad, 1, mask_tissue_pad, mask_tissue_pad, 0, TV_weight(j), Tik_weight(i), 0, vox, P_pad, z_prjs, 200);
+		% % nii = make_nii(chi(:,:,21:end-20),vox);
+		% nii = make_nii(chi,vox);
+		% save_nii(nii,['TIK_ss_TV_' num2str(TV_weight(j)) '_Tik_' num2str(Tik_weight(i)) '_P30_200.nii']);
 
-		chi = tikhonov_qsm(tfs_pad, mask_tissue_pad, 1, mask_tissue_pad, mask_tissue_pad, 0, TV_weight(j), Tik_weight(i), 0, vox, P_pad, z_prjs, 2000);
-		% nii = make_nii(chi(:,:,21:end-20),vox);
-		nii = make_nii(chi,vox);
-		save_nii(nii,['TIK_ss_TV_' num2str(TV_weight(j)) '_Tik_' num2str(Tik_weight(i)) '_P30_2000.nii']);
+		% chi = tikhonov_qsm(tfs_pad, mask_tissue_pad, 1, mask_tissue_pad, mask_tissue_pad, 0, TV_weight(j), Tik_weight(i), 0, vox, P_pad, z_prjs, 2000);
+		% % nii = make_nii(chi(:,:,21:end-20),vox);
+		% nii = make_nii(chi,vox);
+		% save_nii(nii,['TIK_ss_TV_' num2str(TV_weight(j)) '_Tik_' num2str(Tik_weight(i)) '_P30_2000.nii']);
 	end
 end
 cd ..

@@ -1,0 +1,1 @@
+mcc -R -nodisplay -m -v -w enable -d /home/hongfu/Documents/MATLAB/deploy/deploy_LNQSM_more_iterations_head_P1 LNQSM_more_iterations_head.m -a /home/hongfu/Documents/MATLAB/QSM/Misc/NIFTI/make_nii.m /home/hongfu/Documents/MATLAB/QSM/Misc/NIFTI/save_nii.m /home/hongfu/Documents/MATLAB/QSM/dipole_inversion/tikhonov_qsm.m
