@@ -2,15 +2,18 @@
 % iField = iField(:,:,70:112,:);
 % matrix_size(3) = 43;
 
-mkdir src
+mkdir QSM_new
+cd QSM_new
+
 nii = make_nii(abs(iField)*10000,voxel_size); % need to be large so that can use N3 correction
 % how about change to N4 (ants?)
-save_nii(nii,'src/mag.nii');
+save_nii(nii,'mag_all.nii');
 nii = make_nii(angle(iField),voxel_size);
-save_nii(nii,'src/ph.nii');
+save_nii(nii,'ph_all.nii');
 
 imsize = size(iField);
 
+mkdir src
 for i = 1:imsize(4)
 	nii = make_nii(abs(iField(:,:,:,i))*10000,voxel_size);
 	save_nii(nii,['src/mag' num2str(i) '.nii']);
@@ -39,9 +42,18 @@ end
 save raw.mat
 
 
+% 1 manual masking
 % extract brain using itk-snap
 nii = load_nii('mask.nii');
 mask = double(nii.img);
+
+% 2 thresholding magnitude of TE1
+% mask based on mag_cmb_mean
+mask = ones(size(mag(:,:,:,1)));
+mask(mag(:,:,:,1)<2000) = 0;
+nii = make_nii(mask,voxel_size);
+save_nii(nii,'mask_thr.nii');
+
 
 % phase offset correction?
 ph_corr = geme_cmb_mouse(mag.*exp(1j*ph),voxel_size,TE,mask);
@@ -61,7 +73,7 @@ bash_command = sprintf(['for ph in src/corr_ph[1-$echo_num].nii\n' ...
 '   dir=`dirname $ph`;\n' ...
 '   mag=$dir/"corr_mag"${base:7};\n' ...
 '   unph="unph"${base:7};\n' ...
-'   prelude -a $mag -p $ph -u $unph -m mask.nii -n 12&\n' ...
+'   prelude -a $mag -p $ph -u $unph -m mask_thr.nii -n 12&\n' ...
 'done\n' ...
 'wait\n' ...
 'gunzip -f unph*.gz\n']);
@@ -75,77 +87,9 @@ for echo = 1:imsize(4)
 end
 
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % detect and correct for 2pi jumps
-% clear tmps
-% idxs_try = [-5:5];
-% for i = 1:length(idxs_try)
-%     tmps(i) = abs(sum(col((unph(:,:,:,1) - 2*pi*idxs_try(i)).*mask)))
-% end
-% [~,idx_tmp] = min(tmps);
-% idx_wrap = idxs_try(idx_tmp)
-% unph(:,:,:,1) = unph(:,:,:,1) - 2*pi*idx_wrap;
-
-
-% clear tmps
-% for i = 1:length(idxs_try)
-%     tmps(i) = abs(sum(col((unph(:,:,:,2) - 2*pi*idxs_try(i)).*mask)));
-% end
-% [~,idx_tmp] = min(tmps);
-% idx_wrap = idxs_try(idx_tmp)
-% unph(:,:,:,2) = unph(:,:,:,2) - 2*pi*idx_wrap;
-
-
-% clear tmps
-% for i = 1:length(idxs_try)
-%     tmps(i) = abs(sum(col((unph(:,:,:,3) - 2*pi*idxs_try(i)).*mask)));
-% end
-
-% [~,idx_tmp] = min(tmps);
-% idx_wrap = idxs_try(idx_tmp)
-% unph(:,:,:,3) = unph(:,:,:,3) - 2*pi*idx_wrap;
-
-
-% clear tmps
-% for i = 1:length(idxs_try)
-%     tmps(i) = abs(sum(col((unph(:,:,:,4) - 2*pi*idxs_try(i)).*mask)));
-% end
-% [~,idx_tmp] = min(tmps);
-% idx_wrap = idxs_try(idx_tmp)
-% unph(:,:,:,4) = unph(:,:,:,4) - 2*pi*idx_wrap;
-
-
-% clear tmps
-% for i = 1:length(idxs_try)
-%     tmps(i) = abs(sum(col((unph(:,:,:,5) - 2*pi*idxs_try(i)).*mask)));
-% end
-% [~,idx_tmp] = min(tmps);
-% idx_wrap = idxs_try(idx_tmp)
-% unph(:,:,:,5) = unph(:,:,:,5) - 2*pi*idx_wrap;
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 % check and correct for 2pi jump between echoes
 disp('--> correct for potential 2pi jumps between TEs ...')
 
-
-% unph(:,:,:,3) = unph(:,:,:,3)-2*pi;
-% unph(:,:,:,4) = unph(:,:,:,4)-2*pi;
-% unph(:,:,:,5) = unph(:,:,:,5)-4*pi;
-
-% unph = unph.*repmat(mask,[1 1 1 5]);
-% nii = make_nii(unph,voxel_size);
-% save_nii(nii,'unph_prelude.nii');
-
-
-
-% nii = load_nii('unph_cmb1.nii');
-% unph1 = double(nii.img);
-% nii = load_nii('unph_cmb2.nii');
-% unph2 = double(nii.img);
-% unph_diff = unph2 - unph1;
 
 nii = load_nii('unph_diff.nii');
 unph_diff = double(nii.img);
@@ -164,60 +108,54 @@ nii = make_nii(unph,voxel_size);
 save_nii(nii,'unph.nii');
 
 
+%%%%%%% bestpath unwrapping (fast)
+% unwrap the phase using best path
+disp('--> unwrap aliasing phase using bestpath...');
+mask_unwrp = uint8(abs(mask)*255);
+fid = fopen('mask_unwrp.dat','w');
+fwrite(fid,mask_unwrp,'uchar');
+fclose(fid);
 
+[pathstr, ~, ~] = fileparts(which('3DSRNCP.m'));
+setenv('pathstr',pathstr);
+setenv('nv',num2str(imsize(1)));
+setenv('np',num2str(imsize(2)));
+setenv('ns',num2str(imsize(3)));
 
-% % unwrap the phase using best path
-% disp('--> unwrap aliasing phase using bestpath...');
-% mask_unwrp = uint8(abs(mask)*255);
-% fid = fopen('mask_unwrp.dat','w');
-% fwrite(fid,mask_unwrp,'uchar');
-% fclose(fid);
+unph = zeros(imsize);
+ph_corr = angle(iField);
 
-% [pathstr, ~, ~] = fileparts(which('3DSRNCP.m'));
-% setenv('pathstr',pathstr);
-% setenv('nv',num2str(imsize(1)));
-% setenv('np',num2str(imsize(2)));
-% setenv('ns',num2str(imsize(3)));
+for echo_num = 1:imsize(4)
+    setenv('echo_num',num2str(echo_num));
+    fid = fopen(['wrapped_phase' num2str(echo_num) '.dat'],'w');
+    fwrite(fid,ph_corr(:,:,:,echo_num),'float');
+    fclose(fid);
+    if isdeployed
+        bash_script = ['~/bin/3DSRNCP wrapped_phase${echo_num}.dat mask_unwrp.dat ' ...
+        'unwrapped_phase${echo_num}.dat $nv $np $ns reliability${echo_num}.dat'];
+    else    
+        bash_script = ['${pathstr}/3DSRNCP wrapped_phase${echo_num}.dat mask_unwrp.dat ' ...
+        'unwrapped_phase${echo_num}.dat $nv $np $ns reliability${echo_num}.dat'];
+    end
+    unix(bash_script) ;
 
-% unph = zeros(imsize);
-% ph_corr = angle(iField);
+    fid = fopen(['unwrapped_phase' num2str(echo_num) '.dat'],'r');
+    tmp = fread(fid,'float');
+    % tmp = tmp - tmp(1);
+    unph(:,:,:,echo_num) = reshape(tmp - round(mean(tmp(mask==1))/(2*pi))*2*pi ,imsize(1:3)).*mask;
+    fclose(fid);
 
-% for echo_num = 1:imsize(4)
-%     setenv('echo_num',num2str(echo_num));
-%     fid = fopen(['wrapped_phase' num2str(echo_num) '.dat'],'w');
-%     fwrite(fid,ph_corr(:,:,:,echo_num),'float');
-%     fclose(fid);
-%     if isdeployed
-%         bash_script = ['~/bin/3DSRNCP wrapped_phase${echo_num}.dat mask_unwrp.dat ' ...
-%         'unwrapped_phase${echo_num}.dat $nv $np $ns reliability${echo_num}.dat'];
-%     else    
-%         bash_script = ['${pathstr}/3DSRNCP wrapped_phase${echo_num}.dat mask_unwrp.dat ' ...
-%         'unwrapped_phase${echo_num}.dat $nv $np $ns reliability${echo_num}.dat'];
-%     end
-%     unix(bash_script) ;
+    fid = fopen(['reliability' num2str(echo_num) '.dat'],'r');
+    reliability_raw = fread(fid,'float');
+    reliability_raw = reshape(reliability_raw,imsize(1:3));
+    fclose(fid);
 
-%     fid = fopen(['unwrapped_phase' num2str(echo_num) '.dat'],'r');
-%     tmp = fread(fid,'float');
-%     % tmp = tmp - tmp(1);
-%     unph(:,:,:,echo_num) = reshape(tmp - round(mean(tmp(mask==1))/(2*pi))*2*pi ,imsize(1:3)).*mask;
-%     fclose(fid);
+    nii = make_nii(reliability_raw.*mask,voxel_size);
+    save_nii(nii,['reliability_raw' num2str(echo_num) '.nii']);
+end
 
-%     fid = fopen(['reliability' num2str(echo_num) '.dat'],'r');
-%     reliability_raw = fread(fid,'float');
-%     reliability_raw = reshape(reliability_raw,imsize(1:3));
-%     fclose(fid);
-
-%     nii = make_nii(reliability_raw.*mask,voxel_size);
-%     save_nii(nii,['reliability_raw' num2str(echo_num) '.nii']);
-% end
-
-% unph(:,:,:,3) = unph(:,:,:,3)-2*pi;
-% unph(:,:,:,4) = unph(:,:,:,4)-2*pi;
-% unph(:,:,:,5) = unph(:,:,:,5)-4*pi;
-
-% unph = unph.*repmat(mask,[1 1 1 5]);
-% nii = make_nii(unph,voxel_size);
-% save_nii(nii,'unph_bestpath.nii');
+nii = make_nii(unph,voxel_size);
+save_nii(nii,'unph_bestpath.nii');
 
 
 
@@ -263,6 +201,7 @@ save_nii(nii,'tfs.nii');
 disp('--> RESHARP to remove background field ...');
 smv_rad = 0.3;
 tik_reg = 5e-4;
+% tik_reg = 0;
 cgs_num = 500;
 tv_reg = 2e-4;
 z_prjs = B0_dir;

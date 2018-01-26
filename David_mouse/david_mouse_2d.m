@@ -329,8 +329,8 @@ for echo = 2:imsize(4)
     meandiff = mean(meandiff(:));
     njump = round(meandiff/(2*pi));
     disp(['    ' num2str(njump) ' 2pi jumps for TE' num2str(echo)]);
-    % unph(:,:,:,echo) = unph(:,:,:,echo) - njump*2*pi;
-    % unph(:,:,:,echo) = unph(:,:,:,echo).*mask;
+    unph(:,:,:,echo) = unph(:,:,:,echo) - njump*2*pi;
+    unph(:,:,:,echo) = unph(:,:,:,echo).*mask;
 end
 
 nii = make_nii(unph,voxel_size);
@@ -339,15 +339,17 @@ save_nii(nii,'unph_corr.nii');
 
 % fit phase images with echo times
 disp('--> magnitude weighted LS fit of phase to TE ...');
-% [tfs0, fit_residual0] = echofit(unph,n3_mag_cmb,TE,0); 
-[tfs0, fit_residual0] = echofit(unph(:,:,:,1:4),n3_mag_cmb(:,:,:,1:4),TE(1:4),0); 
+[tfs0, fit_residual0] = echofit(unph,n3_mag_cmb,TE,0); 
+% [tfs0, fit_residual0] = echofit(unph(:,:,:,1:4),n3_mag_cmb(:,:,:,1:4),TE(1:4),0); 
 nii = make_nii(tfs0,voxel_size);
 save_nii(nii,'tfs0.nii');
 nii = make_nii(fit_residual0,voxel_size);
 save_nii(nii,'fit_residual0.nii');
 
 r_mask = 1;
-fit_thr = 20; % all 8 echoes
+fit_thr = 20; % all 8 echoes (bestpath)
+fit_thr = 40; % all 8 echoes (prelude)
+
 % fit_thr = 10; % first 10 echoes (bestpath)
 % fit_thr = 20; % first 10 echoes (prelude)
 % extra filtering according to fitting residuals
