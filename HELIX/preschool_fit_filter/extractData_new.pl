@@ -6,7 +6,7 @@ use warnings;
 use List::Util qw[min max];
 use File::Basename;
 
-my @list = glob("/home/hongfu.sun/data/PS14/*");
+my @list = glob("/home/hongfu.sun/data/preschool/*");
 # print @list;
 my @finalList;
 my $last;
@@ -75,14 +75,14 @@ cd \$PBS_O_WORKDIR
 echo \"Current working directory is `pwd`\"
 
 echo \"Starting run at: `date`\" 
-./run_qsm_spgr_ge_catherine.sh \$MCR \"$dicom\" \"$dicom_parent\" > mycode_\${PBS_JOBID}.out
+./run_qsm_spgr_ge_catherine_fit_filter.sh \$MCR \"$dicom\" \"$dicom_parent\" > mycode_\${PBS_JOBID}.out
 echo \"Job finished at: `date`\"
 ";
 
 
 
 	 print "$fields[5]\n";
-	open(my $fileHandle, '>', "/home/hongfu.sun/standalone/preschool_PS15/$fields[5].pbs");  
+	open(my $fileHandle, '>', "/home/hongfu.sun/standalone/preschool_fit_filter/$fields[5].pbs");  
 	print $fileHandle $script;
 	close $fileHandle
 }

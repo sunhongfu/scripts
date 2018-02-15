@@ -6,7 +6,7 @@ use warnings;
 use List::Util qw[min max];
 use File::Basename;
 
-my @list = glob("/home/hongfu.sun/data/PS14/*");
+my @list = glob("*");
 # print @list;
 my @finalList;
 my $last;
@@ -14,7 +14,6 @@ my $imageSet;
 my $firstDicom;
 foreach my $dir (@list){
         my @sublist = glob("$dir/*");
-#print @sublist;
         next if (@sublist == 0);
 #print "$dir\n";
         # regular expression to extract the last scan
@@ -59,7 +58,7 @@ foreach my $dir (@list){
 foreach my $dicom (@finalList){
 	my @fields = split /\//, $dicom;
 	my $dicom_parent = dirname($dicom);
-#print $dicom_parent;
+
 	my $script = 
 "#!/bin/bash
 #PBS -S /bin/bash
@@ -75,14 +74,14 @@ cd \$PBS_O_WORKDIR
 echo \"Current working directory is `pwd`\"
 
 echo \"Starting run at: `date`\" 
-./run_qsm_spgr_ge_catherine.sh \$MCR \"$dicom\" \"$dicom_parent\" > mycode_\${PBS_JOBID}.out
+./run_qsm_spgr_ge_catherine.sh \$MCR \"/home/hongfu.sun/data/preschool/$dicom\" \"/home/hongfu.sun/data/preschool/$dicom_parent\" > mycode_\${PBS_JOBID}.out
 echo \"Job finished at: `date`\"
 ";
 
 
 
-	 print "$fields[5]\n";
-	open(my $fileHandle, '>', "/home/hongfu.sun/standalone/preschool_PS15/$fields[5].pbs");  
+	# print "$fields[0]\n";
+	open(my $fileHandle, '>', "/media/helix/standalone/preschool/$fields[0].pbs");  
 	print $fileHandle $script;
 	close $fileHandle
 }
