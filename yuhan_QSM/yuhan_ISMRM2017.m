@@ -378,91 +378,91 @@ save_nii(nii,['LN-QSM/LN_ero2_tik_1e-3_tv_4e-4_2000.nii']);
 % save_nii(nii,['sus_resharp_tik_', num2str(tik_reg), '_tv_', num2str(tv_reg), '_num_', num2str(inv_num), '.nii']);
 
 
-%%%%%%%%%%%% NEW single step QSM
+% %%%%%%%%%%%% NEW single step QSM
 
-% pad zeros
-tfs = padarray(tfs,[0 0 20]);
-mask = padarray(mask,[0 0 20]);
-R = padarray(R,[0 0 20]);
+% % pad zeros
+% tfs = padarray(tfs,[0 0 20]);
+% mask = padarray(mask,[0 0 20]);
+% R = padarray(R,[0 0 20]);
 
-for r = 1
+% for r = 1
 
-[X,Y,Z] = ndgrid(-r:r,-r:r,-r:r);
-h = (X.^2/r^2 + Y.^2/r^2 + Z.^2/r^2 <= 1);
-ker = h/sum(h(:));
-imsize = size(mask);
-mask_tmp = convn(mask.*R,ker,'same');
-mask_ero = zeros(imsize);
-mask_ero(mask_tmp > 0.999999) = 1; % no error tolerance
+% [X,Y,Z] = ndgrid(-r:r,-r:r,-r:r);
+% h = (X.^2/r^2 + Y.^2/r^2 + Z.^2/r^2 <= 1);
+% ker = h/sum(h(:));
+% imsize = size(mask);
+% mask_tmp = convn(mask.*R,ker,'same');
+% mask_ero = zeros(imsize);
+% mask_ero(mask_tmp > 0.999999) = 1; % no error tolerance
 
-% try total field inversion on regular mask, regular prelude
-Tik_weight = 0.001;
-TV_weight = 5e-4;
-z_prjs = [0 0 1];
-[chi, res] = tikhonov_qsm(tfs, mask_ero.*R, 1, mask_ero.*R, mask_ero.*R, TV_weight, Tik_weight, voxel_size, z_prjs, 2000);
-nii = make_nii(chi(:,:,21:end-20).*mask_ero(:,:,21:end-20).*R(:,:,21:end-20),voxel_size);
-save_nii(nii,['chi_brain_pad20_ero' num2str(r) '_Tik_' num2str(Tik_weight) '_TV_' num2str(TV_weight) '_2000.nii']);
+% % try total field inversion on regular mask, regular prelude
+% Tik_weight = 0.001;
+% TV_weight = 5e-4;
+% z_prjs = [0 0 1];
+% [chi, res] = tikhonov_qsm(tfs, mask_ero.*R, 1, mask_ero.*R, mask_ero.*R, TV_weight, Tik_weight, voxel_size, z_prjs, 2000);
+% nii = make_nii(chi(:,:,21:end-20).*mask_ero(:,:,21:end-20).*R(:,:,21:end-20),voxel_size);
+% save_nii(nii,['chi_brain_pad20_ero' num2str(r) '_Tik_' num2str(Tik_weight) '_TV_' num2str(TV_weight) '_2000.nii']);
 
-end
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% end
 
 
-% complex fitting
-nii = load_nii('ph_fitted_prelude.nii');
-tfs_cpx = double(nii.img);
-tfs_cpx_norm = -tfs_cpx/(2.675e8*3)*1e6/(TE(2)-TE(1));
-
-disp('--> RESHARP to remove background field ...');
-smv_rad = 3;
-tik_reg = 1e-4;
-cgs_num = 500;
-[lfs_cpx_resharp, mask_resharp] = resharp(tfs_cpx_norm,mask.*R,voxel_size,smv_rad,tik_reg,cgs_num);
-
-nii = make_nii(lfs_cpx_resharp,voxel_size);
-save_nii(nii,['lfs_cpx_resharp_tik_', num2str(tik_reg), '_num_', num2str(cgs_num), '.nii']);
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-disp('--> TV susceptibility inversion on RESHARP...');
-tv_reg = 6e-3;
-z_prjs = [0 0 1];
-inv_num = 1000;
-sus_cpx_resharp = tvdi(lfs_cpx_resharp,mask_resharp,voxel_size,tv_reg,mag(:,:,:,end),z_prjs,inv_num); 
+% % complex fitting
+% nii = load_nii('ph_fitted_prelude.nii');
+% tfs_cpx = double(nii.img);
+% tfs_cpx_norm = -tfs_cpx/(2.675e8*3)*1e6/(TE(2)-TE(1));
 
-% save nifti
-nii = make_nii(sus_cpx_resharp.*mask_resharp,voxel_size);
-save_nii(nii,['sus_cpx_resharp_tik_', num2str(tik_reg), '_tv_', num2str(tv_reg), '_num_', num2str(inv_num), '.nii']);
+% disp('--> RESHARP to remove background field ...');
+% smv_rad = 3;
+% tik_reg = 1e-4;
+% cgs_num = 500;
+% [lfs_cpx_resharp, mask_resharp] = resharp(tfs_cpx_norm,mask.*R,voxel_size,smv_rad,tik_reg,cgs_num);
+
+% nii = make_nii(lfs_cpx_resharp,voxel_size);
+% save_nii(nii,['lfs_cpx_resharp_tik_', num2str(tik_reg), '_num_', num2str(cgs_num), '.nii']);
 
 
+% disp('--> TV susceptibility inversion on RESHARP...');
+% tv_reg = 6e-3;
+% z_prjs = [0 0 1];
+% inv_num = 1000;
+% sus_cpx_resharp = tvdi(lfs_cpx_resharp,mask_resharp,voxel_size,tv_reg,mag(:,:,:,end),z_prjs,inv_num); 
+
+% % save nifti
+% nii = make_nii(sus_cpx_resharp.*mask_resharp,voxel_size);
+% save_nii(nii,['sus_cpx_resharp_tik_', num2str(tik_reg), '_tv_', num2str(tv_reg), '_num_', num2str(inv_num), '.nii']);
 
 
 
-%% tik-qsm
-%%%%%%%%%%%% NEW single step QSM
 
-% pad zeros
-tfs_cpx_norm = padarray(tfs_cpx_norm,[0 0 20]);
-mask = padarray(mask,[0 0 20]);
-R = padarray(R,[0 0 20]);
 
-for r = [2 ] 
+% %% tik-qsm
+% %%%%%%%%%%%% NEW single step QSM
 
-[X,Y,Z] = ndgrid(-r:r,-r:r,-r:r);
-h = (X.^2/r^2 + Y.^2/r^2 + Z.^2/r^2 <= 1);
-ker = h/sum(h(:));
-imsize = size(mask);
-mask_tmp = convn(mask,ker,'same');
-mask_ero = zeros(imsize);
-mask_ero(mask_tmp > 1-1/sum(h(:))) = 1; % no error tolerance
+% % pad zeros
+% tfs_cpx_norm = padarray(tfs_cpx_norm,[0 0 20]);
+% mask = padarray(mask,[0 0 20]);
+% R = padarray(R,[0 0 20]);
 
-% try total field inversion on regular mask, regular prelude
-Tik_weight = 0.005;
-TV_weight = 0.008;
-z_prjs = [0 0 1];
-[chi, res] = tikhonov_qsm(tfs_cpx_norm, mask_ero.*R, 1, mask_ero.*R, mask_ero.*R, TV_weight, Tik_weight, voxel_size, z_prjs, 2000);
-nii = make_nii(chi(:,:,21:end-20).*mask_ero(:,:,21:end-20).*R(:,:,21:end-20),voxel_size);
-save_nii(nii,['chi__cpx_brain_pad20_ero' num2str(r) '_Tik_' num2str(Tik_weight) '_TV_' num2str(TV_weight) '_2000.nii']);
+% for r = [2 ] 
 
-end
+% [X,Y,Z] = ndgrid(-r:r,-r:r,-r:r);
+% h = (X.^2/r^2 + Y.^2/r^2 + Z.^2/r^2 <= 1);
+% ker = h/sum(h(:));
+% imsize = size(mask);
+% mask_tmp = convn(mask,ker,'same');
+% mask_ero = zeros(imsize);
+% mask_ero(mask_tmp > 1-1/sum(h(:))) = 1; % no error tolerance
+
+% % try total field inversion on regular mask, regular prelude
+% Tik_weight = 0.005;
+% TV_weight = 0.008;
+% z_prjs = [0 0 1];
+% [chi, res] = tikhonov_qsm(tfs_cpx_norm, mask_ero.*R, 1, mask_ero.*R, mask_ero.*R, TV_weight, Tik_weight, voxel_size, z_prjs, 2000);
+% nii = make_nii(chi(:,:,21:end-20).*mask_ero(:,:,21:end-20).*R(:,:,21:end-20),voxel_size);
+% save_nii(nii,['chi__cpx_brain_pad20_ero' num2str(r) '_Tik_' num2str(Tik_weight) '_TV_' num2str(TV_weight) '_2000.nii']);
+
+% end
 
