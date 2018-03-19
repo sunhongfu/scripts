@@ -109,6 +109,93 @@ save_nii(nii,'field_noisy.nii');
 
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RESHARP
+[RDF, mask_resharp] = resharp(field_noisy,mask_brain,vox,2,1e-6,500);
+nii = make_nii(RDF,vox);
+save_nii(nii,'resharp_1e-6.nii');
+RDF = 267.5*RDF;
+Mask = mask_resharp;
+iFreq = [];
+iMag = mask_brain;
+N_std = 1;
+matrix_size = size(Mask);
+voxel_size = vox;
+delta_TE = 1;
+CF = 42.6036*1e6;
+B0_dir = [0 0 1];
+
+% iLSQR
+chi_iLSQR = QSM_iLSQR(RDF,mask_resharp,'H',z_prjs,'voxelsize',vox,'niter',200,'TE',1000*delta_TE,'B0',1);
+nii = make_nii(chi_iLSQR,vox);
+save_nii(nii,['chi_resharp_iLSQR_ero2.nii']);
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+iFreq = field_noisy*2*pi*42.58*3*15e-3;
+delta_TE = 15e-3;
+matrix_size = imsize;
+% CF = 1/(2*pi)*1e6;
+CF = 42.58*3e6;
+% iMag = Mask.*model;
+N_std = 1;
+voxel_size = vox;
+B0_dir = z_prjs;
+[RDF, mask_resharp] = resharp(iFreq,mask_brain,vox,2,1e-6,500);
+
+Mask = mask_resharp;
+iMag = Mask;
+
+save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
+     voxel_size delta_TE CF B0_dir;
+% run part of MEDI first
+QSM = MEDI_L1('lambda',1000);
+nii = make_nii(QSM.*Mask,vox);
+save_nii(nii,'MEDI_RESHARP_1e-6_ero2.nii');
+
+
+
+
+
+% RESHARP ERO3
+[RDF, mask_resharp] = resharp(field_noisy,mask_brain,vox,3,1e-6,500);
+nii = make_nii(RDF,vox);
+save_nii(nii,'resharp_1e-6.nii');
+Mask = mask_resharp;
+iFreq = [];
+iMag = mask_brain;
+N_std = 1;
+matrix_size = size(Mask);
+voxel_size = vox;
+delta_TE = 1;
+CF = 42.6036*1e6;
+B0_dir = [0 0 1];
+
+save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
+     voxel_size delta_TE CF B0_dir;
+% run part of MEDI first
+QSM = MEDI_L1('lambda',1000);
+nii = make_nii(QSM.*Mask,vox);
+save_nii(nii,'MEDI_RESHARP_1e-6_ero3.nii');
+
+% iLSQR
+chi_iLSQR = QSM_iLSQR(RDF,mask_resharp,'H',z_prjs,'voxelsize',vox,'niter',200,'TE',1000*delta_TE,'B0',dicom_info.MagneticFieldStrength);
+nii = make_nii(chi_iLSQR,vox);
+save_nii(nii,['chi_resharp_iLSQR_ero3.nii']);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TGV-QSM
+
+tgv_qsm  -p field_noisy.nii -m mask_brain.nii -f 1 -t 3.7383e-03 -e 2 -o SS_QSM_4 --alpha 0.0003 0.0001 --no-resampling
+tgv_qsm  -p field_noisy.nii -m mask_brain.nii -f 1 -t 3.7383e-03 -e 2 -o SS_QSM_5 --alpha 0.00012 0.00004 --no-resampling
+tgv_qsm  -p field_noisy.nii -m mask_brain.nii -f 1 -t 3.7383e-03 -e 2 -o SS_QSM_6 --alpha 0.00003 0.00001 --no-resampling
+tgv_qsm  -p field_noisy.nii -m mask_brain.nii -f 1 -t 3.7383e-03 -e 2 -o SS_QSM_7 --alpha 0.00009 0.00003 --no-resampling
+tgv_qsm  -p field_noisy.nii -m mask_brain.nii -f 1 -t 3.7383e-03 -e 2 -o SS_QSM_8 --alpha 0.000009 0.000003 --no-resampling
+tgv_qsm  -p field_noisy.nii -m mask_brain.nii -f 1 -t 3.7383e-03 -e 2 -o SS_QSM_9 --alpha 0.00003 0.00001 --no-resampling 
+
+
+
 %% TFI of the whole head
 iFreq = field_noisy*2*pi*42.58*3*15e-3;
 delta_TE = 15e-3;

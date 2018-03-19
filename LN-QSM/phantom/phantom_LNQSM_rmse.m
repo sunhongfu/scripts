@@ -112,9 +112,70 @@ ROI_air(abs(model-9)<1e-6) = 1;
 ROI_air = logical(ROI_air);
 
 
+chi = model;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RESHARP + iLSQR
+cd model
+nii = load_nii('chi_resharp_iLSQR_ero2.nii');
+iLSQR_brain = double(nii.img);
+mask_iLSQR = ones(size(iLSQR_brain));
+mask_iLSQR(iLSQR_brain == 0) = 0;
+
+
+% set CSF = -0.014
+% chi_TFI = TFI_head - mean(TFI_head(ROI_WM>0)) - 1e-4;
+chi_iLSQR = iLSQR_brain - mean(iLSQR_brain(ROI_WM>0&mask_iLSQR>0)) - 1e-4;
+nii = make_nii(chi_iLSQR,vox);
+save_nii(nii,'chi_iLSQR.nii');
+
+
+diff = chi_iLSQR - chi;
+diff_brain = diff(mask_iLSQR>0);
+
+rmse_brain = sqrt(sum(diff_brain(:).^2)/sum(mask_iLSQR(:)))
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RESHARP + MEDI
+nii = load_nii('MEDI_RESHARP_1e-6_ero2.nii');
+MEDI_brain = double(nii.img);
+mask_MEDI = ones(size(MEDI_brain));
+mask_MEDI(iLSQR_brain == 0) = 0;
+
+chi_MEDI = MEDI_brain - mean(MEDI_brain(ROI_WM>0&mask_MEDI>0)) - 1e-4;
+nii = make_nii(chi_MEDI,vox);
+save_nii(nii,'chi_MEDI.nii');
+
+
+diff = chi_MEDI - chi;
+diff_brain = diff(mask_MEDI>0);
+
+rmse_brain = sqrt(sum(diff_brain(:).^2)/sum(mask_MEDI(:)))
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SS
+nii = load_nii('field_noisySS_QSM_5_000.nii');
+SS_brain = double(nii.img);
+mask_SS = ones(size(SS_brain));
+mask_SS(iLSQR_brain == 0) = 0;
+
+chi_SS = SS_brain - mean(SS_brain(ROI_WM>0&mask_SS>0)) - 1e-4;
+nii = make_nii(chi_SS,vox);
+save_nii(nii,'chi_SS.nii');
+
+
+diff = chi_SS - chi;
+diff_brain = diff(mask_SS>0);
+
+rmse_brain = sqrt(sum(diff_brain(:).^2)/sum(mask_SS(:)))
+
+
 
 % reference to CSF
-chi = model;
+
 
 % load in TFI results
 nii = load_nii('TFI/TFI_head.nii');
@@ -130,8 +191,8 @@ TFI_tissue = double(nii.img);
 
 
 % set CSF = -0.014
-chi_TFI = TFI_head - mean(TFI_head(ROI_CSF>0)) - 0.014;
-% chi_TFI = TFI_tissue - mean(TFI_tissue(ROI_CSF>0)) - 0.014;
+% chi_TFI = TFI_head - mean(TFI_head(ROI_WM>0)) - 1e-4;
+chi_TFI = TFI_head - mean(TFI_head(ROI_WM>0)) - 1e-4;
 nii = make_nii(chi_TFI,vox);
 save_nii(nii,'TFI/chi_TFI.nii');
 
@@ -141,7 +202,7 @@ diff_brain = diff(mask_brain>0);
 diff_tissue = diff(mask_tissue>0);
 diff_head = diff(mask_head>0);
 
-rmse_brain = sqrt(sum(diff_brain(:).^2)/sum(mask_brain(:)))
+rmse_brain = sqrt(sum(diff_brain(:).^2)/sum(mask_iLSQR(:)))
 rmse_tissue = sqrt(sum(diff_tissue(:).^2)/sum(mask_tissue(:)))
 rmse_head = sqrt(sum(diff_head(:).^2)/sum(mask_head(:)))
 
@@ -150,8 +211,9 @@ rmse_head = sqrt(sum(diff_head(:).^2)/sum(mask_head(:)))
 
 Tik_weights = {'10.0000e-006', '18.3298e-006', '33.5982e-006', '61.5848e-006', '112.8838e-006', '206.9138e-006', '379.2690e-006', '695.1928e-006', '1.2743e-003', '2.3357e-003', '4.2813e-003', '7.8476e-003', '14.3845e-003', '26.3665e-003', '48.3293e-003', '88.5867e-003', '162.3777e-003', '297.6351e-003', '545.5595e-003', '1.0000e+000'};
 
-TV_weights = {'1e-4','2e-4','3e-4','4e-4','5e-4'};
+% TV_weights = {'1e-4','2e-4','3e-4','4e-4','5e-4'};
 
+TV_weights = {'1e-4','2e-4'};
 
 % TV_weights = {'1e-4','2e-4','3e-4','4e-4','5e-4'};
 % Tik_weights = {'1.2743e-003'};
@@ -169,7 +231,7 @@ for i = 1:length(Tik_weights)
 		chi_LN = double(nii.img);
 
 		% set CSF = -0.014
-		chi_LN = chi_LN - mean(chi_LN(ROI_CSF>0)) - 0.014;
+		chi_LN = chi_LN - mean(chi_LN(ROI_WM>0)) - 1e-4;
 
 		nii = make_nii(chi_LN);
 		save_nii(nii,['TIK_hs_TV_' num2str(TV) '_Tik_' num2str(Tik) '_P30_5000_maskTV_CSF.nii'])
@@ -179,7 +241,7 @@ for i = 1:length(Tik_weights)
 		diff_tissue = diff(mask_tissue>0);
 		diff_head = diff(mask_head>0);
 
-		rmse_brain(i,j) = sqrt(sum(diff_brain(:).^2)/sum(mask_brain(:)));
+		rmse_brain(i,j) = sqrt(sum(diff_brain(:).^2)/sum(mask_iLSQR(:)));
 		rmse_tissue(i,j) = sqrt(sum(diff_tissue(:).^2)/sum(mask_tissue(:)));
 		rmse_head(i,j) = sqrt(sum(diff_head(:).^2)/sum(mask_head(:)));
 

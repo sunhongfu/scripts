@@ -5,47 +5,48 @@
 mkdir QSM_new
 cd QSM_new
 
-nii = make_nii(abs(iField)*10000,voxel_size); % need to be large so that can use N3 correction
-% how about change to N4 (ants?)
-save_nii(nii,'mag_all.nii');
-nii = make_nii(angle(iField),voxel_size);
-save_nii(nii,'ph_all.nii');
+% nii = make_nii(abs(iField)*10000,voxel_size); % need to be large so that can use N3 correction
+% % how about change to N4 (ants?)
+% save_nii(nii,'mag_all.nii');
+% nii = make_nii(angle(iField),voxel_size);
+% save_nii(nii,'ph_all.nii');
 
-imsize = size(iField);
+% imsize = size(iField);
 
-mkdir src
-for i = 1:imsize(4)
-	nii = make_nii(abs(iField(:,:,:,i))*10000,voxel_size);
-	save_nii(nii,['src/mag' num2str(i) '.nii']);
+% mkdir src
+% for i = 1:imsize(4)
+% 	nii = make_nii(abs(iField(:,:,:,i))*10000,voxel_size);
+% 	save_nii(nii,['src/mag' num2str(i) '.nii']);
 
-	% N3 correction
-	setenv('echonum',num2str(i));
-	unix('nii2mnc src/mag${echonum}.nii src/mag${echonum}.mnc');
-	unix('nu_correct src/mag${echonum}.mnc src/corr_mag${echonum}.mnc -V1.0 -distance 10');
-	unix('mnc2nii src/corr_mag${echonum}.mnc src/corr_mag${echonum}.nii');
+% 	% N3 correction
+% 	setenv('echonum',num2str(i));
+% 	unix('nii2mnc src/mag${echonum}.nii src/mag${echonum}.mnc');
+% 	unix('nu_correct src/mag${echonum}.mnc src/corr_mag${echonum}.mnc -V1.0 -distance 10');
+% 	unix('mnc2nii src/corr_mag${echonum}.mnc src/corr_mag${echonum}.nii');
 
-end
+% end
 
-ph = angle(iField);
+% ph = angle(iField);
 
-for i = 1:imsize(4)
-	nii = make_nii(ph(:,:,:,i),voxel_size);
-	save_nii(nii,['src/ph' num2str(i) '.nii']);
-end
+% for i = 1:imsize(4)
+% 	nii = make_nii(ph(:,:,:,i),voxel_size);
+% 	save_nii(nii,['src/ph' num2str(i) '.nii']);
+% end
 
-mag = zeros(imsize);
-for echo = 1:imsize(4)
-    nii = load_nii(['src/corr_mag' num2str(echo) '.nii']);
-    mag(:,:,:,echo) = double(nii.img);
-end
+% mag = zeros(imsize);
+% for echo = 1:imsize(4)
+%     nii = load_nii(['src/corr_mag' num2str(echo) '.nii']);
+%     mag(:,:,:,echo) = double(nii.img);
+% end
 
-save raw.mat
+% save raw.mat
 
+!mv ../src .
 
-% 1 manual masking
-% extract brain using itk-snap
-nii = load_nii('mask.nii');
-mask = double(nii.img);
+% % 1 manual masking
+% % extract brain using itk-snap
+% nii = load_nii('mask.nii');
+% mask = double(nii.img);
 
 % 2 thresholding magnitude of TE1
 % mask based on mag_cmb_mean
@@ -56,59 +57,40 @@ save_nii(nii,'mask_thr.nii');
 
 
 % phase offset correction?
-ph_corr = geme_cmb_mouse(mag.*exp(1j*ph),voxel_size,TE,mask);
+% ph_corr = geme_cmb_mouse(mag.*exp(1j*ph),voxel_size,TE,mask);
+ph_corr = angle(iField);
 % save offset corrected phase niftis
 for echo = 1:imsize(4)
     nii = make_nii(ph_corr(:,:,:,echo),voxel_size);
     save_nii(nii,['src/corr_ph' num2str(echo) '.nii']);
 end
 
-!rm src/*.mnc
-% unwrap each echo
-disp('--> unwrap aliasing phase for all TEs using prelude...');
-setenv('echo_num',num2str(size(iField,4)));
-bash_command = sprintf(['for ph in src/corr_ph[1-$echo_num].nii\n' ...
-'do\n' ...
-'   base=`basename $ph`;\n' ...
-'   dir=`dirname $ph`;\n' ...
-'   mag=$dir/"corr_mag"${base:7};\n' ...
-'   unph="unph"${base:7};\n' ...
-'   prelude -a $mag -p $ph -u $unph -m mask_thr.nii -n 12&\n' ...
-'done\n' ...
-'wait\n' ...
-'gunzip -f unph*.gz\n']);
-unix(bash_command);
+!rm src/*.mnc src/*.imp
+clear iField
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % unwrap each echo
+% disp('--> unwrap aliasing phase for all TEs using prelude...');
+% setenv('echo_num',num2str(imsize(4)));
+% bash_command = sprintf(['for ph in src/corr_ph[1-$echo_num].nii\n' ...
+% 'do\n' ...
+% '   base=`basename $ph`;\n' ...
+% '   dir=`dirname $ph`;\n' ...
+% '   mag=$dir/"corr_mag"${base:7};\n' ...
+% '   unph="unph"${base:7};\n' ...
+% '   prelude -a $mag -p $ph -u $unph -m mask_thr.nii -n 12&\n' ...
+% 'done\n' ...
+% 'wait\n' ...
+% 'gunzip -f unph*.gz\n']);
+% unix(bash_command);
 
-unph = zeros(imsize);
-for echo = 1:imsize(4)
-    nii = load_nii(['unph' num2str(echo) '.nii']);
-    unph(:,:,:,echo) = double(nii.img);
-end
+% unph = zeros(imsize);
+% for echo = 1:imsize(4)
+%     nii = load_nii(['unph' num2str(echo) '.nii']);
+%     unph(:,:,:,echo) = double(nii.img);
+% end
 
-
-% check and correct for 2pi jump between echoes
-disp('--> correct for potential 2pi jumps between TEs ...')
-
-
-nii = load_nii('unph_diff.nii');
-unph_diff = double(nii.img);
-
-for echo = 2:imsize(4)
-    meandiff = unph(:,:,:,echo)-unph(:,:,:,1)-double(echo-1)*unph_diff;
-    meandiff = meandiff(mask==1);
-    meandiff = mean(meandiff(:));
-    njump = round(meandiff/(2*pi));
-    disp(['    ' num2str(njump) ' 2pi jumps for TE' num2str(echo)]);
-    unph(:,:,:,echo) = unph(:,:,:,echo) - njump*2*pi;
-    unph(:,:,:,echo) = unph(:,:,:,echo).*mask;
-end
-
-nii = make_nii(unph,voxel_size);
-save_nii(nii,'unph.nii');
-
-
-%%%%%%% bestpath unwrapping (fast)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % unwrap the phase using best path
 disp('--> unwrap aliasing phase using bestpath...');
 mask_unwrp = uint8(abs(mask)*255);
@@ -122,8 +104,7 @@ setenv('nv',num2str(imsize(1)));
 setenv('np',num2str(imsize(2)));
 setenv('ns',num2str(imsize(3)));
 
-unph = zeros(imsize);
-ph_corr = angle(iField);
+unph = zeros(imsize(1:4));
 
 for echo_num = 1:imsize(4)
     setenv('echo_num',num2str(echo_num));
@@ -154,9 +135,69 @@ for echo_num = 1:imsize(4)
     save_nii(nii,['reliability_raw' num2str(echo_num) '.nii']);
 end
 
+
+unph = unph.*repmat(mask,[1 1 1 imsize(4)]);
 nii = make_nii(unph,voxel_size);
 save_nii(nii,'unph_bestpath.nii');
 
+
+% unwrap the phase difference
+ph_diff = angle(exp(1j*(ph_corr(:,:,:,2)-ph_corr(:,:,:,1))));
+nii = make_nii(ph_diff,voxel_size);
+save_nii(nii,'ph_diff.nii');
+
+fid = fopen(['wrapped_ph_diff.dat'],'w');
+fwrite(fid,ph_diff,'float');
+fclose(fid);
+if isdeployed
+    bash_script = ['~/bin/3DSRNCP wrapped_ph_diff.dat mask_unwrp.dat ' ...
+    'unwrapped_ph_diff.dat $nv $np $ns reliability_ph_diff.dat'];
+else    
+    bash_script = ['${pathstr}/3DSRNCP wrapped_ph_diff.dat mask_unwrp.dat ' ...
+    'unwrapped_ph_diff.dat $nv $np $ns reliability_ph_diff.dat'];
+end
+unix(bash_script) ;
+fid = fopen(['unwrapped_ph_diff.dat'],'r');
+tmp = fread(fid,'float');
+% tmp = tmp - tmp(1);
+
+njumps = mean(tmp(mask==1))/(2*pi)
+if njumps>-1 & njumps<0
+    njumps = -1;
+end
+
+unph_diff = reshape(tmp - round(njumps)*2*pi ,imsize(1:3)).*mask;
+fclose(fid);
+
+
+nii = make_nii(unph_diff,voxel_size);
+save_nii(nii,'unph_diff.nii');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% check and correct for 2pi jump between echoes
+disp('--> correct for potential 2pi jumps between TEs ...')
+
+
+% nii = load_nii('unph_diff.nii');
+% unph_diff = double(nii.img);
+
+% unph_diff = unph(:,:,:,2) - unph(:,:,:,1);
+mask_roi = zeros(size(mask));
+mask_roi(86:106,86:106,45:50) =1;
+
+for echo = 2:imsize(4)
+    meandiff = unph(:,:,:,echo)-unph(:,:,:,1)-double(echo-1)*unph_diff;
+    meandiff = meandiff(mask_roi==1);
+    meandiff = mean(meandiff(:))
+    njump = round(meandiff/(2*pi));
+    disp(['    ' num2str(njump) ' 2pi jumps for TE' num2str(echo)]);
+    unph(:,:,:,echo) = unph(:,:,:,echo) - njump*2*pi;
+    unph(:,:,:,echo) = unph(:,:,:,echo).*mask;
+end
+
+nii = make_nii(unph,voxel_size);
+save_nii(nii,'unph.nii');
 
 
 % fit phase images with echo times
@@ -198,11 +239,13 @@ nii = make_nii(tfs,voxel_size);
 save_nii(nii,'tfs.nii');
 
 
+clear ph_corr fit_residual0 fit_residual_blur mask_roi mask_unwrp ph_dif reliability_raw tfs0 tmp unph unph_diff
+
+
 disp('--> RESHARP to remove background field ...');
-smv_rad = 0.3;
-tik_reg = 5e-4;
-% tik_reg = 0;
-cgs_num = 500;
+smv_rad = 0.2;
+tik_reg = 1e-4;
+cgs_num = 200;
 tv_reg = 2e-4;
 z_prjs = B0_dir;
 inv_num = 500;
@@ -226,7 +269,7 @@ save_nii(nii,['RESHARP/lfs_resharp0_tik_', num2str(tik_reg), '_num_', num2str(cg
 % iLSQR method
 chi_iLSQR = QSM_iLSQR(lfs_resharp*(2.675e8*9.4)/1e6,mask_resharp,'H',z_prjs,'voxelsize',voxel_size,'niter',50,'TE',1000,'B0',9.4);
 nii = make_nii(chi_iLSQR,voxel_size);
-save_nii(nii,'RESHARP/chi_iLSQR.nii');
+save_nii(nii,'RESHARP/chi_iLSQR0.nii');
 
 
 % % MEDI
@@ -252,18 +295,49 @@ save_nii(nii,'RESHARP/chi_iLSQR.nii');
 
 
 % V-SHARP + iLSQR
-mkdir VSHARP
 B0 =9.4;
 voxelsize = voxel_size;
 padsize = [12 12 12];
 smvsize = 12;
 [TissuePhase3d, mask_vsharp] = V_SHARP(tfs ,single(mask.*R),'smvsize',smvsize,'voxelsize',voxelsize*10);
 nii = make_nii(TissuePhase3d,voxel_size);
+% save nifti
+[~,~,~] = mkdir('VSHARP');
 save_nii(nii,'VSHARP/VSHARP.nii');
 
-chi_iLSQR_vsharp = QSM_iLSQR(TissuePhase3d*(2.675e8*9.4)/1e6,mask_vsharp,'H',z_prjs,'voxelsize',voxel_size,'niter',50,'TE',1000,'B0',9.4);
-nii = make_nii(chi_iLSQR_vsharp,voxel_size);
-save_nii(nii,'VSHARP/chi_iLSQR_vsharp.nii');
+chi_iLSQR_0 = QSM_iLSQR(TissuePhase3d*(2.675e8*9.4)/1e6,mask_vsharp,'H',z_prjs,'voxelsize',voxel_size,'niter',50,'TE',1000,'B0',9.4);
+nii = make_nii(chi_iLSQR_0,voxel_size);
+save_nii(nii,'VSHARP/chi_iLSQR_0_vsharp.nii');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -465,12 +539,38 @@ nii = make_nii(iFreq_raw,voxel_size);
 save_nii(nii,'iFreq_raw.nii');
 
 
-% phase unwrapping using prelude
-!prelude -a ../src/corr_mag1.nii -p iFreq_raw.nii -u iFreq_un -m ../mask.nii -n 8
-!gunzip iFreq_un.nii.gz
-nii = load_nii('iFreq_un.nii');
-iFreq = double(nii.img);
+% % phase unwrapping using prelude
+% !prelude -a ../src/corr_mag1.nii -p iFreq_raw.nii -u iFreq_un -m ../mask.nii -n 8
+% !gunzip iFreq_un.nii.gz
+% nii = load_nii('iFreq_un.nii');
+% iFreq = double(nii.img);
 
+% unwrap using bestpath
+fid = fopen(['iFreq_raw.dat'],'w');
+fwrite(fid,iFreq_raw,'float');
+fclose(fid);
+if isdeployed
+    bash_script = ['~/bin/3DSRNCP wrapped_ph_diff.dat mask_unwrp.dat ' ...
+    'unwrapped_ph_diff.dat $nv $np $ns reliability_ph_diff.dat'];
+else    
+    bash_script = ['${pathstr}/3DSRNCP wrapped_ph_diff.dat mask_unwrp.dat ' ...
+    'unwrapped_ph_diff.dat $nv $np $ns reliability_ph_diff.dat'];
+end
+unix(bash_script) ;
+fid = fopen(['unwrapped_ph_diff.dat'],'r');
+tmp = fread(fid,'float');
+% tmp = tmp - tmp(1);
+
+njumps = mean(tmp(mask==1))/(2*pi)
+if njumps>-1 & njumps<0
+    njumps = -1;
+end
+
+unph_diff = reshape(tmp - round(njumps)*2*pi ,imsize(1:3)).*mask;
+fclose(fid);
+
+nii = make_nii(unph_diff,voxel_size);
+save_nii(nii,'unph_diff.nii');
 
 % RESHARP background field removal
 [RDF, mask_resharp] = resharp(iFreq,mask,voxel_size,0.3,5e-4,500);
