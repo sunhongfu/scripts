@@ -685,7 +685,7 @@ cd ..
 mkdir TFS_RESHARP_ERO2_iLSQR
 cd TFS_RESHARP_ERO2_iLSQR
 % (8) MEDI eroded brain with RESHARP (2 voxels erosion)
-[RDF, mask_resharp] = resharp(iFreq,mask,vox,2,1e-6,500);
+[RDF, mask_resharp] = resharp(iFreq,mask,vox,2,1e-6,200);
 nii = make_nii(RDF,voxel_size);
 save_nii(nii,'resharp_1e-6.nii');
 % Mask = mask_resharp;
@@ -697,7 +697,7 @@ save_nii(nii,'resharp_1e-6.nii');
 % save_nii(nii,'MEDI_RESHARP_1e-6_ero2.nii');
 
 %%%%%%%% (2) iLSQR %%%%%%%%%
-chi_iLSQR = QSM_iLSQR(RDF,mask_resharp,'H',z_prjs,'voxelsize',vox,'niter',200,'TE',1000*delta_TE,'B0',dicom_info.MagneticFieldStrength);
+chi_iLSQR = QSM_iLSQR(RDF,mask_resharp,'H',z_prjs,'voxelsize',vox,'niter',50,'TE',1000*delta_TE,'B0',dicom_info.MagneticFieldStrength);
 nii = make_nii(chi_iLSQR,vox);
 save_nii(nii,['chi_resharp_iLSQR_ero2.nii']);
 cd ..
@@ -707,7 +707,7 @@ cd ..
 mkdir TFS_RESHARP_ERO3_iLSQR
 cd TFS_RESHARP_ERO3_iLSQR
 % (9) MEDI eroded brain with RESHARP (3 voxels erosion)
-[RDF, mask_resharp] = resharp(iFreq,mask,vox,3,1e-6,500);
+[RDF, mask_resharp] = resharp(iFreq,mask,vox,3,1e-6,200);
 nii = make_nii(RDF,voxel_size);
 save_nii(nii,'resharp_1e-6.nii');
 % Mask = mask_resharp;
@@ -719,7 +719,7 @@ save_nii(nii,'resharp_1e-6.nii');
 % save_nii(nii,'MEDI_RESHARP_1e-6_ero3.nii');
 
 %%%%%%%% (2) iLSQR %%%%%%%%%
-chi_iLSQR = QSM_iLSQR(RDF,mask_resharp,'H',z_prjs,'voxelsize',vox,'niter',200,'TE',1000*delta_TE,'B0',dicom_info.MagneticFieldStrength);
+chi_iLSQR = QSM_iLSQR(RDF,mask_resharp,'H',z_prjs,'voxelsize',vox,'niter',50,'TE',1000*delta_TE,'B0',dicom_info.MagneticFieldStrength);
 nii = make_nii(chi_iLSQR,vox);
 save_nii(nii,['chi_resharp_iLSQR_ero3.nii']);
 cd ..
