@@ -254,54 +254,57 @@ cd ..
 mkdir TFS_LBV_ERO1
 cd TFS_LBV_ERO1
 % (5) MEDI 1 voxel erosion with LBV
-lfs_lbv= iFreq - poly3d(iFreq,mask);
-RDF = LBV(lfs_lbv,mask,matrix_size,voxel_size,0.001);
-nii = make_nii(RDF,vox);
-save_nii(nii,'LBV_ero1.nii');
+lfs_lbv = LBV(iFreq,mask,matrix_size,voxel_size,0.001);
 Mask = ones(size(mask));
-Mask(RDF == 0) = 0;
+Mask(lfs_lbv == 0) = 0;
+RDF= lfs_lbv - poly3d(lfs_lbv,Mask);
+nii = make_nii(RDF.*Mask,vox);
+save_nii(nii,'LBV_ero1_new.nii');
+
 save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
      voxel_size delta_TE CF B0_dir;
 
 QSM = MEDI_L1('lambda',1000);
 nii = make_nii(QSM.*Mask,vox);
-save_nii(nii,'MEDI_LBV_ero1.nii');
+save_nii(nii,'MEDI_LBV_ero1_new.nii');
 cd ..
 
 
 mkdir TFS_LBV_ERO2
 cd TFS_LBV_ERO2
-% (6) MEDI eroded brain with LBV (2 voxels erosion)
-lfs_lbv= iFreq - poly3d(iFreq,mask);
-RDF = LBV(lfs_lbv.*mask_ero1,mask_ero1,matrix_size,voxel_size,0.001);
-nii = make_nii(RDF,vox);
-save_nii(nii,'LBV_ero2.nii');
+% (5) MEDI 1 voxel erosion with LBV
+lfs_lbv = LBV(iFreq,mask_ero1,matrix_size,voxel_size,0.001);
 Mask = ones(size(mask));
-Mask(RDF == 0) = 0;
+Mask(lfs_lbv == 0) = 0;
+RDF= lfs_lbv - poly3d(lfs_lbv,Mask);
+nii = make_nii(RDF.*Mask,vox);
+save_nii(nii,'LBV_ero2_new.nii');
+
 save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
      voxel_size delta_TE CF B0_dir;
-% run part of MEDI first
+
 QSM = MEDI_L1('lambda',1000);
 nii = make_nii(QSM.*Mask,vox);
-save_nii(nii,'MEDI_LBV_ero2.nii');
+save_nii(nii,'MEDI_LBV_ero2_new.nii');
 cd ..
 
 
 mkdir TFS_LBV_ERO3
 cd TFS_LBV_ERO3
-% (7) MEDI eroded brain with LBV (3 voxels erosion)
-lfs_lbv= iFreq - poly3d(iFreq,mask);
-RDF = LBV(lfs_lbv.*mask_ero2,mask_ero2,matrix_size,voxel_size,0.001);
-nii = make_nii(RDF,vox);
-save_nii(nii,'LBV_ero3.nii');
+% (5) MEDI 1 voxel erosion with LBV
+lfs_lbv = LBV(iFreq,mask_ero2,matrix_size,voxel_size,0.001);
 Mask = ones(size(mask));
-Mask(RDF == 0) = 0;
+Mask(lfs_lbv == 0) = 0;
+RDF= lfs_lbv - poly3d(lfs_lbv,Mask);
+nii = make_nii(RDF.*Mask,vox);
+save_nii(nii,'LBV_ero3_new.nii');
+
 save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
      voxel_size delta_TE CF B0_dir;
-% run part of MEDI first
+
 QSM = MEDI_L1('lambda',1000);
 nii = make_nii(QSM.*Mask,vox);
-save_nii(nii,'MEDI_LBV_ero3.nii');
+save_nii(nii,'MEDI_LBV_ero3_new.nii');
 cd ..
 
 
