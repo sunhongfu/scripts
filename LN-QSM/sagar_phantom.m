@@ -196,6 +196,37 @@ tgv_qsm  -p field_noisy.nii -m mask_brain.nii -f 1 -t 3.7383e-03 -e 2 -o SS_QSM_
 
 
 
+
+%% TFI of the brain
+iFreq = field_noisy*2*pi*42.58*3*15e-3;
+delta_TE = 15e-3;
+matrix_size = imsize;
+% CF = 1/(2*pi)*1e6;
+CF = 42.58*3e6;
+Mask = mask_brain;
+iMag = Mask;
+% iMag = Mask.*model;
+N_std = 1;
+voxel_size = vox;
+B0_dir = z_prjs;
+
+mkdir TFI_brain
+cd TFI_brain
+% (1) TFI of 0 voxel erosion
+% only brain tissue, need whole head later
+P_B = 30;
+P = 1 * Mask + P_B * (1-Mask);
+% Mask_G = 1 * Mask + 1/P_B * (~Mask & mask_head);
+Mask_G = Mask;
+RDF = 0;
+wG = 1;
+save RDF_brain.mat matrix_size voxel_size delta_TE B0_dir CF iMag N_std iFreq Mask Mask_G P RDF wG
+QSM = TFI_L1('filename', 'RDF_brain.mat', 'lambda', 600*2);
+nii = make_nii(QSM,voxel_size);
+save_nii(nii,'TFI_brain.nii');
+
+
+
 %% TFI of the whole head
 iFreq = field_noisy*2*pi*42.58*3*15e-3;
 delta_TE = 15e-3;
@@ -266,6 +297,13 @@ mask_brain_pad = mask_brain;
 P = 1 * mask_tissue + 30 * (1 - mask_tissue);
 % P_pad = padarray(P,[0 0 20]);
 P_pad = P;
+
+% !!!
+% attention
+% if to use padding, above P is wrong
+% create P from the padded mask instead!
+
+
 % Pnew_pad = P_pad.*mask_head_pad;
 % Pnewnew_pad = Pnew_pad + 1/30*(1 - mask_head_pad);
 mask_TV = 1 * mask_tissue_pad + 1/30 * (~mask_tissue_pad & mask_head_pad);

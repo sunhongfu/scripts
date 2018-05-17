@@ -313,7 +313,7 @@ cd ..
 mkdir TFS_RESHARP_ERO2
 cd TFS_RESHARP_ERO2
 % (8) MEDI eroded brain with RESHARP (2 voxels erosion)
-[RDF, mask_resharp] = resharp(iFreq,mask,vox,2,1e-6,500);
+[RDF, mask_resharp] = resharp(iFreq,mask,vox,2,1e-6,200);
 nii = make_nii(RDF,voxel_size);
 save_nii(nii,'resharp_1e-6.nii');
 Mask = mask_resharp;
