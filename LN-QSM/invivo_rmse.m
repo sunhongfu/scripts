@@ -109,4 +109,8 @@ diff_ero0=(ss_ero0-chi_cosmos).*ss_mask;
 rmse_ero0= sqrt(sum(diff_ero0(:).^2)/sum(ss_mask(:)))
 
 
-
+cd LN-QSM/TFS_RESHARP_ERO2_iLSQR
+nii = load_nii('chi_resharp_iLSQR_ero2.nii');
+iLSQR = double(nii.img);
+diff_ero2 = (iLSQR- chi_cosmos).*mask_ero3;
+rmse_ero2 = sqrt(sum(diff_ero2(:).^2)/sum(mask_ero3(:)))

@@ -1,0 +1,1 @@
+mcc -R -nodisplay -m -v -w enable -d /home/hongfu/Documents/MATLAB/deploy/deploy_qsm_challenge qsm_challenge_helix.m -a /home/hongfu/Documents/MATLAB/QSM/Misc/NIFTI/make_nii.m /home/hongfu/Documents/MATLAB/QSM/Misc/NIFTI/save_nii.m /home/hongfu/Documents/MATLAB/QSM/dipole_inversion/tikhonov_qsm.m
