@@ -103,11 +103,11 @@ antsRegistration -d 3 -r [ $ref , $src  ,1] -m mattes[ $ref , $src , 1 , 32, reg
 
 
 # register QSM to MNI templete
-antsApplyTransforms -d 3 -i $qsm_left_to_neutral -r $mni -o $qsm_left_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
-antsApplyTransforms -d 3 -i $qsm_right_to_neutral -r $mni -o $qsm_right_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
-antsApplyTransforms -d 3 -i $qsm_extension_to_neutral -r $mni -o $qsm_extension_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
-antsApplyTransforms -d 3 -i $qsm_flexion_to_neutral -r $mni -o $qsm_flexion_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
-antsApplyTransforms -d 3 -i $qsm_neutral -r $mni -o $qsm_neutral_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
+antsApplyTransforms -d 3 -i $qsm_left_to_neutral -r $mni_brain -o $qsm_left_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
+antsApplyTransforms -d 3 -i $qsm_right_to_neutral -r $mni_brain -o $qsm_right_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
+antsApplyTransforms -d 3 -i $qsm_extension_to_neutral -r $mni_brain -o $qsm_extension_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
+antsApplyTransforms -d 3 -i $qsm_flexion_to_neutral -r $mni_brain -o $qsm_flexion_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
+antsApplyTransforms -d 3 -i $qsm_neutral -r $mni_brain -o $qsm_neutral_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
 
 
 # do the measurements on the tracts (max prob 25)
