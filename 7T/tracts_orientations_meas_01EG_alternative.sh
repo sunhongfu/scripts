@@ -49,11 +49,23 @@ qsm_extension_to_neutral=/home/hongfu/NCIgb5_scratch/hongfu/COSMOS/01EG/extensio
 qsm_extension_to_mni=/home/hongfu/NCIgb5_scratch/hongfu/COSMOS/01EG/extension/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_adj_e2n_to_MNI.nii.gz
 
 
-## register 4 tilted orientations to neutral
-flirt -in $qsm_left -applyxfm -init $mat_left_to_neutral -out $qsm_left_to_neutral -paddingsize 0.0 -interp trilinear -ref $qsm_neutral
-flirt -in $qsm_right -applyxfm -init $mat_right_to_neutral -out $qsm_right_to_neutral -paddingsize 0.0 -interp trilinear -ref $qsm_neutral
-flirt -in $qsm_extension -applyxfm -init $mat_extension_to_neutral -out $qsm_extension_to_neutral -paddingsize 0.0 -interp trilinear -ref $qsm_neutral
-flirt -in $qsm_flexion -applyxfm -init $mat_flexion_to_neutral -out $qsm_flexion_to_neutral -paddingsize 0.0 -interp trilinear -ref $qsm_neutral
+
+
+
+# register 4 titled chi_adj to neutral
+
+flirt -in $qsm_left -ref $qsm_neutral -out $qsm_left_to_neutral -omat $mat_left_to_neutral -bins 256 -cost normcorr -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 12  -interp trilinear
+flirt -in $qsm_right -ref $qsm_neutral -out $qsm_right_to_neutral -omat $mat_right_to_neutral -bins 256 -cost normcorr -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 12  -interp trilinear
+flirt -in $qsm_extension -ref $qsm_neutral -out $qsm_extension_to_neutral -omat $mat_extension_to_neutral -bins 256 -cost normcorr -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 12  -interp trilinear
+flirt -in $qsm_flexion -ref $qsm_neutral -out $qsm_flexion_to_neutral -omat $mat_flexion_to_neutral -bins 256 -cost normcorr -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 12  -interp trilinear
+
+
+
+# ## register 4 tilted orientations to neutral
+# flirt -in $qsm_left -applyxfm -init $mat_left_to_neutral -out $qsm_left_to_neutral -paddingsize 0.0 -interp trilinear -ref $qsm_neutral
+# flirt -in $qsm_right -applyxfm -init $mat_right_to_neutral -out $qsm_right_to_neutral -paddingsize 0.0 -interp trilinear -ref $qsm_neutral
+# flirt -in $qsm_extension -applyxfm -init $mat_extension_to_neutral -out $qsm_extension_to_neutral -paddingsize 0.0 -interp trilinear -ref $qsm_neutral
+# flirt -in $qsm_flexion -applyxfm -init $mat_flexion_to_neutral -out $qsm_flexion_to_neutral -paddingsize 0.0 -interp trilinear -ref $qsm_neutral
 
 
 ## register T1 to neutral mag
@@ -91,11 +103,11 @@ antsRegistration -d 3 -r [ $ref , $src  ,1] -m mattes[ $ref , $src , 1 , 32, reg
 
 
 # register QSM to MNI templete
-antsApplyTransforms -d 3 -i $qsm_left_to_neutral -r $mni -o $qsm_left_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
-antsApplyTransforms -d 3 -i $qsm_right_to_neutral -r $mni -o $qsm_right_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
-antsApplyTransforms -d 3 -i $qsm_extension_to_neutral -r $mni -o $qsm_extension_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
-antsApplyTransforms -d 3 -i $qsm_flexion_to_neutral -r $mni -o $qsm_flexion_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
-antsApplyTransforms -d 3 -i $qsm_neutral -r $mni -o $qsm_neutral_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
+antsApplyTransforms -d 3 -i $qsm_left_to_neutral -r $mni_brain -o $qsm_left_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
+antsApplyTransforms -d 3 -i $qsm_right_to_neutral -r $mni_brain -o $qsm_right_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
+antsApplyTransforms -d 3 -i $qsm_extension_to_neutral -r $mni_brain -o $qsm_extension_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
+antsApplyTransforms -d 3 -i $qsm_flexion_to_neutral -r $mni_brain -o $qsm_flexion_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
+antsApplyTransforms -d 3 -i $qsm_neutral -r $mni_brain -o $qsm_neutral_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
 
 
 # do the measurements on the tracts (max prob 25)
@@ -122,5 +134,5 @@ fslstats -K $wm_labels $qsm_extension_to_mni -M
 
 # register COSMOS to MNI space
 flirt -in $cosmos -applyxfm -init $mat_t1_brain_flirt -out $cosmos_to_t1_flirt -paddingsize 0.0 -interp trilinear -ref $t1_brain_flirt
-antsApplyTransforms -d 3 -i $cosmos_to_t1_flirt -r $mni -o $cosmos_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
+antsApplyTransforms -d 3 -i $cosmos_to_t1_flirt -r $mni_brain -o $cosmos_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
 

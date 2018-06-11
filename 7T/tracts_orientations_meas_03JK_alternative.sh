@@ -115,5 +115,5 @@ fslstats -K $wm_labels $qsm_extension_to_mni -M
 
 # register COSMOS to MNI space
 flirt -in $cosmos -applyxfm -init $mat_t1_brain_flirt -out $cosmos_to_t1_flirt -paddingsize 0.0 -interp trilinear -ref $t1_brain_flirt
-antsApplyTransforms -d 3 -i $cosmos_to_t1_flirt -r $mni -o $cosmos_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
+antsApplyTransforms -d 3 -i $cosmos_to_t1_flirt -r $mni_brain -o $cosmos_to_mni -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat 
 
