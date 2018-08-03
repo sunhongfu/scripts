@@ -1,0 +1,7 @@
+mcc -R -nodisplay -m -v -w enable -d deploy_catherine/ qsm_spgr_ge_catherine.m
+
+qsub -l nodes=1:ppn=2,walltime=48:00:00,mem=4gb 1119101_PRESCHOOL_1119101.pbs
+
+showq -u hongfu.sun
+qstat -u hongfu.sun
+pbsnodes
