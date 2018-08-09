@@ -1,3 +1,4 @@
+% For monopolar QSM acquisition
 clear
 cd /gpfs/M2Scratch/NCIgb5/hongfu/COSMOS/01EG/neutral/QSM_MEGE_7T
 load('raw.mat','mag_corr','imsize','path_mag','mag_list')
@@ -256,9 +257,6 @@ end
 clear mag_corr
 !rm src/mag_corr1_dicoms*.nii src/mag_corr1_dicoms*.json
 !/home/hongfu/bin/mricrogl_lx/dcm2niix -f mag_corr1_dicoms -o src src/mag_corr1_dicoms 
-
-
-
 
 
 

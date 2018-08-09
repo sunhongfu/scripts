@@ -1,3 +1,27 @@
+cd /scratch/cj97/hongfu/COSMOS/01EG/1.7.72.2/1.7.72.2.1.2/ME-MP2RAGE_0p75/QSM_MEMP2RAGE_7T
+clear
+load('raw.mat','mag_corr','TE','mask','imsize','vox');
+[R2 T2 amp] = r2imgfit(double(mag_corr),TE,repmat(mask,[1 1 1 imsize(4)]));
+nii = make_nii(R2,vox);
+save_nii(nii,'R2.nii');
+nii = make_nii(T2,vox);
+save_nii(nii,'T2.nii');
+nii = make_nii(amp,vox);
+save_nii(nii,'amp.nii');
+
+
+cd /scratch/cj97/hongfu/COSMOS/03JK/1.7.72.5/1.7.72.5.1.3/ME-MP2RAGE_0p75/QSM_MEMP2RAGE_7T
+clear
+load('raw.mat','mag_corr','TE','mask','imsize','vox');
+[R2 T2 amp] = r2imgfit(double(mag_corr),TE,repmat(mask,[1 1 1 imsize(4)]));
+nii = make_nii(R2,vox);
+save_nii(nii,'R2.nii');
+nii = make_nii(T2,vox);
+save_nii(nii,'T2.nii');
+nii = make_nii(amp,vox);
+save_nii(nii,'amp.nii');
+
+
       
     
 
