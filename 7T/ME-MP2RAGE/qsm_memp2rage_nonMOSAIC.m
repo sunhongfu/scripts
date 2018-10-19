@@ -4,19 +4,18 @@
 % bash command below to adjust the heading zeros of dicom name
 
 % for FILE in *.dcm; do 
-% 	FILE_NOZERO=`echo $FILE | sed -e 's:^0*::'`;
-% 	FILE_5D=$(printf %05d.dcm ${FILE_NOZERO%.dcm})
-% 	if [ $FILE != $FILE_5D ]; then
-% 		mv $FILE $FILE_5D
-% 	fi
+%     FILE_NOZERO=`echo $FILE | sed -e 's:^0*::'`;
+%     FILE_5D=$(printf %05d.dcm ${FILE_NOZERO%.dcm})
+%     if [ $FILE != $FILE_5D ]; then
+%         mv $FILE $FILE_5D
+%     fi
 % done
 
 
-
 % read in combined magnitude and phase images
-path_mag = '/home/hongfu/cj97_scratch/hongfu/COSMOS/03JK/1.7.72.5/1.7.72.5.1.3/ME-MP2RAGE_0p75/1.7.72.5.1.3.28/dicom_series'
-path_ph = '/home/hongfu/cj97_scratch/hongfu/COSMOS/03JK/1.7.72.5/1.7.72.5.1.3/ME-MP2RAGE_0p75/1.7.72.5.1.3.29/dicom_series'
-path_out = '/home/hongfu/cj97_scratch/hongfu/COSMOS/03JK/1.7.72.5/1.7.72.5.1.3/ME-MP2RAGE_0p75';
+path_mag = '/home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/1.7.72.3.1.3.29/dicom_series'
+path_ph = '/home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/1.7.72.3.1.3.31/dicom_series'
+path_out = '/home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75';
 
 %% read in DICOMs of both uncombined magnitude and raw unfiltered phase images
 path_mag = cd(cd(path_mag));

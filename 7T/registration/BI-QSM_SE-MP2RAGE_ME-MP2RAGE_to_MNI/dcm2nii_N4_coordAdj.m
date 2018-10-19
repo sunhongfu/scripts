@@ -32,7 +32,7 @@ save_untouch_nii(nii,'/scratch/cj97/hongfu/COSMOS/01EG/1.7.72.2/1.7.72.2.1.2/ME-
 
 % DCM to NIFTI
 % subject 02SCOTT
-!/home/hongfu/bin/mricrogl_lx/dcm2niix -f UNIDEN_comboecho -o /home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/UNIDEN_comboecho /home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/UNIDEN_comboecho/1.7.72.3.1.3.21/dicom_series
+!/home/hongfu/bin/mricrogl_lx/dcm2niix -f UNIDEN_comboecho -o /home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/UNIDEN_comboecho /home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/UNIDEN_comboecho/1.7.72.3.1.3.20/dicom_series
 % correct for the SIZE. pad a zero slice
 nii = load_untouch_nii('/home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/UNIDEN_comboecho/UNIDEN_comboecho_c32_e4.nii');
 nii.img = padarray(nii.img,[0 0 1],'post');
@@ -142,6 +142,19 @@ nii_coord_adj('R2.nii','/scratch/cj97/hongfu/COSMOS/01EG/1.7.72.2/1.7.72.2.1.2/M
 
 
 
+cd /home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/QSM_MEMP2RAGE_7T
+for echo = 1:4
+    setenv('echo',num2str(echo));
+    unix('N4BiasFieldCorrection -i src/mag_corr${echo}.nii -o src/mag_corr${echo}_n4.nii');
+end
+% adjust coordinates
+nii_coord_adj('src/mag_corr1_n4.nii','/home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/UNIDEN_comboecho/UNIDEN_comboecho_c32_e4_padded.nii');
+nii_coord_adj('RESHARP/chi_iLSQR_smvrad2.nii','/home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/UNIDEN_comboecho/UNIDEN_comboecho_c32_e4_padded.nii');
+nii_coord_adj('BET_mask.nii','/home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/UNIDEN_comboecho/UNIDEN_comboecho_c32_e4_padded.nii');
+nii_coord_adj('R2.nii','/home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/UNIDEN_comboecho/UNIDEN_comboecho_c32_e4_padded.nii');
+
+
+
 cd /scratch/cj97/hongfu/COSMOS/03JK/1.7.72.5/1.7.72.5.1.3/ME-MP2RAGE_0p75/QSM_MEMP2RAGE_7T
 for echo = 1:4
     setenv('echo',num2str(echo));
@@ -153,6 +166,18 @@ nii_coord_adj('RESHARP/chi_iLSQR_smvrad2.nii','/scratch/cj97/hongfu/COSMOS/03JK/
 nii_coord_adj('BET_mask.nii','/scratch/cj97/hongfu/COSMOS/03JK/1.7.72.5/1.7.72.5.1.3/ME-MP2RAGE_0p75/UNIDEN_comboecho/UNIDEN_comboecho_c32_e4_padded.nii');
 nii_coord_adj('R2.nii','/scratch/cj97/hongfu/COSMOS/03JK/1.7.72.5/1.7.72.5.1.3/ME-MP2RAGE_0p75/UNIDEN_comboecho/UNIDEN_comboecho_c32_e4_padded.nii');
 
+
+
+cd /home/hongfu/cj97_scratch/hongfu/COSMOS/05SG/1.7.72.4/1.7.72.4.1.2/ME-MP2RAGE_0p75/QSM_MEMP2RAGE_7T
+for echo = 1:4
+    setenv('echo',num2str(echo));
+    unix('N4BiasFieldCorrection -i src/mag_corr${echo}.nii -o src/mag_corr${echo}_n4.nii');
+end
+% adjust coordinates
+nii_coord_adj('src/mag_corr1_n4.nii','/home/hongfu/cj97_scratch/hongfu/COSMOS/05SG/1.7.72.4/1.7.72.4.1.2/ME-MP2RAGE_0p75/UNIDEN_comboecho/UNIDEN_comboecho_c32_e4_padded.nii');
+nii_coord_adj('RESHARP/chi_iLSQR_smvrad2.nii','/home/hongfu/cj97_scratch/hongfu/COSMOS/05SG/1.7.72.4/1.7.72.4.1.2/ME-MP2RAGE_0p75/UNIDEN_comboecho/UNIDEN_comboecho_c32_e4_padded.nii');
+nii_coord_adj('BET_mask.nii','/home/hongfu/cj97_scratch/hongfu/COSMOS/05SG/1.7.72.4/1.7.72.4.1.2/ME-MP2RAGE_0p75/UNIDEN_comboecho/UNIDEN_comboecho_c32_e4_padded.nii');
+nii_coord_adj('R2.nii','/home/hongfu/cj97_scratch/hongfu/COSMOS/05SG/1.7.72.4/1.7.72.4.1.2/ME-MP2RAGE_0p75/UNIDEN_comboecho/UNIDEN_comboecho_c32_e4_padded.nii');
 
 
 
