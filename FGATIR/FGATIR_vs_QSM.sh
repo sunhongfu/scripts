@@ -405,3 +405,60 @@ warpedImage=/Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_025/14982/ants_tra
 
 antsRegistration -d 3 -r [ $ref , $src  ,1] -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t translation[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 6x4x2 -l 1 -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t rigid[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 3x2x1 -l 1 -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t affine[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 3x2x1 -l 1 -m mattes[ $ref , $src , 0.5 , 32 ] -m cc[ $ref , $src , 0.5 , 4 ] -t SyN[ .20, 3, 0 ] -c [ 100x100x50, -0.01, 5 ] -s 1x0.5x0vox -f 4x2x1 -l 1 -u 1 -z 1 -o [$transformPrefix, $warpedImage]
 
+
+
+
+
+
+
+
+
+
+
+# Qmrims_023 subject
+
+/usr/local/fsl/bin/flirt -in /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/BRAVO_pd_4p5s_TI450_3_BRAVO_pd_4p5s_TI450_20181031110957_3.nii -ref /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/T1weighted_Anatomical_6_T1-weighted_Anatomical_20181031110957_6.nii -out /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/BRAVO_pd_4p5s_TI450_3_BRAVO_pd_4p5s_TI450_20181031110957_3_FLIRT.nii -omat /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/BRAVO_pd_4p5s_TI450_3_BRAVO_pd_4p5s_TI450_20181031110957_3_FLIRT.mat -bins 256 -cost corratio -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 6  -interp trilinear
+
+
+
+/usr/local/fsl/bin/flirt -in /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/MB_TI1p2_TR2p54_4bi_ax_GRAPPA1p5_8_MB_TI1p2_TR2p54_4bi_ax_GRAPPA1p5_20181031110957_8_e1.nii -ref /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/T1weighted_Anatomical_6_T1-weighted_Anatomical_20181031110957_6.nii -out /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/MB_TI1p2_TR2p54_4bi_ax_GRAPPA1p5_8_MB_TI1p2_TR2p54_4bi_ax_GRAPPA1p5_20181031110957_8_e1_FLIRT.nii -omat /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/MB_TI1p2_TR2p54_4bi_ax_GRAPPA1p5_8_MB_TI1p2_TR2p54_4bi_ax_GRAPPA1p5_20181031110957_8_e1_FLIRT.mat -bins 256 -cost corratio -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 6  -interp trilinear
+
+
+
+/usr/local/fsl/bin/flirt -in /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/MB_TI1p15_TR2p54_4bi_ax_5_MB_TI1p15_TR2p54_4bi_ax_20181031110957_5_e1.nii -ref /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/T1weighted_Anatomical_6_T1-weighted_Anatomical_20181031110957_6.nii -out /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/MB_TI1p15_TR2p54_4bi_ax_5_MB_TI1p15_TR2p54_4bi_ax_20181031110957_5_e1_FLIRT.nii -omat /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/MB_TI1p15_TR2p54_4bi_ax_5_MB_TI1p15_TR2p54_4bi_ax_20181031110957_5_e1_FLIRT.mat -bins 256 -cost corratio -searchrx -90 90 -searchry -90 90 -searchrz -90 90 -dof 6  -interp trilinear
+
+
+
+
+# QSM 0.75mm to T1, then to MNI
+/usr/local/fsl/bin/flirt -in /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1.nii -ref /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/T1weighted_Anatomical_6_T1-weighted_Anatomical_20181031110957_6.nii -out /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.nii -omat /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.mat -bins 256 -cost mutualinfo -searchrx -180 180 -searchry -180 180 -searchrz -180 180 -dof 12  -interp trilinear
+# apply mag MAT FLIRT trans to QSM
+/usr/local/fsl/bin/flirt -in /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/RESHARP/chi_iLSQR_smvrad3.nii -applyxfm -init /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.mat -out /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/RESHARP/chi_iLSQR_smvrad3_FLIRT.nii -paddingsize 0.0 -interp trilinear -ref /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.nii.gz
+/usr/local/fsl/bin/flirt -in /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/RESHARP/MEDI1000_RESHARP_smvrad3.nii -applyxfm -init /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.mat -out /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/RESHARP/MEDI1000_RESHARP_smvrad3_FLIRT.nii -paddingsize 0.0 -interp trilinear -ref /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.nii.gz
+/usr/local/fsl/bin/flirt -in /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/RESHARP/MEDI1500_RESHARP_smvrad3.nii -applyxfm -init /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.mat -out /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/RESHARP/MEDI1500_RESHARP_smvrad3_FLIRT.nii -paddingsize 0.0 -interp trilinear -ref /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.nii.gz
+/usr/local/fsl/bin/flirt -in /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/RESHARP/MEDI2000_RESHARP_smvrad3.nii -applyxfm -init /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.mat -out /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/RESHARP/MEDI2000_RESHARP_smvrad3_FLIRT.nii -paddingsize 0.0 -interp trilinear -ref /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.nii.gz
+/usr/local/fsl/bin/flirt -in /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/RESHARP/MEDI5000_RESHARP_smvrad3.nii -applyxfm -init /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.mat -out /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/RESHARP/MEDI5000_RESHARP_smvrad3_FLIRT.nii -paddingsize 0.0 -interp trilinear -ref /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.nii.gz
+
+
+# apply mag MAT FLIRT trans to R2*
+/usr/local/fsl/bin/flirt -in /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/R2.nii -applyxfm -init /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.mat -out /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/R2_FLIRT.nii -paddingsize 0.0 -interp trilinear -ref /Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/QSM_p75/QSM_SPGR_GE/src/mag1_FLIRT.nii.gz
+
+
+
+
+# ANTs registration
+mni=/usr/local/fsl/data/standard/MNI152_T1_1mm.nii.gz
+
+## register T1 to MNI-atlas
+# (1) try on 1 mm MNI template
+its=10000x1111x5  #fast mode, medium reg quality
+# its=10000x111110x11110  #slow mode, high reg quality
+############################################################################
+src=/Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/T1weighted_Anatomical_6_T1-weighted_Anatomical_20181031110957_6.nii
+ref=$mni
+transformPrefix=/Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/ants_trans_T1_to_MNI
+warpedImage=/Users/hongfusun/DATA/FGATIR/sorted_dicoms/Qmrims_023/15043/ants_trans_T1_to_MNI.nii.gz
+############################################################################
+
+antsRegistration -d 3 -r [ $ref , $src  ,1] -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t translation[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 6x4x2 -l 1 -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t rigid[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 3x2x1 -l 1 -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t affine[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 3x2x1 -l 1 -m mattes[ $ref , $src , 0.5 , 32 ] -m cc[ $ref , $src , 0.5 , 4 ] -t SyN[ .20, 3, 0 ] -c [ 100x100x50, -0.01, 5 ] -s 1x0.5x0vox -f 4x2x1 -l 1 -u 1 -z 1 -o [$transformPrefix, $warpedImage]
+
