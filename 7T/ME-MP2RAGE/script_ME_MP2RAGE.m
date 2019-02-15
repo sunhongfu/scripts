@@ -153,6 +153,22 @@ save_nii(nii,'amp_I2.nii');
 
 # SWI using Yuhan's codes
 # this was run on office Ubuntu at UofC
+
+cd /media/data/ME-MP2RAGE/Wu_524/4_bi_R-L/QSM_MEMP2RAGE_7T/src
+# generate mnc files from nii
+rm ../*.mnc
+nii2mnc ../BET_mask.nii
+rm *.mnc
+nii2mnc mag_corr1_n4.nii
+nii2mnc mag_corr2_n4.nii
+nii2mnc mag_corr3_n4.nii
+nii2mnc mag_corr4_n4.nii
+nii2mnc ph_corr1.nii
+nii2mnc ph_corr2.nii
+nii2mnc ph_corr3.nii
+nii2mnc ph_corr4.nii
+
+
 cd /media/data/ME-MP2RAGE/01_VM_H257/QSM_MEMP2RAGE_7T/src
 # generate mnc files from nii
 rm ../*.mnc
@@ -230,6 +246,24 @@ nii2mnc ph_corr4.nii
 
 
 %% run these in MATLAB
+cd /media/data/ME-MP2RAGE/Wu_524/4_bi_R-L/QSM_MEMP2RAGE_7T/src
+do_unwrap_swi('mag_corr1_n4.mnc', 'ph_corr1.mnc', 'swi_unwrap_echo_1_of_4.mnc', 'phase_unwrap_echo_1_of_4.mnc', '../BET_mask.mnc', 0.2, 1, 4, 1);
+do_unwrap_swi('mag_corr2_n4.mnc', 'ph_corr2.mnc', 'swi_unwrap_echo_2_of_4.mnc', 'phase_unwrap_echo_2_of_4.mnc', '../BET_mask.mnc', 0.25, 1, 4, 1);
+do_unwrap_swi('mag_corr3_n4.mnc', 'ph_corr3.mnc', 'swi_unwrap_echo_3_of_4.mnc', 'phase_unwrap_echo_3_of_4.mnc', '../BET_mask.mnc', 0.3, 1, 4, 1);
+do_unwrap_swi('mag_corr4_n4.mnc', 'ph_corr4.mnc', 'swi_unwrap_echo_4_of_4.mnc', 'phase_unwrap_echo_4_of_4.mnc', '../BET_mask.mnc', 0.35, 1, 4, 1);
+unix('./multi_echo_swi_unwrapped.pl mag_corr ph_corr ../BET_mask.mnc 4 combined_unwrap_swi.mnc');
+
+do_swi('mag_corr1_n4.mnc', 'ph_corr1.mnc', 'swi_echo_1_of_4.mnc', 'phase_echo_1_of_4.mnc', 0.2, 1);
+do_swi('mag_corr2_n4.mnc', 'ph_corr2.mnc', 'swi_echo_2_of_4.mnc', 'phase_echo_2_of_4.mnc', 0.25, 1);
+do_swi('mag_corr3_n4.mnc', 'ph_corr3.mnc', 'swi_echo_3_of_4.mnc', 'phase_echo_3_of_4.mnc', 0.3, 1);
+do_swi('mag_corr4_n4.mnc', 'ph_corr4.mnc', 'swi_echo_4_of_4.mnc', 'phase_echo_4_of_4.mnc', 0.35, 1);
+unix('./multi_echo_swi.pl mag_corr ph_corr 4 combined_swi.mnc');
+
+
+
+
+
+
 cd /media/data/ME-MP2RAGE/01_VM_H257/QSM_MEMP2RAGE_7T/src
 do_unwrap_swi('mag_corr1_n4.mnc', 'ph_corr1.mnc', 'swi_unwrap_echo_1_of_4.mnc', 'phase_unwrap_echo_1_of_4.mnc', '../BET_mask.mnc', 0.2, 1, 4, 1);
 do_unwrap_swi('mag_corr2_n4.mnc', 'ph_corr2.mnc', 'swi_unwrap_echo_2_of_4.mnc', 'phase_unwrap_echo_2_of_4.mnc', '../BET_mask.mnc', 0.25, 1, 4, 1);
@@ -267,6 +301,15 @@ do_unwrap_swi('mag_corr2_n4.mnc', 'ph_corr2.mnc', 'swi_unwrap_echo_2_of_4.mnc', 
 do_unwrap_swi('mag_corr3_n4.mnc', 'ph_corr3.mnc', 'swi_unwrap_echo_3_of_4.mnc', 'phase_unwrap_echo_3_of_4.mnc', '../BET_mask.mnc', 0.3, 1, 4, 1);
 do_unwrap_swi('mag_corr4_n4.mnc', 'ph_corr4.mnc', 'swi_unwrap_echo_4_of_4.mnc', 'phase_unwrap_echo_4_of_4.mnc', '../BET_mask.mnc', 0.35, 1, 4, 1);
 unix('./multi_echo_swi_unwrapped.pl mag_corr ph_corr ../BET_mask.mnc 4 combined_unwrap_swi.mnc');
+
+
+cd /media/data/ME-MP2RAGE/03_MP_H447/QSM_MEMP2RAGE_7T/src
+do_unwrap_swi('mag_corr1_n4.mnc', 'ph_corr1.mnc', 'swi_unwrap_echo_1_of_4_power1.mnc', 'phase_unwrap_echo_1_of_4_power1.mnc', '../BET_mask.mnc', 0.2, 1, 1, 1);
+do_unwrap_swi('mag_corr2_n4.mnc', 'ph_corr2.mnc', 'swi_unwrap_echo_2_of_4_power1.mnc', 'phase_unwrap_echo_2_of_4_power1.mnc', '../BET_mask.mnc', 0.25, 1, 1, 1);
+do_unwrap_swi('mag_corr3_n4.mnc', 'ph_corr3.mnc', 'swi_unwrap_echo_3_of_4_power1.mnc', 'phase_unwrap_echo_3_of_4_power1.mnc', '../BET_mask.mnc', 0.3, 1, 1, 1);
+do_unwrap_swi('mag_corr4_n4.mnc', 'ph_corr4.mnc', 'swi_unwrap_echo_4_of_4_power1.mnc', 'phase_unwrap_echo_4_of_4_power1.mnc', '../BET_mask.mnc', 0.35, 1, 1, 1);
+unix('./multi_echo_swi_unwrapped_power1.pl mag_corr ph_corr ../BET_mask.mnc 4 combined_unwrap_swi_power1.mnc');
+
 
 do_swi('mag_corr1_n4.mnc', 'ph_corr1.mnc', 'swi_echo_1_of_4.mnc', 'phase_echo_1_of_4.mnc', 0.2, 1);
 do_swi('mag_corr2_n4.mnc', 'ph_corr2.mnc', 'swi_echo_2_of_4.mnc', 'phase_echo_2_of_4.mnc', 0.25, 1);
@@ -308,6 +351,11 @@ unix('./multi_echo_swi.pl mag_corr ph_corr 4 combined_swi.mnc');
 
 
 # move the current results to folder of filter strengths
+cd /media/data/ME-MP2RAGE/Wu_524/4_bi_R-L/QSM_MEMP2RAGE_7T/src
+mkdir p1
+mv phase_echo*.mnc swi_echo*.mnc phase_unwrap_echo*.mnc swi_unwrap_echo*.mnc combined_swi*.mnc combined_unwrap_swi*.mnc p1
+
+
 cd /media/data/ME-MP2RAGE/01_VM_H257/QSM_MEMP2RAGE_7T/src
 mkdir p1
 mv phase_echo*.mnc swi_echo*.mnc phase_unwrap_echo*.mnc swi_unwrap_echo*.mnc combined_swi*.mnc combined_unwrap_swi*.mnc p1
@@ -331,6 +379,31 @@ mv phase_echo*.mnc swi_echo*.mnc phase_unwrap_echo*.mnc swi_unwrap_echo*.mnc com
 
 
 # convert mnc results to nii
+cd /media/data/ME-MP2RAGE/Wu_524/4_bi_R-L/QSM_MEMP2RAGE_7T/src/p1
+for minc_file in *.mnc
+do
+	mnc2nii $minc_file
+done
+
+cd /media/data/ME-MP2RAGE/Wu_524/4_bi_R-L/QSM_MEMP2RAGE_7T/src/p2
+for minc_file in *.mnc
+do
+	mnc2nii $minc_file
+done
+
+cd /media/data/ME-MP2RAGE/Wu_524/4_bi_R-L/QSM_MEMP2RAGE_7T/src/p3
+for minc_file in *.mnc
+do
+	mnc2nii $minc_file
+done
+
+cd /media/data/ME-MP2RAGE/Wu_524/4_bi_R-L/QSM_MEMP2RAGE_7T/src/p4
+for minc_file in *.mnc
+do
+	mnc2nii $minc_file
+done
+
+
 cd /media/data/ME-MP2RAGE/01_VM_H257/QSM_MEMP2RAGE_7T/src/p1
 for minc_file in *.mnc
 do
@@ -462,14 +535,44 @@ done
 
 
 
-TE1 = 2.3;
-TE2 = 5;
-TE3 = 6.9;
-TE4 = 8.7;
+% TE1 = 2.3;
+% TE2 = 5;
+% TE3 = 6.9;
+% TE4 = 8.7;
 
+% new TEs
+TE1 = 1.9;
+TE2 = 4.2;
+TE3 = 6.4;
+TE4 = 8.6;
 
 
 % create mIP
+nii = load_untouch_nii('/media/data/ME-MP2RAGE/Wu_524/4_bi_R-L/QSM_MEMP2RAGE_7T/src/p1/phase_unwrap_echo_1_of_4.nii');
+pha1 = single(nii.img)./TE1;
+nii = load_untouch_nii('/media/data/ME-MP2RAGE/Wu_524/4_bi_R-L/QSM_MEMP2RAGE_7T/src/p1/phase_unwrap_echo_2_of_4.nii');
+pha2 = single(nii.img)./TE2;
+nii = load_untouch_nii('/media/data/ME-MP2RAGE/Wu_524/4_bi_R-L/QSM_MEMP2RAGE_7T/src/p1/phase_unwrap_echo_3_of_4.nii');
+pha3 = single(nii.img)./TE3;
+nii = load_untouch_nii('/media/data/ME-MP2RAGE/Wu_524/4_bi_R-L/QSM_MEMP2RAGE_7T/src/p1/phase_unwrap_echo_4_of_4.nii');
+pha4 = single(nii.img)./TE4;
+
+pha_all = cat(4, pha1,pha2,pha3,pha4);
+mIP_all = min(pha_all,[],4);
+mIP_all = mIP_all*TE4;
+
+nii.img = mIP_all;
+save_untouch_nii(nii,'/media/data/ME-MP2RAGE/Wu_524/4_bi_R-L/QSM_MEMP2RAGE_7T/src/p1/phase_mIP.nii');
+
+pha_mean = (pha1 + pha2 + pha3 + pha4)/4*TE4;
+nii.img = pha_mean;
+save_untouch_nii(nii,'/media/data/ME-MP2RAGE/Wu_524/4_bi_R-L/QSM_MEMP2RAGE_7T/src/p1/pha_mean.nii');
+
+
+
+
+
+
 nii = load_untouch_nii('/media/data/ME-MP2RAGE/03_MP_H447/QSM_MEMP2RAGE_7T/src/p1/phase_unwrap_echo_1_of_4.nii');
 pha1 = single(nii.img)./TE1;
 nii = load_untouch_nii('/media/data/ME-MP2RAGE/03_MP_H447/QSM_MEMP2RAGE_7T/src/p1/phase_unwrap_echo_2_of_4.nii');

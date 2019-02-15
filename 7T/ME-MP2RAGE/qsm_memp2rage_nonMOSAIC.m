@@ -12,61 +12,126 @@
 % done
 
 
-% read in combined magnitude and phase images
-path_mag = '/home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/1.7.72.3.1.3.29/dicom_series'
-path_ph = '/home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75/1.7.72.3.1.3.31/dicom_series'
-path_out = '/home/hongfu/cj97_scratch/hongfu/COSMOS/02SCOTT/1.7.72.3/1.7.72.3.1.3/ME-MP2RAGE_0p75';
+path_mag = '/scratch/cj97/hongfu/ME-MP2RAGE/Sun_14_2179/1.10.3/1.10.3.536/1.10.3.536.1.1/1.10.3.536.1.1.7/dicom_series';
+path_ph = '/scratch/cj97/hongfu/ME-MP2RAGE/Sun_14_2179/1.10.3/1.10.3.536/1.10.3.536.1.1/1.10.3.536.1.1.8/dicom_series';
+path_out = '/scratch/cj97/hongfu/ME-MP2RAGE/Sun_14_2179/6_swapped';
 
-%% read in DICOMs of both uncombined magnitude and raw unfiltered phase images
-path_mag = cd(cd(path_mag));
-mag_list = dir([path_mag '/*.dcm']);
-mag_list = mag_list(~strncmpi('.', {mag_list.name}, 1));
+setenv('path_ph',path_ph);
+!/home/hongfu/mricrogl_lx/dcm2niix $path_ph
 
-path_ph = cd(cd(path_ph));
-ph_list = dir([path_ph '/*.dcm']);
-ph_list = ph_list(~strncmpi('.', {ph_list.name}, 1));
+setenv('path_mag',path_mag);
+!/home/hongfu/mricrogl_lx/dcm2niix $path_mag
 
-% number of total (2 inversion) slices (mag and ph should be the same)
-nSL = length(ph_list);
-
-% get the sequence parameters
-dicom_info = dicominfo([path_ph,filesep,ph_list(end).name]);
-NumberOfEchoes = dicom_info.EchoNumber; 
-
-% get the sequence parameters
-for i = 1:nSL/2/NumberOfEchoes:nSL/2 % read in TEs
-    dicom_info = dicominfo([path_ph,filesep,ph_list(i).name]);
-    TE(dicom_info.EchoNumber) = dicom_info.EchoTime*1e-3;
+% read in the dcm2niix converted nifti files
+cd(path_ph);
+for echo = 1:6
+    nii = load_untouch_nii(['UNIDEN_comboecho_e' num2str(echo) '_ph.nii']);
+    ph(:,:,:,:,echo,1) = single(nii.img);
+    for chan = 2:32
+        nii = load_untouch_nii(['UNIDEN_comboecho_c' num2str(chan) '_e' num2str(echo) '_ph.nii']);
+        ph(:,:,:,:,echo,chan) = single(nii.img);
+    end
 end
-vox = [dicom_info.PixelSpacing(1), dicom_info.PixelSpacing(2), dicom_info.SliceThickness];
 
 
+cd(path_mag);
+for echo = 1:6
+    nii = load_untouch_nii(['UNIDEN_comboecho_e' num2str(echo) '.nii']);
+    mag(:,:,:,:,echo,1) = single(nii.img);
+    for chan = 2:32
+        nii = load_untouch_nii(['UNIDEN_comboecho_c' num2str(chan) '_e' num2str(echo) '.nii']);
+        mag(:,:,:,:,echo,chan) = single(nii.img);
+    end
+end
+
+
+% flip second dimension
+mag = flipdim(mag,2);
+ph = flipdim(ph,2);
+
+
+
+% read in the json files for scan parameters
+cd(path_ph);
+for echo = 1:6
+    ph_json = jsondecode(fileread(['UNIDEN_comboecho_e' num2str(echo) '_ph.json']));
+    TE(echo) = ph_json.EchoTime;
+end
+ImageOrientationPatient = ph_json.ImageOrientationPatientDICOM;
 % angles (z projections of the image x y z coordinates) 
-Xz = dicom_info.ImageOrientationPatient(3);
-Yz = dicom_info.ImageOrientationPatient(6);
-Zxyz = cross(dicom_info.ImageOrientationPatient(1:3),dicom_info.ImageOrientationPatient(4:6));
+Xz = ImageOrientationPatient(3);
+Yz = ImageOrientationPatient(6);
+Zxyz = cross(ImageOrientationPatient(1:3),ImageOrientationPatient(4:6));
 Zz = Zxyz(3);
 z_prjs = [Xz, Yz, Zz];
 
-% read in measurements
-mag = zeros(dicom_info.Rows,dicom_info.Columns,nSL/2,'single');
-ph = zeros(dicom_info.Rows,dicom_info.Columns,nSL/2,'single');
-for i = nSL/2+1:nSL
-    mag(:,:,i-nSL/2) = single(dicomread([path_mag,filesep,mag_list(i).name]));
-    ph(:,:,i-nSL/2) = single(dicomread([path_ph,filesep,ph_list(i).name]));
-end
+% get the sequence parameters
+path_ph = cd(cd(path_ph));
+ph_list = dir([path_ph '/*.dcm']);
+ph_list = ph_list(~strncmpi('.', {ph_list.name}, 1));
+dicom_info = dicominfo([path_ph,filesep,ph_list(end).name]);
+vox = [dicom_info.PixelSpacing(1), dicom_info.PixelSpacing(2), dicom_info.SliceThickness];
 
-imsize = size(ph);
 
-% RESHAPE individual channel images into 
-mag = reshape(mag, imsize(1), imsize(2), 32, nSL/2/32/NumberOfEchoes, NumberOfEchoes);
-mag = permute(mag,[2 1 4 5 3]);
-
-ph = reshape(ph, imsize(1), imsize(2), 32, nSL/2/32/NumberOfEchoes, NumberOfEchoes);
-ph = permute(ph,[2 1 4 5 3]);
 ph = 2*pi.*(ph - single(dicom_info.SmallestImagePixelValue))/(single(dicom_info.LargestImagePixelValue - dicom_info.SmallestImagePixelValue)) - pi;
-
 imsize = size(ph);
+
+
+
+
+% %% read in DICOMs of both uncombined magnitude and raw unfiltered phase images
+% path_mag = cd(cd(path_mag));
+% mag_list = dir([path_mag '/*.dcm']);
+% mag_list = mag_list(~strncmpi('.', {mag_list.name}, 1));
+
+% path_ph = cd(cd(path_ph));
+% ph_list = dir([path_ph '/*.dcm']);
+% ph_list = ph_list(~strncmpi('.', {ph_list.name}, 1));
+
+% % number of total (2 inversion) slices (mag and ph should be the same)
+% nSL = length(ph_list);
+
+% % get the sequence parameters
+% dicom_info = dicominfo([path_ph,filesep,ph_list(end).name]);
+% NumberOfEchoes = dicom_info.EchoNumber; 
+
+% % get the sequence parameters
+% for i = 1:nSL/2/NumberOfEchoes:nSL/2 % read in TEs
+%     dicom_info = dicominfo([path_ph,filesep,ph_list(i).name]);
+%     TE(dicom_info.EchoNumber) = dicom_info.EchoTime*1e-3;
+% end
+% vox = [dicom_info.PixelSpacing(1), dicom_info.PixelSpacing(2), dicom_info.SliceThickness];
+
+
+% % angles (z projections of the image x y z coordinates) 
+% Xz = dicom_info.ImageOrientationPatient(3);
+% Yz = dicom_info.ImageOrientationPatient(6);
+% Zxyz = cross(dicom_info.ImageOrientationPatient(1:3),dicom_info.ImageOrientationPatient(4:6));
+% Zz = Zxyz(3);
+% z_prjs = [Xz, Yz, Zz];
+
+% % % read in measurements
+% % mag = zeros(dicom_info.Rows,dicom_info.Columns,nSL/2,'single');
+% % ph = zeros(dicom_info.Rows,dicom_info.Columns,nSL/2,'single');
+% % for i = nSL/2+1:nSL
+% %     mag(:,:,i-nSL/2) = single(dicomread([path_mag,filesep,mag_list(i).name]));
+% %     ph(:,:,i-nSL/2) = single(dicomread([path_ph,filesep,ph_list(i).name]));
+% % end
+
+% imsize = size(ph);
+
+% % % RESHAPE individual channel images into 
+% % mag = reshape(mag, imsize(1), imsize(2), 32, nSL/2/32/NumberOfEchoes, NumberOfEchoes);
+% % mag = permute(mag,[2 1 4 5 3]);
+
+% % ph = reshape(ph, imsize(1), imsize(2), 32, nSL/2/32/NumberOfEchoes, NumberOfEchoes);
+% % ph = permute(ph,[2 1 4 5 3]);
+% ph = 2*pi.*(ph - single(dicom_info.SmallestImagePixelValue))/(single(dicom_info.LargestImagePixelValue - dicom_info.SmallestImagePixelValue)) - pi;
+
+
+
+
+
 
 % define output directories
 path_qsm = [path_out '/QSM_MEMP2RAGE_7T'];
@@ -79,6 +144,11 @@ cd(path_qsm);
 save('raw.mat','-v7.3');
 
 
+% only the second inversion
+mag = squeeze(mag(:,:,:,2,:,:));
+ph = squeeze(ph(:,:,:,2,:,:));
+
+imsize = size(mag);
 
 % BEGIN THE QSM RECON PIPELINE
 % initial quick brain mask
@@ -161,10 +231,14 @@ save_nii(nii,'unph_bestpath_before_jump_correction.nii');
 % remove all the temp files
 ! rm *.dat
 
+
+
 % 2pi jumps correction
 nii = load_nii('unph_diff.nii');
 unph_diff = double(nii.img);
+
 unph_diff = unph_diff/2;
+
 for echo = 2:imsize(4)
     meandiff = unph(:,:,:,echo)-unph(:,:,:,1)-double(echo-1)*unph_diff;
     meandiff = meandiff(mask==1);
@@ -227,6 +301,10 @@ for smv_rad = [2]
     disp('--> RESHARP to remove background field ...');
     % [lfs_resharp_0, mask_resharp_0] = resharp_lsqr(tfs_0,mask.*R_0,vox,smv_rad,lsqr_num);
     [lfs_resharp_0, mask_resharp_0] = resharp(tfs_0,mask.*R_0,vox,smv_rad,tik_reg,cgs_num);
+
+    save('raw.mat','lfs_resharp_0','mask_resharp_0','-append');
+
+
     % save nifti
     mkdir('RESHARP');
     nii = make_nii(lfs_resharp_0,vox);
@@ -258,11 +336,14 @@ for smv_rad = [2]
     nii = make_nii(QSM.*Mask,vox);
     save_nii(nii,['RESHARP/MEDI1000_RESHARP_smvrad' num2str(smv_rad) '.nii']);
     
-    % %TVDI
-    % sus_resharp = tvdi(lfs_resharp_0,mask_resharp_0,vox,2e-4,iMag,z_prjs,500); 
-    % nii = make_nii(sus_resharp.*mask_resharp_0,vox);
-    % save_nii(nii,['RESHARP/TV_2e-4_smvrad' num2str(smv_rad) '.nii']);
+    %TVDI
+    sus_resharp = tvdi(lfs_resharp_0,mask_resharp_0,vox,2e-4,iMag,z_prjs,500); 
+    nii = make_nii(sus_resharp.*mask_resharp_0,vox);
+    save_nii(nii,['RESHARP/TV_2e-4_smvrad' num2str(smv_rad) '.nii']);
 
+    sus_resharp = tvdi(lfs_resharp_0,mask_resharp_0,vox,5e-4,iMag,z_prjs,500); 
+    nii = make_nii(sus_resharp.*mask_resharp_0,vox);
+    save_nii(nii,['RESHARP/TV_5e-4_smvrad' num2str(smv_rad) '.nii']);
 end
 
 

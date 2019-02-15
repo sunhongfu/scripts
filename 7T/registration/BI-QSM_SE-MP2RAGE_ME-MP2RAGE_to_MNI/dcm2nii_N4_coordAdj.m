@@ -219,6 +219,24 @@ nii_coord_adj('R2.nii','src/mag_corr1_dicoms.nii');
 
 % n4 correction 
 
+cd /home/hongfu/cj97_scratch/hongfu/ME-MP2RAGE/Tuccio_525/1.10.3.525/1.10.3.525.1.1/4_mono_swapped/QSM_MEMP2RAGE_7T
+for echo = 1:4
+    setenv('echo',num2str(echo));
+    unix('N4BiasFieldCorrection -i src/mag_corr${echo}.nii -o src/mag_corr${echo}_n4.nii');
+end
+
+cd /home/hongfu/cj97_scratch/hongfu/ME-MP2RAGE/Tuccio_525/1.10.3.525/1.10.3.525.1.1/4_bi/ME-MP2RAGE_0p75/QSM_MEMP2RAGE_7T
+for echo = 1:4
+    setenv('echo',num2str(echo));
+    unix('N4BiasFieldCorrection -i src/mag_corr${echo}.nii -o src/mag_corr${echo}_n4.nii');
+end
+
+cd /home/hongfu/cj97_scratch/hongfu/ME-MP2RAGE/Wu_524/1.10.3/1.10.3.524/1.10.3.524.1.3/4_bi_R-L/QSM_MEMP2RAGE_7T
+for echo = 1:4
+    setenv('echo',num2str(echo));
+    unix('N4BiasFieldCorrection -i src/mag_corr${echo}.nii -o src/mag_corr${echo}_n4.nii');
+end
+
 cd /gpfs/M2Scratch/NCIgb5/hongfu/ME-MP2RAGE/01_VM_H257/QSM_MEMP2RAGE_7T
 for echo = 1:4
     setenv('echo',num2str(echo));
