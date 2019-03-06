@@ -34,6 +34,10 @@ r2sm_5=/Users/hongfusun/DATA/ME-MP2RAGE/05_JON_H476/R2_I2_adj_to_MNI.nii
 t1m_5=/Users/hongfusun/DATA/ME-MP2RAGE/05_JON_H476/T1m_to_MNI.nii
 
 
+
+
+
+
 # measure QSM
 fslstats -K $rois_prob_50 $qsm_1 -M
 fslstats -K $roi_sn $qsm_1 -M
