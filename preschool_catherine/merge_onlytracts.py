@@ -9,9 +9,9 @@ qsm_path = "/media/data/project_preschool/recon"
 dti_path = "/media/pikelab/Hongfu/project_preschool/native_b0_vec1"
 fa_path = "/media/data/project_preschool/DTI_Tract_Data/FA_Map"
 md_path = "/media/data/project_preschool/DTI_Tract_Data/MD"
-tracts_path = "/media/pikelab/Hongfu/project_preschool/tracts"
+tracts_path = "/home/hongfu/mnt/deepmri/preschool/project_preschool/tracts"
 
-merge_folder = "/media/pikelab/Hongfu/project_preschool/merge"
+merge_folder = "/home/hongfu/mnt/deepmri/preschool/project_preschool/merge"
 
 # put mag1, QSM, b0, FA, MD, RD, vector, tracts together
 
@@ -71,13 +71,13 @@ for qsm_subject in qsm_list:
 	match_flag = False
 	for root, dirs, files in os.walk(tracts_path):
 		for name in files:
-			if re.match(qsm_subject + "_(\S+)\.nii", name):
+			if re.match(qsm_subject + "_(\S+)\.nii", name, re.IGNORECASE):
 				md_file = os.path.abspath(os.path.join(root, name))
 				if not os.path.exists(merge_folder + "/" + qsm_subject + "/tracts"):
 					os.makedirs(merge_folder + "/" + qsm_subject + "/tracts")
 				shutil.copy(md_file, merge_folder + "/" + qsm_subject + "/tracts/")
 				match_flag = True
 	if match_flag == False:
-		print "NO_tracts_" + qsm_subject
+		print("NO_tracts_" + qsm_subject)
 
 

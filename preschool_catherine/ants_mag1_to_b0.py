@@ -4,13 +4,12 @@ import glob
 import re
 
 
-qsm_path     = "/media/data/project_preschool/recon"
-dti_path     = "/media/pikelab/Hongfu/project_preschool/native_b0_vec1"
-fa_path      = "/media/data/project_preschool/DTI_Tract_Data/FA_Map"
-md_path      = "/media/data/project_preschool/DTI_Tract_Data/MD"
-tracts_path  = "/media/pikelab/Hongfu/project_preschool/tracts"
+qsm_path = "/media/data/project_preschool/recon"
+dti_path = "/media/pikelab/Hongfu/project_preschool/native_b0_vec1"
+fa_path = "/media/data/project_preschool/DTI_Tract_Data/FA_Map"
+md_path = "/media/data/project_preschool/DTI_Tract_Data/MD"
+tracts_path = "/media/pikelab/Hongfu/project_preschool/tracts"
 merge_folder = "/media/pikelab/Hongfu/project_preschool/merge"
-
 
 
 # create a list of QSM subjects
@@ -19,32 +18,43 @@ qsm_list = ["PS13_004", "PS14_001", "PS14_003", "PS14_005", "PS14_006", "PS14_00
 
 # do n4 corrections on the b0 maps
 for qsm_subject in qsm_list:
-	for root, dirs, files in os.walk(merge_folder):
-		for name in files:
-			if re.match(qsm_subject + "_(\S+)_B0_n4\.nii", name):
-				b0_file_n4           = os.path.abspath(os.path.join(root, name))
-				mag_sos_n4           = os.path.abspath(os.path.join(root, "mag_sos_RAS_masked_n4.nii"))
-				ants_trans_T2s_to_B0 = os.path.abspath(os.path.join(root, "trans_T2s_to_B0"))
-				ants_T2s_to_B0       = os.path.abspath(os.path.join(root, "T2s_to_B0.nii.gz"))
-				qsmImage1            = os.path.abspath(os.path.join(root, "chi_ero0_tik_1e-3_tv_1e-4_2000_peel_1_RAS.nii"))
-				qsmImage2            = os.path.abspath(os.path.join(root, "chi_iLSQR_peel1_RAS.nii"))
-				qsmImage3            = os.path.abspath(os.path.join(root, "MEDI2000_LBV_peel1_RAS.nii"))
-				qsmImage4            = os.path.abspath(os.path.join(root, "TFI_lbv_v2d_lambda2000_peel_1_RAS.nii"))
-				qsmOutImage1         = os.path.abspath(os.path.join(root, "chi_ero0_tik_1e-3_tv_1e-4_2000_peel_1_RAS_ants_to_B0.nii"))
-				qsmOutImage2         = os.path.abspath(os.path.join(root, "chi_iLSQR_peel1_RAS_ants_to_B0.nii.nii"))
-				qsmOutImage3         = os.path.abspath(os.path.join(root, "MEDI2000_LBV_peel1_RAS_ants_to_B0.nii.nii"))
-				qsmOutImage4         = os.path.abspath(os.path.join(root, "TFI_lbv_v2d_lambda2000_peel_1_RAS_ants_to_B0.nii.nii"))
+    for root, dirs, files in os.walk(merge_folder):
+        for name in files:
+            if re.match(qsm_subject + r"_(\S+)_B0_n4\.nii", name):
+                b0_file_n4 = os.path.abspath(os.path.join(root, name))
+                mag_sos_n4 = os.path.abspath(
+                    os.path.join(root, "mag_sos_RAS_masked_n4.nii"))
+                ants_trans_T2s_to_B0 = os.path.abspath(
+                    os.path.join(root, "trans_T2s_to_B0"))
+                ants_T2s_to_B0 = os.path.abspath(
+                    os.path.join(root, "T2s_to_B0.nii.gz"))
+                qsmImage1 = os.path.abspath(os.path.join(
+                    root, "chi_ero0_tik_1e-3_tv_1e-4_2000_peel_1_RAS.nii"))
+                qsmImage2 = os.path.abspath(
+                    os.path.join(root, "chi_iLSQR_peel1_RAS.nii"))
+                qsmImage3 = os.path.abspath(os.path.join(
+                    root, "MEDI2000_LBV_peel1_RAS.nii"))
+                qsmImage4 = os.path.abspath(os.path.join(
+                    root, "TFI_lbv_v2d_lambda2000_peel_1_RAS.nii"))
+                qsmOutImage1 = os.path.abspath(os.path.join(
+                    root, "chi_ero0_tik_1e-3_tv_1e-4_2000_peel_1_RAS_ants_to_B0.nii"))
+                qsmOutImage2 = os.path.abspath(os.path.join(
+                    root, "chi_iLSQR_peel1_RAS_ants_to_B0.nii.nii"))
+                qsmOutImage3 = os.path.abspath(os.path.join(
+                    root, "MEDI2000_LBV_peel1_RAS_ants_to_B0.nii.nii"))
+                qsmOutImage4 = os.path.abspath(os.path.join(
+                    root, "TFI_lbv_v2d_lambda2000_peel_1_RAS_ants_to_B0.nii.nii"))
 
-				cmd = ( "its=10000x1111x5\n"
-						"ref=" + b0_file_n4 + "\n"
-						"src=" + mag_sos_n4 + "\n"
-						"transformPrefix=" + ants_trans_T2s_to_B0 + "\n"
-						"warpedImage=" + ants_T2s_to_B0 + "\n"
-						"antsRegistration -d 3 -r [ $ref , $src  ,1] -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t translation[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 6x4x2 -l 1 -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t rigid[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 3x2x1 -l 1 -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t affine[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 3x2x1 -l 1 -m mattes[ $ref , $src , 0.5 , 32 ] -m cc[ $ref , $src , 0.5 , 4 ] -t SyN[ .20, 3, 0 ] -c [ 100x100x50, -0.01, 5 ] -s 1x0.5x0vox -f 4x2x1 -l 1 -u 1 -z 1 -o [$transformPrefix, $warpedImage]" + "\n"
-						"antsApplyTransforms -d 3 -i $qsmImage1 -r $ref -o $qsmOutImage1 -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat" + "\n"
-						"antsApplyTransforms -d 3 -i $qsmImage2 -r $ref -o $qsmOutImage2 -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat" + "\n"
-						"antsApplyTransforms -d 3 -i $qsmImage3 -r $ref -o $qsmOutImage3 -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat" + "\n"
-						"antsApplyTransforms -d 3 -i $qsmImage4 -r $ref -o $qsmOutImage4 -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat" + "\n" )
-				
-				print cmd
-				os.system(cmd)
+                cmd = ("its=10000x1111x5\n"
+                       "ref=" + b0_file_n4 + "\n"
+                       "src=" + mag_sos_n4 + "\n"
+                       "transformPrefix=" + ants_trans_T2s_to_B0 + "\n"
+                       "warpedImage=" + ants_T2s_to_B0 + "\n"
+                       "antsRegistration -d 3 -r [ $ref , $src  ,1] -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t translation[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 6x4x2 -l 1 -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t rigid[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 3x2x1 -l 1 -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t affine[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 3x2x1 -l 1 -m mattes[ $ref , $src , 0.5 , 32 ] -m cc[ $ref , $src , 0.5 , 4 ] -t SyN[ .20, 3, 0 ] -c [ 100x100x50, -0.01, 5 ] -s 1x0.5x0vox -f 4x2x1 -l 1 -u 1 -z 1 -o [$transformPrefix, $warpedImage]" + "\n"
+                       "antsApplyTransforms -d 3 -i $qsmImage1 -r $ref -o $qsmOutImage1 -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat" + "\n"
+                       "antsApplyTransforms -d 3 -i $qsmImage2 -r $ref -o $qsmOutImage2 -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat" + "\n"
+                       "antsApplyTransforms -d 3 -i $qsmImage3 -r $ref -o $qsmOutImage3 -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat" + "\n"
+                       "antsApplyTransforms -d 3 -i $qsmImage4 -r $ref -o $qsmOutImage4 -n Linear -t ${transformPrefix}1Warp.nii.gz -t ${transformPrefix}0GenericAffine.mat" + "\n")
+
+                print(cmd)
+                os.system(cmd)

@@ -80,3 +80,5 @@ for i = 1:height(patientorientationsDTI)
 	save_nii(nii2,'sin2_alpha.nii');
 end
 
+% make use of the FLIRT registration between QSM/T2* and DTI/B0
+% To finally calculate the fiber angle between acquisition QSM and B0
