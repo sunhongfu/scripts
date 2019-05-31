@@ -3,9 +3,9 @@ import re
 import sys
 import glob
 
-merge_folder = "/home/hongfu/mnt/deepmri/preschool/project_preschool/merge"
+merge_folder = "/QRISdata/Q1041/preschool/project_preschool/merge"
 
-output_file_L_Uncinate = "/home/hongfu/mnt/deepmri/preschool/project_preschool/L_Uncinate.txt"
+output_file_L_Uncinate = "/QRISdata/Q1041/preschool/project_preschool/L_Uncinate.txt"
 
 title_row = 'subject' + '\t' + 'tract name' + '\t' + 'FA' + '\t' + 'MD' + '\t' + 'RD' + '\t' + 'chi_ero0_tik_1e-3_tv_1e-4_2000_peel_1_RAS_ants_to_B0' + \
     '\t' + 'chi_iLSQR_peel1_RAS_ants_to_B0' + '\t' + 'MEDI2000_LBV_peel1_RAS_ants_to_B0' + \
@@ -16,7 +16,7 @@ with open(output_file_L_Uncinate, 'a') as f:
 # measure different tracts if exists
 for root, dirs, files in os.walk(merge_folder):
     for name in files:
-        if re.match(r".*l.?unci.*\.nii", name, re.IGNORECASE):
+        if re.match(r".*l.?unc.*\.nii", name, re.IGNORECASE):
             tract = os.path.abspath(os.path.join(root, name))
             qsm_folder = os.path.abspath(os.path.join(root, ".."))
             subject = os.path.basename(qsm_folder)

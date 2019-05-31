@@ -3,9 +3,9 @@ import re
 import sys
 import glob
 
-merge_folder = "/home/hongfu/mnt/deepmri/preschool/project_preschool/merge"
+merge_folder = "/QRISdata/Q1041/preschool/project_preschool/merge"
 
-output_file_R_ILF = "/home/hongfu/mnt/deepmri/preschool/project_preschool/R_ILF.txt"
+output_file_R_ILF = "/QRISdata/Q1041/preschool/project_preschool/R_ILF.txt"
 
 title_row = 'subject' + '\t' + 'tract name' + '\t' + 'FA' + '\t' + 'MD' + '\t' + 'RD' + '\t' + 'chi_ero0_tik_1e-3_tv_1e-4_2000_peel_1_RAS_ants_to_B0' + \
     '\t' + 'chi_iLSQR_peel1_RAS_ants_to_B0' + '\t' + 'MEDI2000_LBV_peel1_RAS_ants_to_B0' + \
