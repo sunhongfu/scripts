@@ -26,7 +26,7 @@ for qsm_subject in qsm_list:
 				# copy QSM files to a folder
 				if not os.path.exists(merge_folder + "/" + qsm_subject):
 					os.makedirs(merge_folder + "/" + qsm_subject)
-				shutil.copy(qsm_subject_path + "/" + "mag_sos_RAS_masked_n4.nii")
+				# shutil.copy(qsm_subject_path + "/" + "mag_sos_RAS_masked_n4.nii")
 				# get the QSM folder name pi/halfPi etc.
 				qsm_folder_name = glob.glob(qsm_subject_path + "/QSM_SPGR_GE*")
 				# print qsm_folder_name
