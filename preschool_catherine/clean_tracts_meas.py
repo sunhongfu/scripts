@@ -1,7 +1,6 @@
 
 import os
 import pandas as pd
-import numpy as np
 import glob
 
 # clean up the tracts meas from the raw txt files and export to csv

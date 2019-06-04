@@ -1,7 +1,4 @@
 
-
-
-
 % eigen vectors relative to scanner frame/coordinates
 
 % get the direction cosines of the first row and first column with respect to the patient/scanner
@@ -10,6 +7,11 @@
 % DICOM defines a term: "Reference Coordinates System" or RCS.  The RCS is a very intuitive coordinate system of the patient body: X direction is from Right to Left. So if the patient is standing in front of you with the arm raised to the sides, then X direction is from the right hand to the left hand.
 % Y direction is from front to back or medical-wise from Anterior to Posterior so if the patient is standing in front of you so you see him/her from his/her left side, then Y goes from your left to your right (confusing? look at the picture).
 % Z direction goes from Feet to Head.
+
+
+
+% read in the sub_all_meas_clean.csv
+sub_all_meas_clean = readmatrix();
 
 patientorientationsDTI = readtable('patientorientationsDTI.txt');
 
@@ -78,7 +80,18 @@ for i = 1:height(patientorientationsDTI)
 	sin2_alpha = 1 - Vectors_ScannerRAS(:,:,:,3).^2;
 	nii2 = make_nii(sin2_alpha,vox);
 	save_nii(nii2,'sin2_alpha.nii');
+
+
+	% make use of the FLIRT registration between QSM/T2* and DTI/B0
+	% To finally calculate the fiber angle between acquisition QSM and B0
+	% map from DTI to QSM (apply the inverse tranform, since did FLIRT from QSM to B0)
+	load /home/hongfu/mnt/deepmri/preschool/project_preschool/merge/CL_DEV_001/flirt_trans_T2s_to_B0.mat -ASCII
+	F = flirt_trans_T2s_to_B0(1:3,1:3);
+	qsm_Vectors_ScannerRAS = F\(T*tmp);
+
+	% calculate the sin2_alpha to the main field
+	qsm_sin2_alpha = 1 - qsm_Vectors_ScannerRAS(:,:,:,3).^2;
+	nii2 = make_nii(qsm_sin2_alpha,vox);
+	save_nii(nii2,'qsm_sin2_alpha.nii');
 end
 
-% make use of the FLIRT registration between QSM/T2* and DTI/B0
-% To finally calculate the fiber angle between acquisition QSM and B0
