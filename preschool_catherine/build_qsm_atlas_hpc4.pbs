@@ -1,0 +1,9 @@
+#!/bin/bash
+#PBS -A UQ-EAIT-ITEE
+#PBS -l select=1:ncpus=24:mem=48GB
+#PBS -l walltime=24:00:00
+
+# export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=4
+cd /30days/uqhsun8/project_preschool/merge
+
+find . -name TFI_lbv_v2d_lambda2000_peel_1_RAS.nii -exec bash buildtemplateparallel.sh -d 3 -n 0 -m 30x50x20 -t GR  -s CC -c 2 -j 24 -o TFI_lbv_v2d_lambda2000_peel_1_RAS  {} +
