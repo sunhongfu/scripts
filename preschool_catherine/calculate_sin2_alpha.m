@@ -10,18 +10,17 @@
 
 
 
-% read in the sub_all_meas_clean.csv
-sub_all_meas_clean = readmatrix();
+% read in the diffusion_orientations.csv
+% diffusion_orientations = readtable('/Users/hongfusun/Dropbox/research/papers/preschool/2019/diffusion_orientations.csv');
+diffusion_orientations = readtable('diffusion_orientations.csv');
+merge_path = '/QRISdata/Q1041/preschool/project_preschool/merge/';
 
-patientorientationsDTI = readtable('patientorientationsDTI.txt');
+diffusion_orientations{1,1}{1} = diffusion_orientations{1,1}{1}(2:end); % trim the first strange white space
 
-merge_path = '/media/helix/data/project_preschool/merge/';
-
-
-for i = 1:height(patientorientationsDTI)
+for i = 1:height(diffusion_orientations)
 	% for i =1:3
 	cd(merge_path)
-	cd(patientorientationsDTI{i,1}{1})
+	cd(diffusion_orientations{i,1}{1})
 	
 	FE = dir('*_FE.nii');
 	if isempty(FE)
@@ -43,7 +42,7 @@ for i = 1:height(patientorientationsDTI)
 
 	% transform from FOV RAS to scanner RAS
 	% patientOrientation [Xx, Xy, Xz, Yx, Yy, Yz]
-	patientOrientation = patientorientationsDTI{i,2:7};
+	patientOrientation = diffusion_orientations{i,2:7};
 	Xx = patientOrientation(1);
 	Xy = patientOrientation(2);
 	Xz = patientOrientation(3);
@@ -85,9 +84,11 @@ for i = 1:height(patientorientationsDTI)
 	% make use of the FLIRT registration between QSM/T2* and DTI/B0
 	% To finally calculate the fiber angle between acquisition QSM and B0
 	% map from DTI to QSM (apply the inverse tranform, since did FLIRT from QSM to B0)
-	load /home/hongfu/mnt/deepmri/preschool/project_preschool/merge/CL_DEV_001/flirt_trans_T2s_to_B0.mat -ASCII
+	load flirt_trans_T2s_to_B0.mat -ASCII
 	F = flirt_trans_T2s_to_B0(1:3,1:3);
 	qsm_Vectors_ScannerRAS = F\(T*tmp);
+	qsm_Vectors_ScannerRAS = reshape(qsm_Vectors_ScannerRAS,[3, sizeX, sizeY, sizeZ]);
+	qsm_Vectors_ScannerRAS = permute(qsm_Vectors_ScannerRAS,[2,3,4,1]);
 
 	% calculate the sin2_alpha to the main field
 	qsm_sin2_alpha = 1 - qsm_Vectors_ScannerRAS(:,:,:,3).^2;
