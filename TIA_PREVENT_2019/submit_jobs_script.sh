@@ -1,0 +1,1 @@
+for pbs in *.pbs; do qsub ${pbs}; done
