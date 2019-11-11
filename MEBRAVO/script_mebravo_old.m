@@ -6,8 +6,8 @@ calibrationPfile = 'p-files/P37888.7';
 kacq_file = 'kacq_yz.txt.1024150629';
 outputDir = 'recon';
 
-recon_arc_asset2(pfilePath, calibrationPfile, kacq_file, outputDir);
-% recon_arc_asset2(pfilePath, calibrationPfile, [], outputDir);
+recon_arc_asset(pfilePath, calibrationPfile, kacq_file, outputDir);
+% recon_arc_asset(pfilePath, calibrationPfile, [], outputDir);
 
 % (2) generate QSM
 realDicomsDir = [outputDir '/DICOMs_real'];
@@ -18,8 +18,8 @@ qsm_bravo(realDicomsDir, imagDicomsDir, path_out);
 
 % (3) generate R2* map
 % MATLAB script for computing R2* map from multi-echo BRAVO sequence
-load('all.mat','mag','TE','mask','imsize','vox');
-[R2, T2, amp] = r2imgfit2(double(mag),TE,repmat(mask,[1 1 1 imsize(4)]));
+load('all.mat','mag_corr','TE','mask','imsize','vox');
+[R2, T2, amp] = r2imgfit2(double(mag_corr),TE,repmat(mask,[1 1 1 imsize(4)]));
 nii = make_nii(R2,vox);
 save_nii(nii,'R2.nii');
 nii = make_nii(T2,vox);
@@ -62,7 +62,6 @@ done
 
 
 % ants registration
-
 ## register ME to MNI (ants)
 t1=/Users/hongfusun/DATA/MEBRAVO/HONGFU2/recon_kacq/QSM_BRAVO/iMag.nii
 t1_brain=/Users/hongfusun/DATA/MEBRAVO/HONGFU2/recon_kacq/QSM_BRAVO/t1_brain.nii.gz
