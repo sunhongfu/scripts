@@ -3,8 +3,8 @@
 clear
 load /Users/uqhsun8/DATA/CS-phase/prevent198/pc/kspace.mat
 load /Users/uqhsun8/DATA/CS-phase/prevent198/pc/yangMask_ratio4.mat
-mkdir /Users/uqhsun8/DATA/CS-phase/prevent198/pc/AF4
-cd /Users/uqhsun8/DATA/CS-phase/prevent198/pc/AF4
+mkdir /Users/uqhsun8/DATA/CS-phase/prevent198/zhao/AF4
+cd /Users/uqhsun8/DATA/CS-phase/prevent198/zhao/AF4
 
 mask = Mask;
 
@@ -19,6 +19,7 @@ k = fftshift(fft(fftshift(k,3),[],3),3);
 img_full = zeros(size(k));
 img_npc = zeros(size(k));
 img_pc = zeros(size(k));
+img_zhao = zeros(size(k));
 
 % for each TE
 for echo = 1: size(k,4)
@@ -54,7 +55,8 @@ for echo = 1: size(k,4)
         M = Identity;
         P = Identity;
 
-        weights = 1;
+        weights = ones([sx,sy,nc]);
+        maps = ones([sx,sy,nc]);
 
         %% Create proximal operators
 
@@ -91,24 +93,47 @@ for echo = 1: size(k,4)
         % img_npc(:,:,slice,echo) = mn.*exp(1j*pn);
 
 % (2) second method
-        %% Proposed phase regularized reconstruction with phase cycling
+        % %% Proposed phase regularized reconstruction with phase cycling
 
-        niter = 100;
-        ninneriter = 10;
-        doplot = 1;
-        dohogwild = 1;
+        % niter = 100;
+        % ninneriter = 10;
+        % doplot = 1;
+        % dohogwild = 1;
 
-        [m, p] = mprecon(y, F, S, C, M, P, Pm, Pp, m0, p0, W, niter, ninneriter, dohogwild, doplot);
+        % [m, p] = mprecon(y, F, S, C, M, P, Pm, Pp, m0, p0, W, niter, ninneriter, dohogwild, doplot);
 
-        m = m .* sqrt(weights);
+        % m = m .* sqrt(weights);
 
-        % figure, imshowf(abs(m), [0, 1.0])
-        % figure, imshowf(abs(abs(m) - abs(x)), [0, 0.2])
-        % figure, imshowf(p .* (abs(x) > 0.05), [-pi, pi])
+        % % figure, imshowf(abs(m), [0, 1.0])
+        % % figure, imshowf(abs(abs(m) - abs(x)), [0, 0.2])
+        % % figure, imshowf(p .* (abs(x) > 0.05), [-pi, pi])
 
-        disp(psnr(abs(x), abs(m)))
+        % disp(psnr(abs(x), abs(m)))
 
-        img_pc(:,:,slice,echo) = m.*exp(1j*p);
+        % img_pc(:,:,slice,echo) = m.*exp(1j*p);
+
+
+% (3) third method
+        %% Zhao et al. Separate magnitude and phase reconstruction
+        % Requires irt from Jeff Fessler.
+        % Please run setup.m in the toolbox first.
+
+        lambda_m = 0.3; % regularization parameter for magnitude
+        lambda_p = 0.3; % regularization parameter for phase (rg2/rg4)
+
+        im_mask = weights > 0.1;
+        maps = maps .* im_mask;
+        proxg_m = wave_thresh('db4', 3, lambda_m);
+
+        y = ksp(mask == 1);
+        samp = mask(:, :, 1) == 1; % change to logical for irt.
+
+        setup; % set up the irt package
+
+        [mi, xi] = separate_mag_phase_recon(y, samp, maps, im_mask, proxg_m, lambda_p);
+        disp(psnr(abs(x) / max(abs(x(:))), abs(mi) / max(abs(mi(:)))))
+
+        img_zhao(:,:,slice,echo) = mi.*exp(1j*xi);
 
     end
 

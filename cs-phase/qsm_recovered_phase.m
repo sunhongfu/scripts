@@ -26,29 +26,44 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-path_recon = '/Users/uqhsun8/DATA/CS-phase/prevent198/oct/AF2_DC';
-path_orig = '/Users/uqhsun8/DATA/CS-phase/prevent198';
+% path_recon = '/Users/uqhsun8/DATA/CS-phase/prevent198/oct/AF2_DC';
+% path_orig = '/Users/uqhsun8/DATA/CS-phase/prevent198';
 
-% load([path_recon '/UnetRecon.mat']);
-% nii = make_nii(abs(rec));
-% save_nii(nii,'unet_mag.nii');
-% nii = make_nii(angle(rec));
-% save_nii(nii,'unet_pha.nii');
+% % load([path_recon '/UnetRecon.mat']);
+% % nii = make_nii(abs(rec));
+% % save_nii(nii,'unet_mag.nii');
+% % nii = make_nii(angle(rec));
+% % save_nii(nii,'unet_pha.nii');
+
+% cd(path_recon);
+
+% % nii = load_nii('CCREC_imaag_198.nii');
+% % cc_imag = single(nii.img);
+% % nii = load_nii('CCREC_REAL_198.nii');
+% % cc_real = single(nii.img);
+% % rec = cc_real + 1j* cc_imag;
+% % mag = abs(rec);
+% % ph = angle(rec);
+
+% nii = load_nii('OCtREC_DC_yangmask2_mag_198.nii');
+% mag = single(nii.img);
+% nii = load_nii('OCtREC_DC_yangmask2_phase_198.nii');
+% ph = single(nii.img);
+
+
+
+path_recon = '/Users/uqhsun8/DATA/CS-phase/prevent198/pc/AF4';
+path_orig = '/Users/uqhsun8/DATA/CS-phase/prevent198';
 
 cd(path_recon);
 
-% nii = load_nii('CCREC_imaag_198.nii');
-% cc_imag = single(nii.img);
-% nii = load_nii('CCREC_REAL_198.nii');
-% cc_real = single(nii.img);
-% rec = cc_real + 1j* cc_imag;
-% mag = abs(rec);
-% ph = angle(rec);
-
-nii = load_nii('OCtREC_DC_yangmask2_mag_198.nii');
+nii = load_nii('mag.nii');
 mag = single(nii.img);
-nii = load_nii('OCtREC_DC_yangmask2_phase_198.nii');
+nii = load_nii('ph.nii');
 ph = single(nii.img);
+% re-orient
+mag = flip(flip(mag,1),2);
+ph = flip(flip(ph,1),2);
 
 imsize = size(mag);
 
