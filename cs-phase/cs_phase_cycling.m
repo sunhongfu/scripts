@@ -3,8 +3,8 @@
 clear
 load /Users/uqhsun8/DATA/CS-phase/prevent198/pc/kspace.mat
 load /Users/uqhsun8/DATA/CS-phase/prevent198/pc/yangMask_ratio4.mat
-mkdir /Users/uqhsun8/DATA/CS-phase/prevent198/zhao/AF4
-cd /Users/uqhsun8/DATA/CS-phase/prevent198/zhao/AF4
+mkdir /Users/uqhsun8/DATA/CS-phase/prevent198/dic/AF4
+cd /Users/uqhsun8/DATA/CS-phase/prevent198/dic/AF4
 
 mask = Mask;
 
@@ -17,9 +17,11 @@ k = ifftshift(ifft(ifftshift(fft(fftshift(k,3),[],3),3),[],3),3);
 k = fftshift(fft(fftshift(k,3),[],3),3);
 
 img_full = zeros(size(k));
+img_full2 = zeros(size(k));
 img_npc = zeros(size(k));
 img_pc = zeros(size(k));
 img_zhao = zeros(size(k));
+img_dl = zeros(size(k));
 
 % for each TE
 for echo = 1: size(k,4)
@@ -30,8 +32,8 @@ for echo = 1: size(k,4)
     for slice = 1:size(k,3)
 
         ksp = k(:,:,slice,echo);
-
-        ksp = ksp/max(max(max(abs(ifft2c(ksp)))));
+        scale = max(max(max(abs(ifft2c(ksp)))));
+        ksp = ksp/scale;
         FOV = size(ksp);
         [sx, sy, nc] = size(ksp);
 
@@ -71,6 +73,11 @@ for echo = 1: size(k,4)
         ncycles = 16;
         [m0, p0, W] = pfinit(y, S, F, ncycles);
         % m0 and p0 are initial guess for magnitude and phase, base on zero filling
+
+
+        %% Get Fully-sampled Image
+        x = S' * (ifft2c(ksp));
+        img_full2(:,:,slice,echo) = x;
 
 % (1) first method
         % %% Phase regularized reconstruction without phase cycling
@@ -114,26 +121,50 @@ for echo = 1: size(k,4)
 
 
 % (3) third method
-        %% Zhao et al. Separate magnitude and phase reconstruction
-        % Requires irt from Jeff Fessler.
-        % Please run setup.m in the toolbox first.
+        % %% Zhao et al. Separate magnitude and phase reconstruction
+        % % Requires irt from Jeff Fessler.
+        % % Please run setup.m in the toolbox first.
 
-        lambda_m = 0.3; % regularization parameter for magnitude
-        lambda_p = 0.3; % regularization parameter for phase (rg2/rg4)
+        % lambda_m = 0.3; % regularization parameter for magnitude
+        % lambda_p = 0.3; % regularization parameter for phase (rg2/rg4)
 
-        im_mask = weights > 0.1;
-        maps = maps .* im_mask;
-        proxg_m = wave_thresh('db4', 3, lambda_m);
+        % im_mask = weights > 0.1;
+        % maps = maps .* im_mask;
+        % proxg_m = wave_thresh('db4', 3, lambda_m);
 
-        y = ksp(mask == 1);
-        samp = mask(:, :, 1) == 1; % change to logical for irt.
+        % y = ksp(mask == 1);
+        % samp = mask(:, :, 1) == 1; % change to logical for irt.
 
-        setup; % set up the irt package
+        % setup; % set up the irt package
 
-        [mi, xi] = separate_mag_phase_recon(y, samp, maps, im_mask, proxg_m, lambda_p);
-        disp(psnr(abs(x) / max(abs(x(:))), abs(mi) / max(abs(mi(:)))))
+        % [mi, xi] = separate_mag_phase_recon(y, samp, maps, im_mask, proxg_m, lambda_p);
+        % disp(psnr(abs(x) / max(abs(x(:))), abs(mi) / max(abs(mi(:)))))
 
-        img_zhao(:,:,slice,echo) = mi.*exp(1j*xi);
+        % img_zhao(:,:,slice,echo) = mi.*exp(1j*xi);
+
+
+% (4) fourth method: dictionary learning
+        % MR Image Reconstruction From Highly Undersampled k-Space Data by Dictionary Learning; IEEE-TMI
+        data = ksp;
+        Q1 = mask;
+        DLMRIparams.num = 100;
+        DLMRIparams.n = 64;
+        DLMRIparams.K2 = 64;
+        DLMRIparams.N = 200*DLMRIparams.K2;
+        DLMRIparams.T0 = round((0.2)*DLMRIparams.n);
+        DLMRIparams.nu = 280;
+        DLMRIparams.KSVDopt = 2;
+        DLMRIparams.thr = (0.023)*[2 2 2 2 1.4*ones(1,DLMRIparams.num-4)];
+        DLMRIparams.numiterateKSVD = 20;
+        DLMRIparams.r = 1;
+        ct = 1; % If set to 1, the code additionally outputs various performance metrics computed over the algorithm iterations. 
+        datafull = k(:,:,slice,echo)/scale;
+        nl = 0;
+
+        [Iout1,param1] = DLMRI(data,Q1,DLMRIparams,ct,datafull,nl);
+
+
+        img_dl(:,:,slice,echo) = Iout1;
 
     end
 
