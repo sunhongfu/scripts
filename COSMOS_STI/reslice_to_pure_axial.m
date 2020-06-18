@@ -7,7 +7,10 @@ Y = dicom_info.ImageOrientationPatient(4:6);
 Z = cross(X,Y);
 
 % rotation matrix
-rot_mat = inv([X,Y,Z]);
+% rot_mat = inv([X,Y,Z]);
+rot_mat = ([X,Y,Z]);
+rot_mat(1,3) = -rot_mat(1,3); % match DICOM with FSL
+rot_mat(3,1) = -rot_mat(3,1); % match DICOM corrodinate to FSL
 
 % translation in millimeter
 tra_mat = (imsize'/2-rot_mat*imsize'/2).*vox';
