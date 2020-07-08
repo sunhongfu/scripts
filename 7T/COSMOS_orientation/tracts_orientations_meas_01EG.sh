@@ -6,45 +6,45 @@ wm_labels=/usr/local/fsl/data/atlases/JHU/JHU-ICBM-labels-1mm.nii.gz
 mni=/usr/local/fsl/data/standard/MNI152_T1_1mm.nii.gz
 mni_brain=/usr/local/fsl/data/standard/MNI152_T1_1mm_brain.nii.gz
 
-t1=/media/data/7T_reg/01EG/co20170322_144132mp2rage0p9mmisoipat4s009a1001.nii.gz
-t1_brain=/media/data/7T_reg/01EG/t1_brain.nii.gz
+t1=/Volumes/LaCie/COSMOS_7T/01EG/t1/co20170322_144132mp2rage0p9mmisoipat4s009a1001.nii.gz
+t1_brain=/Volumes/LaCie/COSMOS_7T/01EG/t1/t1_brain.nii.gz
 
-cosmos=/media/data/7T_reg/01EG/cosmos_5_6DOF_rad1.nii
-cosmos_to_t1=/media/data/7T_reg/01EG/cosmos_5_6DOF_rad1_to_t1.nii.gz
-cosmos_to_mni=/media/data/7T_reg/01EG/cosmos_5_6DOF_rad1_to_mni.nii.gz
+cosmos=/Volumes/LaCie/COSMOS_7T/01EG/cosmos_5_12DOF_cgs_smvrad2.nii
+cosmos_to_t1=/Volumes/LaCie/COSMOS_7T/01EG/cosmos_5_12DOF_cgs_smvrad2_to_t1.nii.gz
+cosmos_to_mni=/Volumes/LaCie/COSMOS_7T/01EG/cosmos_5_12DOF_cgs_smvrad2_to_mni.nii.gz
 
-mag_neutral=/media/data/7T_reg/01EG/neutral/QSM_MEGE_7T/src/mag_corr1.nii
-qsm_neutral=/media/data/7T_reg/01EG/neutral/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1.nii
-mag_neutral_to_t1=/media/data/7T_reg/01EG/neutral/QSM_MEGE_7T/src/mag_corr1_to_T1.nii.gz
-mat_neutral_to_t1=/media/data/7T_reg/01EG/neutral/QSM_MEGE_7T/src/mag_corr1_to_T1.mat
-qsm_neutral_to_t1=/media/data/7T_reg/01EG/neutral/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_to_T1.nii.gz
-qsm_neutral_to_mni=/media/data/7T_reg/01EG/neutral/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_to_MNI.nii.gz
-BET_prefix=/media/data/7T_reg/01EG/neutral/QSM_MEGE_7T/src/T1_BET
-BET_mask=/media/data/7T_reg/01EG/neutral/QSM_MEGE_7T/src/T1_BET_mask.nii.gz
+mag_neutral=/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/src/mag_corr1.nii
+qsm_neutral=/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2.nii
+mag_neutral_to_t1=/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/src/mag_corr1_to_T1.nii.gz
+mat_neutral_to_t1=/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/src/mag_corr1_to_T1.mat
+qsm_neutral_to_t1=/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_to_T1.nii.gz
+qsm_neutral_to_mni=/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_to_MNI.nii.gz
+BET_prefix=/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/src/T1_BET
+BET_mask=/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/src/T1_BET_mask.nii.gz
 
-qsm_left=/media/data/7T_reg/01EG/left/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1.nii
-mat_left_to_neutral=/media/data/7T_reg/01EG/left/flirt_qsm_12DOF.mat
-qsm_left_to_neutral=/media/data/7T_reg/01EG/left/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_flirt.nii.gz
-qsm_left_to_t1=/media/data/7T_reg/01EG/left/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_flirt_to_T1.nii.gz
-qsm_left_to_mni=/media/data/7T_reg/01EG/left/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_flirt_to_MNI.nii.gz
+qsm_left=/Volumes/LaCie/COSMOS_7T/01EG/left/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2.nii
+mat_left_to_neutral=/Volumes/LaCie/COSMOS_7T/01EG/left/flirt_qsm_12DOF.mat
+qsm_left_to_neutral=/Volumes/LaCie/COSMOS_7T/01EG/left/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_flirt.nii.gz
+qsm_left_to_t1=/Volumes/LaCie/COSMOS_7T/01EG/left/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_flirt_to_T1.nii.gz
+qsm_left_to_mni=/Volumes/LaCie/COSMOS_7T/01EG/left/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_flirt_to_MNI.nii.gz
 
-qsm_right=/media/data/7T_reg/01EG/right/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1.nii
-mat_right_to_neutral=/media/data/7T_reg/01EG/right/flirt_qsm_12DOF.mat
-qsm_right_to_neutral=/media/data/7T_reg/01EG/right/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_flirt.nii.gz
-qsm_right_to_t1=/media/data/7T_reg/01EG/right/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_flirt_to_T1.nii.gz
-qsm_right_to_mni=/media/data/7T_reg/01EG/right/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_flirt_to_MNI.nii.gz
+qsm_right=/Volumes/LaCie/COSMOS_7T/01EG/right/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2.nii
+mat_right_to_neutral=/Volumes/LaCie/COSMOS_7T/01EG/right/flirt_qsm_12DOF.mat
+qsm_right_to_neutral=/Volumes/LaCie/COSMOS_7T/01EG/right/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_flirt.nii.gz
+qsm_right_to_t1=/Volumes/LaCie/COSMOS_7T/01EG/right/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_flirt_to_T1.nii.gz
+qsm_right_to_mni=/Volumes/LaCie/COSMOS_7T/01EG/right/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_flirt_to_MNI.nii.gz
 
-qsm_flexion=/media/data/7T_reg/01EG/flexion/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1.nii
-mat_flexion_to_neutral=/media/data/7T_reg/01EG/flexion/flirt_qsm_12DOF.mat
-qsm_flexion_to_neutral=/media/data/7T_reg/01EG/flexion/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_flirt.nii.gz
-qsm_flexion_to_t1=/media/data/7T_reg/01EG/flexion/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_flirt_to_T1.nii.gz
-qsm_flexion_to_mni=/media/data/7T_reg/01EG/flexion/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_flirt_to_MNI.nii.gz
+qsm_flexion=/Volumes/LaCie/COSMOS_7T/01EG/flexion/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2.nii
+mat_flexion_to_neutral=/Volumes/LaCie/COSMOS_7T/01EG/flexion/flirt_qsm_12DOF.mat
+qsm_flexion_to_neutral=/Volumes/LaCie/COSMOS_7T/01EG/flexion/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_flirt.nii.gz
+qsm_flexion_to_t1=/Volumes/LaCie/COSMOS_7T/01EG/flexion/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_flirt_to_T1.nii.gz
+qsm_flexion_to_mni=/Volumes/LaCie/COSMOS_7T/01EG/flexion/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_flirt_to_MNI.nii.gz
 
-qsm_extension=/media/data/7T_reg/01EG/extension/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1.nii
-mat_extension_to_neutral=/media/data/7T_reg/01EG/extension/flirt_qsm_12DOF.mat
-qsm_extension_to_neutral=/media/data/7T_reg/01EG/extension/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_flirt.nii.gz
-qsm_extension_to_t1=/media/data/7T_reg/01EG/extension/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_flirt_to_T1.nii.gz
-qsm_extension_to_mni=/media/data/7T_reg/01EG/extension/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad1_flirt_to_MNI.nii.gz
+qsm_extension=/Volumes/LaCie/COSMOS_7T/01EG/extension/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2.nii
+mat_extension_to_neutral=/Volumes/LaCie/COSMOS_7T/01EG/extension/flirt_qsm_12DOF.mat
+qsm_extension_to_neutral=/Volumes/LaCie/COSMOS_7T/01EG/extension/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_flirt.nii.gz
+qsm_extension_to_t1=/Volumes/LaCie/COSMOS_7T/01EG/extension/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_flirt_to_T1.nii.gz
+qsm_extension_to_mni=/Volumes/LaCie/COSMOS_7T/01EG/extension/QSM_MEGE_7T/RESHARP/chi_iLSQR_smvrad2_flirt_to_MNI.nii.gz
 
 
 ## register 4 tilted orientations to neutral
@@ -69,15 +69,15 @@ its=10000x1111x5  #fast mode, medium reg quality
 ############################################################################
 src=$t1_brain
 ref=$mni_brain
-mkdir /media/data/7T_reg/01EG/ants_brain
-transformPrefix=/media/data/7T_reg/01EG/ants_brain/ants_trans_T1_to_MNI
-warpedImage=/media/data/7T_reg/01EG//ants_brain/ants_trans_T1_to_MNI.nii.gz
+mkdir /Volumes/LaCie/COSMOS_7T/01EG/ants_brain
+transformPrefix=/Volumes/LaCie/COSMOS_7T/01EG/ants_brain/ants_trans_T1_to_MNI
+warpedImage=/Volumes/LaCie/COSMOS_7T/01EG//ants_brain/ants_trans_T1_to_MNI.nii.gz
 ############################################################################
 # src=$t1
 # ref=$mni
-# mkdir /media/data/7T_reg/01EG/ants_head
-# transformPrefix=/media/data/7T_reg/01EG/ants_head/ants_trans_T1_to_MNI
-# warpedImage=/media/data/7T_reg/01EG//ants_head/ants_trans_T1_to_MNI.nii.gz
+# mkdir /Volumes/LaCie/COSMOS_7T/01EG/ants_head
+# transformPrefix=/Volumes/LaCie/COSMOS_7T/01EG/ants_head/ants_trans_T1_to_MNI
+# warpedImage=/Volumes/LaCie/COSMOS_7T/01EG//ants_head/ants_trans_T1_to_MNI.nii.gz
 ############################################################################
 
 antsRegistration -d 3 -r [ $ref , $src  ,1] -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t translation[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 6x4x2 -l 1 -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t rigid[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 3x2x1 -l 1 -m mattes[ $ref , $src , 1 , 32, regular, 0.25 ] -t affine[ 0.1 ] -c [$its, 1.e-8, 20] -s 4x2x1vox -f 3x2x1 -l 1 -m mattes[ $ref , $src , 0.5 , 32 ] -m cc[ $ref , $src , 0.5 , 4 ] -t SyN[ .20, 3, 0 ] -c [ 100x100x50, -0.01, 5 ] -s 1x0.5x0vox -f 4x2x1 -l 1 -u 1 -z 1 -o [$transformPrefix, $warpedImage]

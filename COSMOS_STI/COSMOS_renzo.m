@@ -125,5 +125,14 @@ save all_new.mat
 
 
 
+% run iLSQR
+chi_iLSQR_0 = QSM_iLSQR(lfs_resharp*(2.675e8*dicom_info.MagneticFieldStrength)/1e6,double(mask_resharp),'H',z_prjs,'voxelsize',vox,'niter',50,'TE',1000,'B0',dicom_info.MagneticFieldStrength);
+nii = make_nii(chi_iLSQR_0,vox);
+save_nii(nii,'chi_iLSQR_smvrad1.nii');
 
+
+% register to neutral
+/usr/local/fsl/bin/flirt -in /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/chi_iLSQR_smvrad1.nii -applyxfm -init /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/mag_flirt.mat -out /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/chi_iLSQR_smvrad1_to_neutral.nii -paddingsize 0.0 -interp trilinear -ref /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/chi_iLSQR_smvrad1.nii
+
+/usr/local/fsl/bin/flirt -in /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/sus_resharp_tik_0.0001_tv_0.0005_num_500.nii -applyxfm -init /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/mag_flirt.mat -out /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/sus_resharp_tik_0.0001_tv_0.0005_num_500_to_neutral.nii -paddingsize 0.0 -interp trilinear -ref /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/sus_resharp_tik_0.0001_tv_0.0005_num_500.nii
 
