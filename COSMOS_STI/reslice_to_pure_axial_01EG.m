@@ -116,3 +116,15 @@ cd /Users/uqhsun8/Dropbox/anisotropy/left
 
 cd /Users/uqhsun8/Dropbox/anisotropy/right
 /usr/local/fsl/bin/flirt -in xqsm_invivo_right_new.nii -applyxfm -init chi_iLSQR_smvrad1_to_neutral.mat -out xqsm_invivo_right_new_to_neutral.nii -paddingsize 0.0 -interp trilinear -ref xqsm_invivo_right_new.nii
+
+
+
+
+% xqsm_invivo_noisy
+/usr/local/fsl/bin/flirt -in /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/xQSM_invivo_noise_orientations_new/xQSM_invivo_NoisyTrain_extension.nii -applyxfm -init /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/extension/chi_iLSQR_smvrad1_to_neutral.mat -out /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/xQSM_invivo_noise_orientations_new/xQSM_invivo_NoisyTrain_extension_to_neutral.nii -paddingsize 0.0 -interp trilinear -ref /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/xQSM_invivo_noise_orientations_new/xQSM_invivo_NoisyTrain_extension.nii
+
+/usr/local/fsl/bin/flirt -in /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/xQSM_invivo_noise_orientations_new/xQSM_invivo_NoisyTrain_flexion.nii -applyxfm -init /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/flexion/chi_iLSQR_smvrad1_to_neutral.mat -out /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/xQSM_invivo_noise_orientations_new/xQSM_invivo_NoisyTrain_flexion_to_neutral.nii -paddingsize 0.0 -interp trilinear -ref /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/xQSM_invivo_noise_orientations_new/xQSM_invivo_NoisyTrain_flexion.nii
+
+/usr/local/fsl/bin/flirt -in /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/xQSM_invivo_noise_orientations_new/xQSM_invivo_NoisyTrain_left.nii -applyxfm -init /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/left/chi_iLSQR_smvrad1_to_neutral.mat -out /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/xQSM_invivo_noise_orientations_new/xQSM_invivo_NoisyTrain_left_to_neutral.nii -paddingsize 0.0 -interp trilinear -ref /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/xQSM_invivo_noise_orientations_new/xQSM_invivo_NoisyTrain_left.nii
+
+/usr/local/fsl/bin/flirt -in /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/xQSM_invivo_noise_orientations_new/xQSM_invivo_NoisyTrain_right.nii -applyxfm -init /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/right/chi_iLSQR_smvrad1_to_neutral.mat -out /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/xQSM_invivo_noise_orientations_new/xQSM_invivo_NoisyTrain_right_to_neutral.nii -paddingsize 0.0 -interp trilinear -ref /Volumes/DEEPMRI-Q1041/anisotropy_0p6mm/01EG/xQSM_invivo_noise_orientations_new/xQSM_invivo_NoisyTrain_right.nii

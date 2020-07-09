@@ -97,8 +97,14 @@ save_nii(nii,'/Users/uqhsun8/Desktop/QSM_SPGRE_BACKWARD/rot_chi_iLSQR_smvrad1.ni
 
 
 
+# apply to xqsm_invivo_noisy
+/usr/local/fsl/bin/flirt -in /Volumes/DEEPMRI-Q1041/anisotropy_1mm/Recons/xQSM_invivo_noise_anisotropy_1mm/xQSM_invivo_NoisyTrain_extension.nii -applyxfm -init /Volumes/DEEPMRI-Q1041/anisotropy_1mm/extension/final_flirt.mat -out /Volumes/DEEPMRI-Q1041/anisotropy_1mm/Recons/xQSM_invivo_noise_anisotropy_1mm/xQSM_invivo_NoisyTrain_extension_to_neutral.nii -paddingsize 0.0 -interp trilinear -ref /Volumes/DEEPMRI-Q1041/anisotropy_1mm/Recons/xQSM_invivo_noise_anisotropy_1mm/xQSM_invivo_NoisyTrain_extension.nii
 
+/usr/local/fsl/bin/flirt -in /Volumes/DEEPMRI-Q1041/anisotropy_1mm/Recons/xQSM_invivo_noise_anisotropy_1mm/xQSM_invivo_NoisyTrain_flexion.nii -applyxfm -init /Volumes/DEEPMRI-Q1041/anisotropy_1mm/flexion/final_flirt.mat -out /Volumes/DEEPMRI-Q1041/anisotropy_1mm/Recons/xQSM_invivo_noise_anisotropy_1mm/xQSM_invivo_NoisyTrain_flexion_to_neutral.nii -paddingsize 0.0 -interp trilinear -ref /Volumes/DEEPMRI-Q1041/anisotropy_1mm/Recons/xQSM_invivo_noise_anisotropy_1mm/xQSM_invivo_NoisyTrain_flexion.nii
 
+/usr/local/fsl/bin/flirt -in /Volumes/DEEPMRI-Q1041/anisotropy_1mm/Recons/xQSM_invivo_noise_anisotropy_1mm/xQSM_invivo_NoisyTrain_left.nii -applyxfm -init /Volumes/DEEPMRI-Q1041/anisotropy_1mm/left/final_flirt.mat -out /Volumes/DEEPMRI-Q1041/anisotropy_1mm/Recons/xQSM_invivo_noise_anisotropy_1mm/xQSM_invivo_NoisyTrain_left_to_neutral.nii -paddingsize 0.0 -interp trilinear -ref /Volumes/DEEPMRI-Q1041/anisotropy_1mm/Recons/xQSM_invivo_noise_anisotropy_1mm/xQSM_invivo_NoisyTrain_left.nii
+
+/usr/local/fsl/bin/flirt -in /Volumes/DEEPMRI-Q1041/anisotropy_1mm/Recons/xQSM_invivo_noise_anisotropy_1mm/xQSM_invivo_NoisyTrain_right.nii -applyxfm -init /Volumes/DEEPMRI-Q1041/anisotropy_1mm/right/final_flirt.mat -out /Volumes/DEEPMRI-Q1041/anisotropy_1mm/Recons/xQSM_invivo_noise_anisotropy_1mm/xQSM_invivo_NoisyTrain_right_to_neutral.nii -paddingsize 0.0 -interp trilinear -ref /Volumes/DEEPMRI-Q1041/anisotropy_1mm/Recons/xQSM_invivo_noise_anisotropy_1mm/xQSM_invivo_NoisyTrain_right.nii
 
 
 

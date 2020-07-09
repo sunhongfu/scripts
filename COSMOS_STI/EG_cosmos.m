@@ -77,27 +77,88 @@ end
 
 
 
+
+%%%%%%%%%%%%%%%%%
+% lower the resolution
+unix('gunzip -f /Volumes/LaCie/COSMOS_7T/01EG/flexion/*.gz');
+nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/flexion/flirt_lfs_smvrad2.nii');
+vox = [1 1 1];
+oriVox = [0.6, 0.6, 0.6];
+ratio = oriVox ./ vox; 
+newSize = ceil(size(nii.img) .* ratio);
+im2 = imresize3(double(nii.img), newSize);
+nii = make_nii(im2,vox);
+save_nii(nii,'/Volumes/LaCie/COSMOS_7T/01EG/flexion/flirt_lfs_smvrad2_1mm.nii');
+
+unix('gunzip -f /Volumes/LaCie/COSMOS_7T/01EG/extension/*.gz');
+nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/extension/flirt_lfs_smvrad2.nii');
+vox = [1 1 1];
+oriVox = [0.6, 0.6, 0.6];
+ratio = oriVox ./ vox; 
+newSize = ceil(size(nii.img) .* ratio);
+im2 = imresize3(double(nii.img), newSize);
+nii = make_nii(im2,vox);
+save_nii(nii,'/Volumes/LaCie/COSMOS_7T/01EG/extension/flirt_lfs_smvrad2_1mm.nii');
+
+unix('gunzip -f /Volumes/LaCie/COSMOS_7T/01EG/left/*.gz');
+nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/left/flirt_lfs_smvrad2.nii');
+vox = [1 1 1];
+oriVox = [0.6, 0.6, 0.6];
+ratio = oriVox ./ vox; 
+newSize = ceil(size(nii.img) .* ratio);
+im2 = imresize3(double(nii.img), newSize);
+nii = make_nii(im2,vox);
+save_nii(nii,'/Volumes/LaCie/COSMOS_7T/01EG/left/flirt_lfs_smvrad2_1mm.nii');
+
+unix('gunzip -f /Volumes/LaCie/COSMOS_7T/01EG/right/*.gz');
+nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/right/flirt_lfs_smvrad2.nii');
+vox = [1 1 1];
+oriVox = [0.6, 0.6, 0.6];
+ratio = oriVox ./ vox; 
+newSize = ceil(size(nii.img) .* ratio);
+im2 = imresize3(double(nii.img), newSize);
+nii = make_nii(im2,vox);
+save_nii(nii,'/Volumes/LaCie/COSMOS_7T/01EG/right/flirt_lfs_smvrad2_1mm.nii');
+
+nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/RESHARP/lfs_resharp_0_smvrad2_cgs_1e-06.nii');
+vox = [1 1 1];
+oriVox = [0.6, 0.6, 0.6];
+ratio = oriVox ./ vox; 
+newSize = ceil(size(nii.img) .* ratio);
+im2 = imresize3(double(nii.img), newSize);
+nii = make_nii(im2,vox);
+save_nii(nii,'/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/RESHARP/lfs_resharp_0_smvrad2_cgs_1e-06_1mm.nii');
+%%%%%%%%%%%%%%%%%%
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% COSMOS reconstruction with closed-form solution (smvrad2)
 % load in registered local field shift maps
 unix('gunzip -f /Volumes/LaCie/COSMOS_7T/01EG/flexion/*.gz');
-nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/flexion/flirt_lfs_smvrad2.nii');
+% nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/flexion/flirt_lfs_smvrad2.nii');
+nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/flexion/flirt_lfs_smvrad2_1mm.nii');
 lfs(:,:,:,1) = double(nii.img);
 
 unix('gunzip -f /Volumes/LaCie/COSMOS_7T/01EG/extension/*.gz');
-nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/extension/flirt_lfs_smvrad2.nii');
+% nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/extension/flirt_lfs_smvrad2.nii');
+nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/extension/flirt_lfs_smvrad2_1mm.nii');
 lfs(:,:,:,2) = double(nii.img);
 
 unix('gunzip -f /Volumes/LaCie/COSMOS_7T/01EG/right/*.gz');
-nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/right/flirt_lfs_smvrad2.nii');
+% nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/right/flirt_lfs_smvrad2.nii');
+nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/right/flirt_lfs_smvrad2_1mm.nii');
 lfs(:,:,:,3) = double(nii.img);
 
 unix('gunzip -f /Volumes/LaCie/COSMOS_7T/01EG/left/*.gz');
-nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/left/flirt_lfs_smvrad2.nii');
+% nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/left/flirt_lfs_smvrad2.nii');
+nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/left/flirt_lfs_smvrad2_1mm.nii');
 lfs(:,:,:,4) = double(nii.img);
 
-nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/RESHARP/lfs_resharp_0_smvrad2_cgs_1e-06.nii');
+% nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/RESHARP/lfs_resharp_0_smvrad2_cgs_1e-06.nii');
+nii = load_nii('/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/RESHARP/lfs_resharp_0_smvrad2_cgs_1e-06_1mm.nii');
 lfs(:,:,:,5) = double(nii.img);
 
 mask = and(and(and(and(lfs(:,:,:,1),lfs(:,:,:,2)),lfs(:,:,:,3)),lfs(:,:,:,4)),lfs(:,:,:,5));
@@ -107,6 +168,7 @@ mask = double(mask);
 % create K-space filter kernel D
 %%%%% make this a seperate function in the future
 load('/Volumes/LaCie/COSMOS_7T/01EG/neutral/QSM_MEGE_7T/all_new.mat','vox');
+vox = [1 1 1]; % added for lower resolution simulation
 
 Nx = size(lfs,1);
 Ny = size(lfs,2);
@@ -138,5 +200,6 @@ end
 kernel_sum = sum(abs(kernel).^2, 4);
 chi_cosmos = real( ifftn( sum(kernel .* lfs_k, 4) ./ (eps + kernel_sum) ) ) .* mask;
 nii = make_nii(chi_cosmos,vox);
-save_nii(nii,'/Volumes/LaCie/COSMOS_7T/01EG/cosmos_5_12DOF_cgs_smvrad2.nii');
+% save_nii(nii,'/Volumes/LaCie/COSMOS_7T/01EG/cosmos_5_12DOF_cgs_smvrad2.nii');
+save_nii(nii,'/Volumes/LaCie/COSMOS_7T/01EG/cosmos_5_12DOF_cgs_smvrad2_1mm.nii');
 
