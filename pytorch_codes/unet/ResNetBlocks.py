@@ -1,9 +1,11 @@
 #################### ResNet Blocks ########################
-## import defaults packages 
+# import defaults packages
 import torch
 import torch.nn as nn
 
-## basic blocks
+# basic blocks
+
+
 class EncodingBlocks(nn.Module):
     def __init__(self, num_in, num_out):
         super(EncodingBlocks, self).__init__()
@@ -49,7 +51,7 @@ class DecodingBlocks(nn.Module):
             )
         else:
             self.up = nn.Sequential(
-                nn.ConvTranspose3d(num_in, num_in, 2, stride = 2),
+                nn.ConvTranspose3d(num_in, num_in, 2, stride=2),
                 nn.BatchNorm3d(num_in),
                 nn.ReLU()
             )
@@ -61,11 +63,9 @@ class DecodingBlocks(nn.Module):
             nn.BatchNorm3d(num_out),
             nn.ReLU()
         )
-          
+
     def forward(self, x1, x2):
         x1 = self.up(x1)
-        x = torch.cat([x1, x2], dim = 1)
+        x = torch.cat([x1, x2], dim=1)
         x = self.DecodeConv(x)
         return x
-
-
