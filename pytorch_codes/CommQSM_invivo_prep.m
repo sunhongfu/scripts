@@ -93,10 +93,10 @@ for i = 1:5:15000
         % save chi(img), field, D, field_D_cat as NIFTIs
         nii = make_nii(img, vox);
         save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/chi/chi_' num2str(i) '-' num2str(j) '.nii']);
-        % nii = make_nii(field, vox);
-        % save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/field/field_' num2str(i) '-' num2str(j) '.nii']);
-        % nii = make_nii(D, vox);
-        % save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/D/D_' num2str(i) '-' num2str(j) '.nii']);
+        nii = make_nii(field, vox);
+        save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/field/field_' num2str(i) '-' num2str(j) '.nii']);
+        nii = make_nii(D, vox);
+        save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/D/D_' num2str(i) '-' num2str(j) '.nii']);
         nii = make_nii(field_D_cat, vox);
         save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/field_D_cat/field_D_cat_' num2str(i) '-' num2str(j) '.nii']);
     end

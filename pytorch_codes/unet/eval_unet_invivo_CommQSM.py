@@ -11,7 +11,8 @@ import scipy.io as scio
 if __name__ == '__main__':
     with torch.no_grad():
         print('unet')
-        nibimage = nib.load('renzo_left_field_D_cat.nii')
+        nibimage = nib.load(
+            '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo_left_field_D_cat.nii')
         image = nibimage.get_data()
         aff = nibimage.affine
         image = np.array(image)
@@ -28,7 +29,8 @@ if __name__ == '__main__':
         octnet = ResNet(2)
         octnet = nn.DataParallel(octnet)
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        octnet.load_state_dict(torch.load('unet_CommQSM.pth'))
+        octnet.load_state_dict(torch.load(
+            '/scratch/itee/uqhsun8/CommQSM/invivo/unet_invivo_CommQSM.pth'))
         octnet.to(device)
         octnet.eval()
         print(octnet.state_dict)
@@ -42,8 +44,8 @@ if __name__ == '__main__':
         pred = pred.to('cpu')
         pred = pred.numpy()
 
-        name_msk = 'pred_renzo_left.nii'
-        path = 'pred_renzo_left.mat'
+        name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/pred_renzo_left.nii'
+        path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/pred_renzo_left.mat'
         scio.savemat(path, {'PRED': pred})
         clipped_msk = nib.Nifti1Image(pred, aff)
         nib.save(clipped_msk, name_msk)
