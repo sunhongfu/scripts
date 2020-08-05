@@ -43,7 +43,7 @@ def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
     # start the timer.
     time_start = time.time()
     if useGPU:
-        image = image.float()
+        ##image = image.float()
         if torch.cuda.is_available():
             print(torch.cuda.device_count(), "Available GPUs!")
             device = torch.device(
