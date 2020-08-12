@@ -45,7 +45,7 @@ if __name__ == '__main__':
             device = torch.device(
                 "cuda:0" if torch.cuda.is_available() else "cpu")
             single_dipole_unet.load_state_dict(torch.load(
-                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/single_dipole_unet/D_Unet_test.pth'))
+                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/single_dipole_unet/single_dipole_unet.pth'))
             single_dipole_unet.to(device)
             single_dipole_unet.eval()
             print(single_dipole_unet.state_dict)
