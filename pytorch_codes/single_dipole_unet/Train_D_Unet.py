@@ -11,7 +11,7 @@ from dataload_D_Unet import *
 
 def yangDataLoad(Batch_size):
     DATA_DIRECTORY = '/scratch/itee/uqygao10/QSM_NEW/'
-    DATA_LIST_PATH = './test_IDs.txt'
+    DATA_LIST_PATH = 'test_IDs.txt'
     dst = yangDataSet(DATA_DIRECTORY, DATA_LIST_PATH)
     print('dataLength: %d' % dst.__len__())
     trainloader = data.DataLoader(
@@ -23,9 +23,11 @@ def yangSaveNet(resnet, enSave=False):
     print('save results')
     # save the
     if enSave:
-        torch.save(resnet, './D_Unet.pth')
+        torch.save(
+            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/single_dipole_unet/single_dipole_unet.pth')
     else:
-        torch.save(resnet.state_dict(), './D_Unet_test.pth')
+        torch.save(resnet.state_dict(
+        ), '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/single_dipole_unet/single_dipole_unet.pth')
 
 
 def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):

@@ -87,18 +87,27 @@ for i = 1:5:15000
     vox = [1 1 1];
     % for j = 1:size(z_prjs_all,1)
     for j = 1:5
-            [field, D] = forward_field_calc(img, vox, z_prjs_all(j,:));
-        field_D_cat = cat(3,field,D);
+        [field, D, dipole, field_kspace] = forward_field_calc(img, vox, z_prjs_all(j,:));
+        % field_D_cat = cat(3,field,D);
+        % field_dipole_cat = cat(3,field,dipole);
 
-        % save chi(img), field, D, field_D_cat as NIFTIs
-        nii = make_nii(img, vox);
-        save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/chi/chi_' num2str(i) '-' num2str(j) '.nii']);
-        nii = make_nii(field, vox);
-        save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/field/field_' num2str(i) '-' num2str(j) '.nii']);
-        nii = make_nii(D, vox);
-        save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/D/D_' num2str(i) '-' num2str(j) '.nii']);
-        nii = make_nii(field_D_cat, vox);
-        save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/field_D_cat/field_D_cat_' num2str(i) '-' num2str(j) '.nii']);
+        %% save chi(img), field, D, field_D_cat as NIFTIs
+        % nii = make_nii(img, vox);
+        % save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/chi/chi_' num2str(i) '-' num2str(j) '.nii']);
+        % nii = make_nii(field, vox);
+        % save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/field/field_' num2str(i) '-' num2str(j) '.nii']);
+        % nii = make_nii(D, vox);
+        % save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/D/D_' num2str(i) '-' num2str(j) '.nii']);
+        % nii = make_nii(dipole, vox);
+        % save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/dipole/dipole_' num2str(i) '-' num2str(j) '.nii']);
+        % nii = make_nii(field_dipole_cat, vox);
+        % save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/field_dipole_cat/field_dipole_cat_' num2str(i) '-' num2str(j) '.nii']);
+        % nii = make_nii(field_D_cat, vox);
+        % save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/field_D_cat/field_D_cat_' num2str(i) '-' num2str(j) '.nii']);
+        nii = make_nii(real(field_kspace), vox);
+        save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/field_kspace/real_field_kspace_' num2str(i) '-' num2str(j) '.nii']);
+        nii = make_nii(imag(field_kspace), vox);
+        save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/field_kspace/imag_field_kspace_' num2str(i) '-' num2str(j) '.nii']);
     end
 end
 

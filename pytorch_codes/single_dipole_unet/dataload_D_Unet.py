@@ -22,9 +22,9 @@ class yangDataSet(data.Dataset):
         # to get the full name of the input and label files.
         self.files = []
         for name in self.img_ids:
-            img_file = self.root + ("/field/field_%s.nii" % name)
-            label_file = self.root + ("/chi/chi_%s.nii" % name)
-            dipole_file = self.root + ("/D/D_%s.nii" % name)
+            img_file = self.root + ("/Field_VIVO/%s-Field_NIFTI.nii" % name)
+            label_file = self.root + ("/QSM_VIVO/%s-Phantom_NIFTI.nii" % name)
+            dipole_file = "/scratch/itee/uqhsun8/CommQSM/pytorch_codes/dipole_image.nii"
             self.files.append({
                 "img": img_file,
                 "label": label_file,
@@ -72,8 +72,8 @@ class yangDataSet(data.Dataset):
 
 # before formal usage, test the validation of data loader.
 if __name__ == '__main__':
-    DATA_DIRECTORY = '/scratch/itee/uqhsun8/CommQSM/invivo'
-    DATA_LIST_PATH = '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/multiple_D_unet/invivo_IDs.txt'
+    DATA_DIRECTORY = '/scratch/itee/uqygao10/QSM_NEW/'
+    DATA_LIST_PATH = 'test_IDs.txt'
     Batch_size = 4
     dst = yangDataSet(DATA_DIRECTORY, DATA_LIST_PATH)
     print(dst.__len__())
@@ -83,9 +83,10 @@ if __name__ == '__main__':
     trainloader = data.DataLoader(
         dst, batch_size=Batch_size, shuffle=False, drop_last=True)
     for i, Data in enumerate(trainloader):
-        imgs, labels, names = Data
+        imgs, labels, D, names = Data
         print(i)
         if i % 1 == 0:
             print(names)
+            print(D.size())
             print(imgs.size())
             print(labels.size())
