@@ -21,7 +21,7 @@ z = -Nz/2:Nz/2-1;
 [kx,ky,kz] = ndgrid(x/FOVx,y/FOVy,z/FOVz);
 % D = 1/3 - kz.^2./(kx.^2 + ky.^2 + kz.^2);
 D = 1/3 - (kx.*z_prjs(1)+ky.*z_prjs(2)+kz.*z_prjs(3)).^2./(kx.^2 + ky.^2 + kz.^2);
-D(floor(Nx/2+1),floor(Ny/2+1),floor(Nz/2+1)) = 1;
+D(floor(Nx/2+1),floor(Ny/2+1),floor(Nz/2+1)) = 0;
 
 nii = make_nii(D,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_left_D.nii');
@@ -55,7 +55,7 @@ z = -Nz/2:Nz/2-1;
 [kx,ky,kz] = ndgrid(x/FOVx,y/FOVy,z/FOVz);
 % D = 1/3 - kz.^2./(kx.^2 + ky.^2 + kz.^2);
 D = 1/3 - (kx.*z_prjs(1)+ky.*z_prjs(2)+kz.*z_prjs(3)).^2./(kx.^2 + ky.^2 + kz.^2);
-D(floor(Nx/2+1),floor(Ny/2+1),floor(Nz/2+1)) = 1;
+D(floor(Nx/2+1),floor(Ny/2+1),floor(Nz/2+1)) = 0;
 
 nii = make_nii(D,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_right_D.nii');
@@ -89,7 +89,7 @@ z = -Nz/2:Nz/2-1;
 [kx,ky,kz] = ndgrid(x/FOVx,y/FOVy,z/FOVz);
 % D = 1/3 - kz.^2./(kx.^2 + ky.^2 + kz.^2);
 D = 1/3 - (kx.*z_prjs(1)+ky.*z_prjs(2)+kz.*z_prjs(3)).^2./(kx.^2 + ky.^2 + kz.^2);
-D(floor(Nx/2+1),floor(Ny/2+1),floor(Nz/2+1)) = 1;
+D(floor(Nx/2+1),floor(Ny/2+1),floor(Nz/2+1)) = 0;
 
 nii = make_nii(D,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_forward_D.nii');
@@ -123,7 +123,7 @@ z = -Nz/2:Nz/2-1;
 [kx,ky,kz] = ndgrid(x/FOVx,y/FOVy,z/FOVz);
 % D = 1/3 - kz.^2./(kx.^2 + ky.^2 + kz.^2);
 D = 1/3 - (kx.*z_prjs(1)+ky.*z_prjs(2)+kz.*z_prjs(3)).^2./(kx.^2 + ky.^2 + kz.^2);
-D(floor(Nx/2+1),floor(Ny/2+1),floor(Nz/2+1)) = 1;
+D(floor(Nx/2+1),floor(Ny/2+1),floor(Nz/2+1)) = 0;
 
 nii = make_nii(D,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_backward_D.nii');
@@ -157,7 +157,7 @@ z = -Nz/2:Nz/2-1;
 [kx,ky,kz] = ndgrid(x/FOVx,y/FOVy,z/FOVz);
 % D = 1/3 - kz.^2./(kx.^2 + ky.^2 + kz.^2);
 D = 1/3 - (kx.*z_prjs(1)+ky.*z_prjs(2)+kz.*z_prjs(3)).^2./(kx.^2 + ky.^2 + kz.^2);
-D(floor(Nx/2+1),floor(Ny/2+1),floor(Nz/2+1)) = 1;
+D(floor(Nx/2+1),floor(Ny/2+1),floor(Nz/2+1)) = 0;
 
 nii = make_nii(D,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_D.nii');

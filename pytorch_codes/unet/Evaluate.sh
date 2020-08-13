@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=yang_test_pytorch
+#SBATCH --job-name=sun_test_pytorch
 #SBATCH -n 1
-#SBATCH -c 3
-#SBATCH --mem=100000
+#SBATCH -c 2
+#SBATCH --mem=30000
 #SBATCH -e ResNet_error.err
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:tesla-smx2:1
+#SBATCH --gres=gpu:tesla-smx2:2
 
 module load anaconda/3.6
 source activate /opt/ohpc/pub/apps/pytorch_1.10_openmpi

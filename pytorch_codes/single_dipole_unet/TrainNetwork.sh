@@ -1,11 +1,10 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=HS_single_dipole_unet
+#SBATCH --job-name=10_pytorch
 #SBATCH -n 1
 #SBATCH -c 1
 #SBATCH --mem=30000
-#SBATCH -e HS_single_dipole_unet.err
-#SBATCH -o HS_single_dipole_unet.out
+#SBATCH -e Oct_error.err
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:2
 
