@@ -30,3 +30,13 @@ TODO:
 1. orientations try prjs_x = -0.5: 0.5, prjs_y = -0.5:0.5. or bigger angles: x=-1:1, y=-1:1, z always positive
 2. run unrolled method
 3. change code for 'concatenated inputs mode' to only output half size, currently ignoring the second half
+
+- image_unet_stack_D
+  does not work well with other orientations, such as coronal
+
+- image_unet_stack_dipole
+  stack field and dipole both in image space
+
+- multiple_dipole_unet **update**
+
+- single_dipole_unet **update**

@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=HS_test_multiple_D
+#SBATCH --job-name=eval_multiple_dipole_unet
 #SBATCH -n 1
 #SBATCH -c 3
 #SBATCH --mem=100000
-#SBATCH -e HS_test_multiple_D.err
-#SBATCH -o HS_test_multiple_D.out
+#SBATCH -e eval_multiple_dipole_unet.err
+#SBATCH -o eval_multiple_dipole_unet.out
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:1
 
