@@ -23,17 +23,17 @@ if __name__ == '__main__':
             image = image.float()
 
             nibimage = nib.load(
-                '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo/renzo_' + orien + '_D.nii')
-            D = nibimage.get_data()
+                '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo/renzo_' + orien + '_dipole.nii')
+            dipole = nibimage.get_data()
             aff = nibimage.affine
-            D = np.array(D)
+            dipole = np.array(dipole)
             print('image_unet_stack_dipole')
-            D = torch.from_numpy(D)
-            print(D.size())
-            D = D.float()
+            dipole = torch.from_numpy(dipole)
+            print(dipole.size())
+            dipole = dipole.float()
 
-            field_D = torch.stack([image.float(), D.float()], 0)
-            field_D = torch.unsqueeze(field_D, 0)
+            field_dipole = torch.stack([image.float(), dipole.float()], 0)
+            field_dipole = torch.unsqueeze(field_dipole, 0)
 
             print('image_unet_stack_dipole')
             # load trained network
@@ -48,9 +48,9 @@ if __name__ == '__main__':
             print(octnet.state_dict)
             ################ Evaluation ##################
             image = image.to(device)
-            D = D.to(device)
+            dipole = dipole.to(device)
 
-            pred = octnet(field_D)
+            pred = octnet(field_dipole)
             print(pred.size())
             pred = torch.squeeze(pred, 0)
             pred = torch.squeeze(pred, 0)

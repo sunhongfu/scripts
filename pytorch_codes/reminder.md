@@ -37,6 +37,16 @@ TODO:
 - image_unet_stack_dipole
   stack field and dipole both in image space
 
-- multiple_dipole_unet **update**
+- multiple_dipole_unet **updated**
 
-- single_dipole_unet **update**
+- single_dipole_unet **updated**
+
+To test:
+
+- single_kspace_D_unet **running**
+  field in kspace and dipole in kspace (D) as two individual inputs
+  generate field using the same single D
+
+- multiple_kspace_D_unet **running**
+  field in kspace and dipole in kspace (D) as two individual inputs
+  generate field using different multiple D of different orientations

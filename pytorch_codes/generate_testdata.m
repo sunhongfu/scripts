@@ -82,8 +82,7 @@ save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_field_k
 
 
 
-
-
+% rotate/reslice into coronal
 nii = load_nii('/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_field.nii');
 field = flip(permute(nii.img,[1 3 2]),1);
 vox = permute(nii.hdr.dime.pixdim(2:4), [1 3 2]);
@@ -96,3 +95,29 @@ save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_permute
 nii = make_nii(imag(field_kspace),vox);
 save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_permute132_field_imag.nii');
 
+
+
+
+
+% big angle from forward calc
+nii = load_nii('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/chi_iLSQR_smvrad1.nii');
+chi = double(nii.img);
+vox = nii.hdr.dime.pixdim(2:4);
+
+z_prjs = [sqrt(2)/2, 0 , sqrt(2)/2];
+
+[field, D, dipole, field_kspace] = forward_field_calc(chi, vox, z_prjs);
+
+mask = (chi ~= 0);
+mask = double(mask); 
+
+nii = make_nii(field.*mask,vox);
+save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_bigAngle_field.nii');
+
+field_kspace = ifftshift(fftn(field.*mask));
+
+nii = make_nii(real(field_kspace),vox);
+save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_bigAngle_field_real.nii');
+
+nii = make_nii(imag(field_kspace),vox);
+save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_bigAngle_field_imag.nii');

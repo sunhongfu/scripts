@@ -113,3 +113,18 @@ end
 
 
 
+% generate kspace field from single orientation
+for i = 1:15000
+    nii = load_nii(['/scratch/itee/uqygao10/QSM_NEW/QSM_VIVO/' num2str(i), '-Phantom_NIFTI.nii']);
+    img = single(nii.img);
+
+    % generate D and Field
+    vox = [1 1 1];
+    z_prjs = [0 0 1];
+    [~, ~, ~, field_kspace] = forward_field_calc(img, vox, z_prjs);
+    nii = make_nii(real(field_kspace), vox);
+    save_nii(nii,['/scratch/itee/uqhsun8/CommQSM/invivo/field_kspace_single_orien/real_field_kspace-' num2str(i) '.nii']);
+    nii = make_nii(imag(field_kspace), vox);
+    save_nii(nii,['/scratch/itee/uqhsun8/CommQSM/invivo/field_kspace_single_orien/imag_field_kspace-' num2str(i) '.nii']);
+end
+
