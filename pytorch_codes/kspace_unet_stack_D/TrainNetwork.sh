@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=k_unet_cat_D
+#SBATCH --job-name=train_k_unet_cat_D
 #SBATCH -n 1
 #SBATCH -c 1
 #SBATCH --mem=30000
-#SBATCH -e k_unet_cat_D.err
-#SBATCH -o k_unet_cat_D.out
+#SBATCH -e train_k_unet_cat_D.err
+#SBATCH -o train_k_unet_cat_D.out
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:2
 

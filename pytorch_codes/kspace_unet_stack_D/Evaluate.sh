@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=kspace_unet_stack_D
+#SBATCH --job-name=eval_kspace_unet_stack_D
 #SBATCH -n 1
 #SBATCH -c 3
 #SBATCH --mem=100000
-#SBATCH -e kspace_unet_stack_D.err
-#SBATCH -o kspace_unet_stack_D.out
+#SBATCH -e eval_kspace_unet_stack_D.err
+#SBATCH -o eval_kspace_unet_stack_D.out
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:1
 

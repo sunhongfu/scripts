@@ -24,13 +24,13 @@ def yangSaveNet(resnet, enSave=False):
     # save the
     if enSave:
         torch.save(
-            resnet, '/scratch/itee/uqhsun8/CommQSM/invivo/kspace_unet_cat_D.pth')
+            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/kspace_unet_stack_D/kspace_unet_stack_D.pth')
     else:
         torch.save(resnet.state_dict(),
-                   '/scratch/itee/uqhsun8/CommQSM/invivo/kspace_unet_cat_D.pth')
+                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/kspace_unet_stack_D/kspace_unet_stack_D.pth')
 
 
-def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=10, useGPU=False):
+def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
     print('ResNet')
     print('DataLoad')
     trainloader = yangDataLoad(Batchsize)
