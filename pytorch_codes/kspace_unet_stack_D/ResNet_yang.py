@@ -53,6 +53,7 @@ class ResNet(nn.Module):
 ################## End Section 2 ##########################
 
     def forward(self, x):
+        INPUT = x[:, 0:1, :, :, :]
         names = self.__dict__
         temp = list(range(1, self.EncodingDepth + 1))
         for encodingLayer in temp:
@@ -76,7 +77,7 @@ class ResNet(nn.Module):
 
         # below adopted from Yang's unet_fft code
         x = self.FinalConv(x)
-        # x = x + INPUT  ## removed the data consisteny block.
+        x = x + INPUT  # removed the data consisteny block.
         x[:, :, 0, 0, 0] = 0  # set the average of the recon as 0;
 
         x_k = x.permute(0, 2, 3, 4, 1)  # FFT reconstruciton block.

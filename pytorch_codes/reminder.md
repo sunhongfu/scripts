@@ -43,10 +43,10 @@ TODO:
 
 To test:
 
-- single_kspace_D_unet **running**
+- single_kspace_D_unet **running** NEED TO UPDATE EVAL
   field in kspace and dipole in kspace (D) as two individual inputs
   generate field using the same single D
 
-- multiple_kspace_D_unet **running**
+- multiple_kspace_D_unet **running** NEED TO UPDATE EVAL
   field in kspace and dipole in kspace (D) as two individual inputs
   generate field using different multiple D of different orientations

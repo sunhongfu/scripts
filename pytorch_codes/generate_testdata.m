@@ -106,7 +106,7 @@ vox = nii.hdr.dime.pixdim(2:4);
 
 z_prjs = [sqrt(2)/2, 0 , sqrt(2)/2];
 
-[field, D, dipole, field_kspace] = forward_field_calc(chi, vox, z_prjs);
+[field, D, dipole, ~] = forward_field_calc(chi, vox, z_prjs);
 
 mask = (chi ~= 0);
 mask = double(mask); 
