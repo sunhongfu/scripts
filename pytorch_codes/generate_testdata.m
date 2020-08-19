@@ -7,6 +7,10 @@ nii = make_nii(real(field_kspace),vox);
 save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_left_field_kspace_real.nii');
 nii = make_nii(imag(field_kspace),vox);
 save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_left_field_kspace_imag.nii');
+nii = make_nii(fftshift(real(field_kspace)),vox);
+save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_left_field_kspace_shift_real.nii');
+nii = make_nii(fftshift(imag(field_kspace)),vox);
+save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_left_field_kspace_shift_imag.nii');
 
 
 
@@ -24,6 +28,11 @@ nii = make_nii(real(field_kspace),vox);
 save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_right_field_kspace_real.nii');
 nii = make_nii(imag(field_kspace),vox);
 save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_right_field_kspace_imag.nii');
+nii = make_nii(fftshift(real(field_kspace)),vox);
+save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_right_field_kspace_shift_real.nii');
+nii = make_nii(fftshift(imag(field_kspace)),vox);
+save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_right_field_kspace_shift_imag.nii');
+
 
 
 
@@ -41,6 +50,11 @@ nii = make_nii(real(field_kspace),vox);
 save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_backward_field_kspace_real.nii');
 nii = make_nii(imag(field_kspace),vox);
 save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_backward_field_kspace_imag.nii');
+nii = make_nii(fftshift(real(field_kspace)),vox);
+save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_backward_field_kspace_shift_real.nii');
+nii = make_nii(fftshift(imag(field_kspace)),vox);
+save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_backward_field_kspace_shift_imag.nii');
+
 
 
 
@@ -58,6 +72,10 @@ nii = make_nii(real(field_kspace),vox);
 save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_forward_field_kspace_real.nii');
 nii = make_nii(imag(field_kspace),vox);
 save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_forward_field_kspace_imag.nii');
+nii = make_nii(fftshift(real(field_kspace)),vox);
+save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_forward_field_kspace_shift_real.nii');
+nii = make_nii(fftshift(imag(field_kspace)),vox);
+save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_forward_field_kspace_shift_imag.nii');
 
 
 
@@ -75,6 +93,10 @@ nii = make_nii(real(field_kspace),vox);
 save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_field_kspace_real.nii');
 nii = make_nii(imag(field_kspace),vox);
 save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_field_kspace_imag.nii');
+nii = make_nii(fftshift(real(field_kspace)),vox);
+save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_field_kspace_shift_real.nii');
+nii = make_nii(fftshift(imag(field_kspace)),vox);
+save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_field_kspace_shift_imag.nii');
 
 
 

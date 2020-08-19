@@ -7,6 +7,9 @@ vox = [1 1 1];
 nii = make_nii(D,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_left_D.nii');
 
+nii = make_nii(fftshift(D),vox);
+save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_left_D_shift.nii');
+
 nii = make_nii(dipole,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_left_dipole.nii');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -20,6 +23,9 @@ vox = [1 1 1];
 
 nii = make_nii(D,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_right_D.nii');
+
+nii = make_nii(fftshift(D),vox);
+save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_right_D_shift.nii');
 
 nii = make_nii(dipole,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_right_dipole.nii');
@@ -35,6 +41,9 @@ vox = [1 1 1];
 nii = make_nii(D,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_forward_D.nii');
 
+nii = make_nii(fftshift(D),vox);
+save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_forward_D_shift.nii');
+
 nii = make_nii(dipole,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_forward_dipole.nii');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -49,6 +58,9 @@ vox = [1 1 1];
 nii = make_nii(D,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_backward_D.nii');
 
+nii = make_nii(fftshift(D),vox);
+save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_backward_D_shift.nii');
+
 nii = make_nii(dipole,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_backward_dipole.nii');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -62,6 +74,9 @@ vox = [1 1 1];
 
 nii = make_nii(D,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_D.nii');
+
+nii = make_nii(fftshift(D),vox);
+save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_D_shift.nii');
 
 nii = make_nii(dipole,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_dipole.nii');
