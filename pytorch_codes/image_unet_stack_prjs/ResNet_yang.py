@@ -28,8 +28,8 @@ class ResNet(nn.Module):
         for encodingLayer in temp:
             if encodingLayer == 1:
                 num_outputs = initial_num_layers * 2 ** (encodingLayer - 1)
-                # for the first input layer takes 2 channels HONGFU
-                self.EncodeConvs.append(EncodingBlocks(2, num_outputs))
+                # for the first input layer takes 4 channels HONGFU
+                self.EncodeConvs.append(EncodingBlocks(4, num_outputs))
             else:
                 num_outputs = initial_num_layers * 2 ** (encodingLayer - 1)
                 self.EncodeConvs.append(EncodingBlocks(

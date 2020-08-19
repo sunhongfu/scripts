@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=train_image_unet_stack_dipole
+#SBATCH --job-name=train_image_unet_stack_prjs
 #SBATCH -n 1
 #SBATCH -c 1
 #SBATCH --mem=30000
-#SBATCH -e train_image_unet_stack_dipole.err
-#SBATCH -o train_image_unet_stack_dipole.out
+#SBATCH -e train_image_unet_stack_prjs.err
+#SBATCH -o train_image_unet_stack_prjs.out
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:2
 

@@ -14,12 +14,10 @@ class yangDataSet(data.Dataset):
 
         self.z_prjs_file = z_prjs_file
         z_prjs_arr = [line.strip().split(" ") for line in open(z_prjs_file)]
-
+        # convert z_prjs into a dic
         z_prjs_keys = [z_prjs_arr[i][0] for i in range(0, len(z_prjs_arr))]
         z_prjs_values = [z_prjs_arr[i][1:4] for i in range(0, len(z_prjs_arr))]
-        self.z_prjs_dict = dict(zip(z_prjs_keys, z_prjs_values))
-
-        # convert z_prjs into a dic
+        z_prjs_dict = dict(zip(z_prjs_keys, z_prjs_values))
 
         # get the number of files.
         self.img_ids = [i_id.strip() for i_id in open(list_path)]
@@ -33,12 +31,10 @@ class yangDataSet(data.Dataset):
         for name in self.img_ids:
             field_file = self.root + \
                 ("/field/field_%s.nii" % name)
-            prjs_file = self.root + \
-                ("/dipole/dipole_%s.nii" % name)
             label_file = self.root + ("/chi/chi_%s.nii" % name)
             self.files.append({
                 "field": field_file,
-                "dipole": prjs_file,
+                "prjs": z_prjs_dict[name],
                 "label": label_file,
                 "name": name
             })
@@ -54,38 +50,47 @@ class yangDataSet(data.Dataset):
         name = datafiles["name"]
         # nifti read codes.
         nibfield = nib.load(datafiles["field"])
-        nibdipole = nib.load(datafiles["dipole"])
         niblabel = nib.load(datafiles["label"])
 
         field = nibfield.get_data()
-        dipole = nibdipole.get_data()
         label = niblabel.get_data()
 
         field = np.array(field)
-        dipole = np.array(dipole)
         label = np.array(label)
+
+        prjs_elements = np.array([float(i) for i in datafiles["prjs"]])
+
+        # size/shape of field
+        size_prjs = list(field.shape)
+        size_prjs.append(prjs_elements.size)
+        prjs = prjs_elements*np.ones(size_prjs)
 
         # convert the image data to torch.tesors and return.
         field = torch.from_numpy(field)
-        dipole = torch.from_numpy(dipole)
+        prjs = torch.from_numpy(prjs)
         label = torch.from_numpy(label)
 
-        field_dipole = torch.stack(
-            [field.float(), dipole.float()], 0)
+        prjs = prjs.permute(3, 0, 1, 2)
+        field = torch.unsqueeze(field, 0)
+
+        field_prjs = torch.cat(
+            [field.float(), prjs.float()], 0)
+
         label = torch.unsqueeze(label, 0)
 
-        field_dipole = field_dipole.float()
+        field_prjs = field_prjs.float()
         label = label.float()
 
-        return field_dipole, label, name
+        return field_prjs, label, name
 
 
 # before formal usage, test the validation of data loader.
 if __name__ == '__main__':
-    DATA_DIRECTORY = '/scratch/itee/uqhsun8/CommQSM/invivo'
-    DATA_LIST_PATH = '/scratch/itee/uqhsun8/CommQSM/invivo/invivo_IDs.txt'
+    DATA_DIRECTORY = '/Volumes/LaCie/CommQSM/invivo/data_for_training'
+    DATA_LIST_PATH = '/Users/uqhsun8/Documents/MATLAB/scripts/pytorch_codes/invivo_IDs.txt'
+    z_prjs_file = '/Users/uqhsun8/Documents/MATLAB/scripts/pytorch_codes/image_unet_stack_prjs/z_prjs.txt'
     Batch_size = 4
-    dst = yangDataSet(DATA_DIRECTORY, DATA_LIST_PATH)
+    dst = yangDataSet(DATA_DIRECTORY, DATA_LIST_PATH, z_prjs_file)
     print(dst.__len__())
     # just for test,  so the mean is (0,0,0) to show the original images.
     # But when we are training a model, the mean should have another value

@@ -12,7 +12,8 @@ from dataload_unet_invivo_CommQSM import *
 def yangDataLoad(Batch_size):
     DATA_DIRECTORY = '/scratch/itee/uqhsun8/CommQSM/invivo'
     DATA_LIST_PATH = '/scratch/itee/uqhsun8/CommQSM/invivo/invivo_IDs.txt'
-    dst = yangDataSet(DATA_DIRECTORY, DATA_LIST_PATH)
+    z_prjs_file = '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs/z_prjs.txt'
+    dst = yangDataSet(DATA_DIRECTORY, DATA_LIST_PATH,  z_prjs_file)
     print('dataLength: %d' % dst.__len__())
     trainloader = data.DataLoader(
         dst, batch_size=Batch_size, shuffle=True, drop_last=True)
@@ -24,10 +25,10 @@ def yangSaveNet(resnet, enSave=False):
     # save the
     if enSave:
         torch.save(
-            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_dipole/image_unet_stack_dipole.pth')
+            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs/image_unet_stack_prjs.pth')
     else:
         torch.save(resnet.state_dict(),
-                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_dipole/image_unet_stack_dipole.pth')
+                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs/image_unet_stack_prjs.pth')
 
 
 def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
