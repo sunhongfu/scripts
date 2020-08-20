@@ -11,7 +11,7 @@ import scipy.io as scio
 
 if __name__ == '__main__':
     with torch.no_grad():
-        print('image_unet_stack_prjs')
+        print('image_unet_stack_prjs_alldirs')
         z_prjs_file = 'z_prjs_testdata.txt'
         z_prjs_arr = [line.strip().split(" ") for line in open(z_prjs_file)]
         # convert z_prjs into a dic
@@ -30,7 +30,7 @@ if __name__ == '__main__':
             mask = np.not_equal(image, 0)
             mask = mask.astype(float)
 
-            print('image_unet_stack_prjs')
+            print('image_unet_stack_prjs_alldirs')
             image = torch.from_numpy(image)
             print(image.size())
             image = image.float()
@@ -40,7 +40,7 @@ if __name__ == '__main__':
             # dipole = nibimage.get_data()
             # aff = nibimage.affine
             # dipole = np.array(dipole)
-            # print('image_unet_stack_prjs')
+            # print('image_unet_stack_prjs_alldirs')
             # dipole = torch.from_numpy(dipole)
             # print(dipole.size())
             # dipole = dipole.float()
@@ -63,14 +63,14 @@ if __name__ == '__main__':
 
             field_prjs = torch.unsqueeze(field_prjs, 0)
 
-            print('image_unet_stack_prjs')
+            print('image_unet_stack_prjs_alldirs')
             # load trained network
             octnet = ResNet(2)
             octnet = nn.DataParallel(octnet)
             device = torch.device(
                 "cuda:0" if torch.cuda.is_available() else "cpu")
             octnet.load_state_dict(torch.load(
-                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs/image_unet_stack_prjs.pth'))
+                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs_alldirs/image_unet_stack_prjs_alldirs.pth'))
             octnet.to(device)
             octnet.eval()
             print(octnet.state_dict)
@@ -85,10 +85,10 @@ if __name__ == '__main__':
             pred = pred.to('cpu')
             pred = pred.numpy()
 
-            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/image_unet_stack_prjs/renzo_' + \
-                orien + '_image_unet_stack_prjs.nii'
-            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/image_unet_stack_prjs/renzo_' + \
-                orien + '_image_unet_stack_prjs.mat'
+            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/image_unet_stack_prjs_alldirs/renzo_' + \
+                orien + '_image_unet_stack_prjs_alldirs.nii'
+            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/image_unet_stack_prjs_alldirs/renzo_' + \
+                orien + '_image_unet_stack_prjs_alldirs.mat'
             scio.savemat(path, {'PRED': pred})
             clipped_msk = nib.Nifti1Image(pred, aff)
             nib.save(clipped_msk, name_msk)

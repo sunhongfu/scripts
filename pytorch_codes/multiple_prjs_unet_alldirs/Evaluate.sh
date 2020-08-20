@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=eval_image_unet_stack_prjs
+#SBATCH --job-name=eval_multiple_dipole_unet
 #SBATCH -n 1
-#SBATCH -c 1
-#SBATCH --mem=10000
-#SBATCH -e eval_image_unet_stack_prjs.err
-#SBATCH -o eval_image_unet_stack_prjs.out
+#SBATCH -c 3
+#SBATCH --mem=100000
+#SBATCH -e eval_multiple_dipole_unet.err
+#SBATCH -o eval_multiple_dipole_unet.out
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:1
 
@@ -17,4 +17,4 @@ module load mvapich2
 module load matlab
 
 python --version
-srun python -u eval_unet_invivo_CommQSM.py
+srun python -u  eval_multiple_D_unet.py
