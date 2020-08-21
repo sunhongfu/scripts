@@ -61,7 +61,7 @@ class yangDataSet(data.Dataset):
         prjs_elements = np.array([float(i) for i in datafiles["prjs"]])
 
         # size/shape of field
-        size_prjs = list(field.shape)
+        size_prjs = list(image.shape)
         size_prjs.append(prjs_elements.size)
         prjs = prjs_elements*np.ones(size_prjs)
 
