@@ -4,14 +4,13 @@ import torch
 import torch.nn as nn
 import numpy as np
 import nibabel as nib
-from ResNet_yang import *
+from D_Unet import *
 import scipy.io as scio
 ##########################################
 
-
 if __name__ == '__main__':
     with torch.no_grad():
-        print('image_unet_stack_prjs_alldirs_150k')
+        print('multiple_prjs_unet_alldirs_150k')
         z_prjs_file = 'z_prjs_testdata.txt'
         z_prjs_arr = [line.strip().split(" ") for line in open(z_prjs_file)]
         # convert z_prjs into a dic
@@ -26,13 +25,12 @@ if __name__ == '__main__':
             aff = nibimage.affine
             image = np.array(image)
 
-            # generate mask based on field maps
-            mask = np.not_equal(image, 0)
-            mask = mask.astype(float)
-
-            print('image_unet_stack_prjs_alldirs_150k')
+            print('multiple_prjs_unet_alldirs_150k')
             image = torch.from_numpy(image)
             print(image.size())
+
+            image = torch.unsqueeze(image, 0)
+            image = torch.unsqueeze(image, 0)
             image = image.float()
 
             # nibimage = nib.load(
@@ -40,9 +38,12 @@ if __name__ == '__main__':
             # dipole = nibimage.get_data()
             # aff = nibimage.affine
             # dipole = np.array(dipole)
-            # print('image_unet_stack_prjs_alldirs_150k')
+            # print('multiple_prjs_unet_alldirs_150k')
             # dipole = torch.from_numpy(dipole)
             # print(dipole.size())
+
+            # dipole = torch.unsqueeze(dipole, 0)
+            # dipole = torch.unsqueeze(dipole, 0)
             # dipole = dipole.float()
 
             # size/shape of field
@@ -50,45 +51,38 @@ if __name__ == '__main__':
             size_prjs = list(image.shape)
             size_prjs.append(prjs_elements.size)
             prjs = prjs_elements*np.ones(size_prjs)
-
-            # prjs = prjs*np.expand_dims(mask, axis=3)
-
             prjs = torch.from_numpy(prjs)
-
             prjs = prjs.permute(3, 0, 1, 2)
-            image = torch.unsqueeze(image, 0)
+            prjs = torch.unsqueeze(prjs, 0)
+            prjs = prjs.float()
 
-            field_prjs = torch.cat(
-                [image.float(), prjs.float()], 0)
-
-            field_prjs = torch.unsqueeze(field_prjs, 0)
-
-            print('image_unet_stack_prjs_alldirs_150k')
+            print('multiple_prjs_unet_alldirs_150k')
             # load trained network
-            octnet = ResNet(2)
-            octnet = nn.DataParallel(octnet)
+            multiple_prjs_unet_alldirs_150k = Unet(2)
+            multiple_prjs_unet_alldirs_150k = nn.DataParallel(
+                multiple_prjs_unet_alldirs_150k)
             device = torch.device(
                 "cuda:0" if torch.cuda.is_available() else "cpu")
-            octnet.load_state_dict(torch.load(
-                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs_alldirs_150k/image_unet_stack_prjs_alldirs_150k.pth'))
-            octnet.to(device)
-            octnet.eval()
-            print(octnet.state_dict)
+            multiple_prjs_unet_alldirs_150k.load_state_dict(torch.load(
+                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/multiple_prjs_unet_alldirs_150k/multiple_prjs_unet_alldirs_150k.pth'))
+            multiple_prjs_unet_alldirs_150k.to(device)
+            multiple_prjs_unet_alldirs_150k.eval()
+            print(multiple_prjs_unet_alldirs_150k.state_dict)
             ################ Evaluation ##################
-            field_prjs = field_prjs.to(device)
-
-            pred = octnet(field_prjs)
+            image = image.to(device)
+            prjs = prjs.to(device)
+            pred = multiple_prjs_unet_alldirs_150k(image, prjs)
             print(pred.size())
             pred = torch.squeeze(pred, 0)
             pred = torch.squeeze(pred, 0)
-            print(get_parameter_number(octnet))
+            print(get_parameter_number(multiple_prjs_unet_alldirs_150k))
             pred = pred.to('cpu')
             pred = pred.numpy()
 
-            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/image_unet_stack_prjs_alldirs_150k/renzo_' + \
-                orien + '_image_unet_stack_prjs_alldirs_150k.nii'
-            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/image_unet_stack_prjs_alldirs_150k/renzo_' + \
-                orien + '_image_unet_stack_prjs_alldirs_150k.mat'
+            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/multiple_prjs_unet_alldirs_150k/renzo_' + \
+                orien + '_multiple_prjs_unet_alldirs_150k.nii'
+            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/multiple_prjs_unet_alldirs_150k/renzo_' + \
+                orien + '_multiple_prjs_unet_alldirs_150k.mat'
             scio.savemat(path, {'PRED': pred})
             clipped_msk = nib.Nifti1Image(pred, aff)
             nib.save(clipped_msk, name_msk)

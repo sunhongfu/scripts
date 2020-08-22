@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=eval_image_unet_stack_prjs_150k
+#SBATCH --job-name=eval_image_unet_stack_prjs_150k_1x1conv
 #SBATCH -n 1
 #SBATCH -c 1
 #SBATCH --mem=10000
-#SBATCH -e eval_image_unet_stack_prjs_150k.err
-#SBATCH -o eval_image_unet_stack_prjs_150k.out
+#SBATCH -e eval_image_unet_stack_prjs_150k_1x1conv.err
+#SBATCH -o eval_image_unet_stack_prjs_150k_1x1conv.out
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:1
 

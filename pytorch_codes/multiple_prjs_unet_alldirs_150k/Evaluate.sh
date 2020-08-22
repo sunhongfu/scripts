@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=eval_image_unet_stack_prjs_150k
+#SBATCH --job-name=eval_multiple_prjs_unet_alldirs_150k
 #SBATCH -n 1
 #SBATCH -c 1
 #SBATCH --mem=10000
-#SBATCH -e eval_image_unet_stack_prjs_150k.err
-#SBATCH -o eval_image_unet_stack_prjs_150k.out
+#SBATCH -e eval_multiple_prjs_unet_alldirs_150k.err
+#SBATCH -o eval_multiple_prjs_unet_alldirs_150k.out
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:1
 
@@ -17,4 +17,4 @@ module load mvapich2
 module load matlab
 
 python --version
-srun python -u eval_unet_invivo_CommQSM.py
+srun python -u  eval_multiple_D_unet.py
