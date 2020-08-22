@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=eval_multiple_dipole_unet
+#SBATCH --job-name=eval_multiple_prjs_unet_alldirs
 #SBATCH -n 1
-#SBATCH -c 3
-#SBATCH --mem=100000
-#SBATCH -e eval_multiple_dipole_unet.err
-#SBATCH -o eval_multiple_dipole_unet.out
+#SBATCH -c 1
+#SBATCH --mem=10000
+#SBATCH -e eval_multiple_prjs_unet_alldirs.err
+#SBATCH -o eval_multiple_prjs_unet_alldirs.out
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:1
 
