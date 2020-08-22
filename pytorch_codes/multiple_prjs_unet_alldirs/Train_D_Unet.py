@@ -104,4 +104,4 @@ if __name__ == '__main__':
     # use this line to check if all layers
     # are leanrable in this programe.
     # train network
-    yangTrainNet(resnet,  LR=0.001, Batchsize=32, Epoches=100, useGPU=True)
+    yangTrainNet(resnet,  LR=0.001, Batchsize=32, Epoches=200, useGPU=True)

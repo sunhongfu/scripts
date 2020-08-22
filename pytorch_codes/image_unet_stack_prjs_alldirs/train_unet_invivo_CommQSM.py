@@ -31,7 +31,7 @@ def yangSaveNet(resnet, enSave=False):
                    '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs_alldirs/image_unet_stack_prjs_alldirs.pth')
 
 
-def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=200, useGPU=False):
+def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
     print('ResNet')
     print('DataLoad')
     trainloader = yangDataLoad(Batchsize)
@@ -94,4 +94,4 @@ if __name__ == '__main__':
     # use this line to check if all layers
     # are leanrable in this programe.
     # train network
-    yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=True)
+    yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=200, useGPU=True)
