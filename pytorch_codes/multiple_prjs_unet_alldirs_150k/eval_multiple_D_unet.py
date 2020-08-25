@@ -29,6 +29,8 @@ if __name__ == '__main__':
             image = torch.from_numpy(image)
             print(image.size())
 
+            size_prjs = list(image.shape)
+
             image = torch.unsqueeze(image, 0)
             image = torch.unsqueeze(image, 0)
             image = image.float()
@@ -48,7 +50,6 @@ if __name__ == '__main__':
 
             # size/shape of field
             prjs_elements = np.array([float(i) for i in z_prjs_dict[orien]])
-            size_prjs = list(image.shape)
             size_prjs.append(prjs_elements.size)
             prjs = prjs_elements*np.ones(size_prjs)
             prjs = torch.from_numpy(prjs)

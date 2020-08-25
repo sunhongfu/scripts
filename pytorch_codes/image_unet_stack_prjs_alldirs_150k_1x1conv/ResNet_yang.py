@@ -10,6 +10,8 @@
 # import self-defined packages
 import torch.nn.functional as F
 from ResNetBlocks import *
+import torch.nn as nn
+
 ################# End Section 1 ##########################
 
 #################### Section 2 ###########################
@@ -22,6 +24,9 @@ class ResNet(nn.Module):
         self.EncodeConvs = []
         self.DecodeConvs = []
         self.EncodingDepth = EncodingDepth
+        # add 1*1 conv layer at the beginning
+        self.InterChann = nn.Conv3d(4, 64, 1, stride=1, padding=0)
+
         initial_num_layers = 64
         temp = list(range(1, EncodingDepth + 1))
 ################### Encoding Layers #######################
@@ -29,7 +34,7 @@ class ResNet(nn.Module):
             if encodingLayer == 1:
                 num_outputs = initial_num_layers * 2 ** (encodingLayer - 1)
                 # for the first input layer takes 4 channels HONGFU
-                self.EncodeConvs.append(EncodingBlocks(4, num_outputs))
+                self.EncodeConvs.append(EncodingBlocks(64, num_outputs))
             else:
                 num_outputs = initial_num_layers * 2 ** (encodingLayer - 1)
                 self.EncodeConvs.append(EncodingBlocks(
@@ -54,6 +59,7 @@ class ResNet(nn.Module):
     def forward(self, x):
         names = self.__dict__
         temp = list(range(1, self.EncodingDepth + 1))
+        x = self.InterChann(x)  # HONGFU
         for encodingLayer in temp:
             temp_conv = self.EncodeConvs[encodingLayer - 1]
             x = temp_conv(x)

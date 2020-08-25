@@ -10,9 +10,7 @@ class EncodingBlocks(nn.Module):
     def __init__(self, num_in, num_out):
         super(EncodingBlocks, self).__init__()
         self.EncodeConv = nn.Sequential(
-            # add 1x1x1 conv HONGFU for inter-channel relations
-            nn.Conv3d(num_in, num_out, 1, padding=1),
-            nn.Conv3d(num_out, num_out, 3, padding=1),
+            nn.Conv3d(num_in, num_out, 3, padding=1),
             nn.BatchNorm3d(num_out),
             nn.ReLU(),
             nn.Conv3d(num_out, num_out, 3, padding=1),
