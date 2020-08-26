@@ -25,10 +25,10 @@ def yangSaveNet(resnet, enSave=False):
     # save the
     if enSave:
         torch.save(
-            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs_alldirs_1x1conv/image_unet_stack_prjs_alldirs_1x1conv.pth')
+            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs_alldirs_150k_1x1conv/image_unet_stack_prjs_alldirs_150k_1x1conv.pth')
     else:
         torch.save(resnet.state_dict(),
-                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs_alldirs_1x1conv/image_unet_stack_prjs_alldirs_1x1conv.pth')
+                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs_alldirs_150k_1x1conv/image_unet_stack_prjs_alldirs_150k_1x1conv.pth')
 
 
 def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
