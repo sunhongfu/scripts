@@ -85,6 +85,8 @@ if __name__ == '__main__':
             pred = pred.to('cpu')
             pred = pred.numpy()
 
+            pred = pred[0,:,:,:]
+
             name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/image_unet_stack_prjs_alldirs_equalsize/renzo_' + \
                 orien + '_image_unet_stack_prjs_alldirs_equalsize.nii'
             path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/image_unet_stack_prjs_alldirs_equalsize/renzo_' + \
