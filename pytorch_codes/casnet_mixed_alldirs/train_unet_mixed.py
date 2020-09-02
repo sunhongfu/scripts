@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 import time
 import torch.optim.lr_scheduler as LS
-from ResNet_yang import *
+from CasNet import *
 from dataload_unet_mixed import *
 #########  Section 1: DataSet Load #############
 
@@ -24,10 +24,10 @@ def yangSaveNet(resnet, enSave=False):
     # save the
     if enSave:
         torch.save(
-            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unet_mixed/unet_mixed.pth')
+            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/casnet_mixed_alldirs/casnet_mixed_alldirs.pth')
     else:
         torch.save(resnet.state_dict(),
-                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unet_mixed/unet_mixed.pth')
+                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/casnet_mixed_alldirs/casnet_mixed_alldirs.pth')
 
 
 def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
@@ -52,13 +52,17 @@ def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
             for epoch in range(1, Epoches + 1):
                 acc_loss = 0.0
                 for i, data in enumerate(trainloader):
-                    Inputs, Labels, Name = data
+                    Inputs, Labels, Rot_mats, Inv_mats, Name = data
+
                     Inputs = Inputs.to(device)
                     Labels = Labels.to(device)
+                    Rot_mats = Rot_mats.to(device)
+                    Inv_mats = Inv_mats.to(device)
+
                     # zero the gradient buffers
                     optimizer.zero_grad()
                     # forward:
-                    pred = resnet(Inputs)
+                    pred = resnet(Inputs, Rot_mats, Inv_mats)
                     # loss
                     loss = criterion(pred, Labels)
                     # backward
@@ -84,7 +88,7 @@ def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
 if __name__ == '__main__':
     # data load
     # create network
-    resnet = ResNet(2)
+    resnet = CasNet()
     resnet.apply(weights_init)
     resnet.train()
     print('100 EPO-2L')

@@ -2,6 +2,7 @@ import numpy as np
 import nibabel as nib
 import torch
 from torch.utils import data
+import torch.nn.functional as F
 
 
 class yangDataSet(data.Dataset):
@@ -75,6 +76,9 @@ class yangDataSet(data.Dataset):
         label = label.float()
         rot_mat = rot_mat.float()
         inv_mat = inv_mat.float()
+
+        image = F.pad(image, (8, 8, 8, 8, 8, 8), "constant", 0)
+        label = F.pad(label, (8, 8, 8, 8, 8, 8), "constant", 0)
 
         return image, label, rot_mat, inv_mat, name
 
