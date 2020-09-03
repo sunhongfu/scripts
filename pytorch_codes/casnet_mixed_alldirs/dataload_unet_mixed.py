@@ -6,13 +6,20 @@ import torch.nn.functional as F
 
 
 class yangDataSet(data.Dataset):
-    def __init__(self, root, list_path):
+    def __init__(self, root, z_prjs_file):
         super(yangDataSet, self).__init__()
         self.root = root
-        self.list_path = list_path
+        # self.list_path = list_path
+
+        self.z_prjs_file = z_prjs_file
+        z_prjs_arr = [line.strip().split(" ") for line in open(z_prjs_file)]
+        # convert z_prjs into a dic
+        z_prjs_keys = [z_prjs_arr[i][0] for i in range(0, len(z_prjs_arr))]
+        z_prjs_values = [z_prjs_arr[i][1:4] for i in range(0, len(z_prjs_arr))]
+        # z_prjs_dict = dict(zip(z_prjs_keys, z_prjs_values))
 
         # get the number of files.
-        self.img_ids = [i_id.strip() for i_id in open(list_path)]
+        self.img_ids = [i_id.strip() for i_id in z_prjs_keys]
         # print(self.img_ids)
         # get all fil names, preparation for get_item.
         # for example, we have two files:
@@ -85,8 +92,8 @@ class yangDataSet(data.Dataset):
 
 # before formal usage, test the validation of data loader.
 if __name__ == '__main__':
-    DATA_DIRECTORY = '/scratch/itee/uqhsun8/CommQSM/invivo'
-    DATA_LIST_PATH = '/scratch/itee/uqhsun8/CommQSM/invivo/invivo_IDs.txt'
+    DATA_DIRECTORY = '/Volumes/LaCie/CommQSM/invivo/data_for_training'
+    DATA_LIST_PATH = '/Users/uqhsun8/Documents/MATLAB/scripts/pytorch_codes/image_unet_stack_prjs_alldirs_equalsize/z_prjs_alldirs.txt'
     Batch_size = 4
     dst = yangDataSet(DATA_DIRECTORY, DATA_LIST_PATH)
     print(dst.__len__())
@@ -96,9 +103,9 @@ if __name__ == '__main__':
     trainloader = data.DataLoader(
         dst, batch_size=Batch_size, shuffle=False, drop_last=True)
     for i, Data in enumerate(trainloader):
-        imgs, labels, names = Data
+        image, label, rot_mat, inv_mat, name = Data
         print(i)
         if i % 1 == 0:
-            print(names)
-            print(imgs.size())
-            print(labels.size())
+            print(name)
+            print(image.size())
+            print(label.size())

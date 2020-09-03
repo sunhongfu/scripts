@@ -1,5 +1,28 @@
 load('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_LEFT/QSM_SPGR_GE/z_prjs.mat', 'z_prjs');
 
+B = [0 0 1]';
+A = z_prjs';
+
+if A==B
+    U = eye(3);
+else
+    % rotation from unit vector A to B; 
+    % return rotation matrix U such that UA = B;
+    % and ||U||_2 = 1
+    GG = @(A,B) [ dot(A,B) -norm(cross(A,B)) 0;
+                    norm(cross(A,B)) dot(A,B)  0;
+                    0              0           1];
+
+    FFi = @(A,B) [ A (B-dot(A,B)*A)/norm(B-dot(A,B)*A) cross(B,A) ];
+    UU = @(Fi,G) Fi*G*(Fi\eye(3));      
+    U = UU(FFi(A,B), GG(A,B));
+end
+
+nii = make_nii(U);
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_left_rotmat.nii']);
+nii = make_nii(U');
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_left_invmat.nii']);
+
 % resize for testing
 imsize = [48 48 48];
 vox = [1 1 1];
@@ -25,6 +48,29 @@ save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_left_dipole.nii'
 
 load('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_RIGHT/QSM_SPGR_GE/z_prjs.mat', 'z_prjs');
 
+B = [0 0 1]';
+A = z_prjs';
+
+if A==B
+    U = eye(3);
+else
+    % rotation from unit vector A to B; 
+    % return rotation matrix U such that UA = B;
+    % and ||U||_2 = 1
+    GG = @(A,B) [ dot(A,B) -norm(cross(A,B)) 0;
+                    norm(cross(A,B)) dot(A,B)  0;
+                    0              0           1];
+
+    FFi = @(A,B) [ A (B-dot(A,B)*A)/norm(B-dot(A,B)*A) cross(B,A) ];
+    UU = @(Fi,G) Fi*G*(Fi\eye(3));      
+    U = UU(FFi(A,B), GG(A,B));
+end
+
+nii = make_nii(U);
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_right_rotmat.nii']);
+nii = make_nii(U');
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_right_invmat.nii']);
+
 imsize = [256 256 128];
 vox = [1 1 1];
 [~, D, dipole, ~] = forward_field_calc(ones(imsize), vox, z_prjs);
@@ -41,6 +87,29 @@ save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_right_dipole.nii
 
 
 load('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_FORWARD/QSM_SPGR_GE/z_prjs.mat', 'z_prjs');
+
+B = [0 0 1]';
+A = z_prjs';
+
+if A==B
+    U = eye(3);
+else
+    % rotation from unit vector A to B; 
+    % return rotation matrix U such that UA = B;
+    % and ||U||_2 = 1
+    GG = @(A,B) [ dot(A,B) -norm(cross(A,B)) 0;
+                    norm(cross(A,B)) dot(A,B)  0;
+                    0              0           1];
+
+    FFi = @(A,B) [ A (B-dot(A,B)*A)/norm(B-dot(A,B)*A) cross(B,A) ];
+    UU = @(Fi,G) Fi*G*(Fi\eye(3));      
+    U = UU(FFi(A,B), GG(A,B));
+end
+
+nii = make_nii(U);
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_forward_rotmat.nii']);
+nii = make_nii(U');
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_forward_invmat.nii']);
 
 imsize = [256 256 128];
 vox = [1 1 1];
@@ -59,6 +128,29 @@ save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_forward_dipole.n
 
 load('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_BACKWARD/QSM_SPGR_GE/z_prjs.mat', 'z_prjs');
 
+B = [0 0 1]';
+A = z_prjs';
+
+if A==B
+    U = eye(3);
+else
+    % rotation from unit vector A to B; 
+    % return rotation matrix U such that UA = B;
+    % and ||U||_2 = 1
+    GG = @(A,B) [ dot(A,B) -norm(cross(A,B)) 0;
+                    norm(cross(A,B)) dot(A,B)  0;
+                    0              0           1];
+
+    FFi = @(A,B) [ A (B-dot(A,B)*A)/norm(B-dot(A,B)*A) cross(B,A) ];
+    UU = @(Fi,G) Fi*G*(Fi\eye(3));      
+    U = UU(FFi(A,B), GG(A,B));
+end
+
+nii = make_nii(U);
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_backward_rotmat.nii']);
+nii = make_nii(U');
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_backward_invmat.nii']);
+
 imsize = [256 256 128];
 vox = [1 1 1];
 [~, D, dipole, ~] = forward_field_calc(ones(imsize), vox, z_prjs);
@@ -75,6 +167,29 @@ save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_backward_dipole.
 
 
 load('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/all.mat', 'z_prjs');
+
+B = [0 0 1]';
+A = z_prjs';
+
+if A==B
+    U = eye(3);
+else
+    % rotation from unit vector A to B; 
+    % return rotation matrix U such that UA = B;
+    % and ||U||_2 = 1
+    GG = @(A,B) [ dot(A,B) -norm(cross(A,B)) 0;
+                    norm(cross(A,B)) dot(A,B)  0;
+                    0              0           1];
+
+    FFi = @(A,B) [ A (B-dot(A,B)*A)/norm(B-dot(A,B)*A) cross(B,A) ];
+    UU = @(Fi,G) Fi*G*(Fi\eye(3));      
+    U = UU(FFi(A,B), GG(A,B));
+end
+
+nii = make_nii(U);
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_rotmat.nii']);
+nii = make_nii(U');
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_invmat.nii']);
 
 imsize = [256 256 128];
 vox = [1 1 1];
@@ -101,6 +216,31 @@ z_prjs= [z_prjs(1), z_prjs(3), z_prjs(2)];
 z_prjs(1) = -z_prjs(1);
 imsize = [256 128 256];
 vox = [1 1 1];
+
+
+B = [0 0 1]';
+A = z_prjs';
+
+if A==B
+    U = eye(3);
+else
+    % rotation from unit vector A to B; 
+    % return rotation matrix U such that UA = B;
+    % and ||U||_2 = 1
+    GG = @(A,B) [ dot(A,B) -norm(cross(A,B)) 0;
+                    norm(cross(A,B)) dot(A,B)  0;
+                    0              0           1];
+
+    FFi = @(A,B) [ A (B-dot(A,B)*A)/norm(B-dot(A,B)*A) cross(B,A) ];
+    UU = @(Fi,G) Fi*G*(Fi\eye(3));      
+    U = UU(FFi(A,B), GG(A,B));
+end
+
+nii = make_nii(U);
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_permute132_rotmat.nii']);
+nii = make_nii(U');
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_permute132_invmat.nii']);
+
 
 [~, D, dipole, ~] = forward_field_calc(ones(imsize), vox, z_prjs);
 

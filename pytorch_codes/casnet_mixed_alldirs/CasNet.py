@@ -22,7 +22,8 @@ class CasNet(nn.Module):
         x1 = x
         x2 = self.Net2(x1)
 
-        return x1, x2
+        # return x1, x2
+        return x2
 
 
 class AG_block(nn.Module):

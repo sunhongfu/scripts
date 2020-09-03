@@ -10,7 +10,7 @@
 #SBATCH --gres=gpu:tesla-smx2:2
 
 module load anaconda/3.6
-source activate /opt/ohpc/pub/apps/pytorch_1.10_openmpi
+source activate /opt/ohpc/pub/apps/pytorch_1.14_openmpi
 module load cuda/10.0.130
 module load gnu/5.4.0
 module load mvapich2

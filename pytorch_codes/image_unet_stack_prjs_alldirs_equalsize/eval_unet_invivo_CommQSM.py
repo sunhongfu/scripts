@@ -12,7 +12,7 @@ import scipy.io as scio
 if __name__ == '__main__':
     with torch.no_grad():
         print('image_unet_stack_prjs_alldirs_equalsize')
-        z_prjs_file = 'z_prjs_testdata.txt'
+        z_prjs_file = '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/z_prjs_testdata.txt'
         z_prjs_arr = [line.strip().split(" ") for line in open(z_prjs_file)]
         # convert z_prjs into a dic
         z_prjs_keys = [z_prjs_arr[i][0] for i in range(0, len(z_prjs_arr))]
@@ -85,7 +85,7 @@ if __name__ == '__main__':
             pred = pred.to('cpu')
             pred = pred.numpy()
 
-            pred = pred[0,:,:,:]
+            pred = pred[0, :, :, :]
 
             name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/image_unet_stack_prjs_alldirs_equalsize/renzo_' + \
                 orien + '_image_unet_stack_prjs_alldirs_equalsize.nii'

@@ -24,10 +24,10 @@ def yangSaveNet(resnet, enSave=False):
     # save the
     if enSave:
         torch.save(
-            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/casnet_mixed_alldirs/casnet_mixed_alldirs.pth')
+            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/casnet3_mixed_alldirs/casnet3_mixed_alldirs.pth')
     else:
         torch.save(resnet.state_dict(),
-                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/casnet_mixed_alldirs/casnet_mixed_alldirs.pth')
+                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/casnet3_mixed_alldirs/casnet3_mixed_alldirs.pth')
 
 
 def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):

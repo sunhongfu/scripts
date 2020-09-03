@@ -40,12 +40,12 @@ z_prjs_all = [z_prjs_all; z_prjs];
 load('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/all.mat','z_prjs');
 z_prjs_all = [z_prjs_all; z_prjs];
 
-z_prjs_central_permute132 = permute(z_prjs', [1 3 2]);
+z_prjs_central_permute132 = [z_prjs(1), z_prjs(3), z_prjs(2)];
 z_prjs_central_permute132(1) = -z_prjs_central_permute132(1);
-z_prjs_all = [z_prjs_all; z_prjs_central_permute132'];
+z_prjs_all = [z_prjs_all; z_prjs_central_permute132];
 
 
-fileID = fopen('/Users/uqhsun8/Documents/MATLAB/scripts/pytorch_codes/image_unet_stack_prjs/z_prjs_testdata.txt','w');
+fileID = fopen('/Users/uqhsun8/Documents/MATLAB/scripts/pytorch_codes/z_prjs_testdata.txt','w');
 test_ID = {'left', 'right', 'forward', 'backward', 'central', 'central_permute132'};
 
 for j = 1:6 

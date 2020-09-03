@@ -7,10 +7,10 @@ class CasNet(nn.Module):
     def __init__(self):
         super(CasNet, self).__init__()
         self.Net1 = Unet(4)
-        self.Net2 = Unet(4)
+        # self.Net2 = DeepResNet(1, 1)
 
     def forward(self, x, rot_mat, inv_mat):
-        # x: shape: Nb * D * H * W,
+        # x: shape: Nb * C * D * H * W,
         # rot_mat and inv_mat: Nb * 1 * 3 * 3
 
         x = rotate(x, rot_mat)  # rotate signal to the pure axial direction.
@@ -20,10 +20,10 @@ class CasNet(nn.Module):
         x = rotate(x, inv_mat)  # rotate signal to the pure axial direction.
 
         x1 = x
-        x2 = self.Net2(x1)
+        # x2 = self.Net2(x1)
 
         # return x1, x2
-        return x2
+        return x1
 
 
 class AG_block(nn.Module):
@@ -48,10 +48,13 @@ class AG_block(nn.Module):
 
 
 if __name__ == '__main__':
-    HGnet = HybridNet(1, 1)
+    HGnet = CasNet()
     HGnet.apply(weights_init)
     print(get_parameter_number(HGnet))
-    a = torch.randn(1, 1, 48, 48, 48)
+    a = torch.randn(2, 1, 48, 48, 48)
+    rot_a = torch.randn(2, 1, 3, 3)
+    invrot_a = torch.randn(2, 1, 3, 3)
     print(a.size())
-    b, c = HGnet(a, a)
+    b, c = HGnet(a, rot_a, invrot_a)
     print(b.size())
+    print(c.shape)

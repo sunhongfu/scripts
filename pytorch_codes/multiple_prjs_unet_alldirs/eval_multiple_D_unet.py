@@ -11,7 +11,7 @@ import scipy.io as scio
 if __name__ == '__main__':
     with torch.no_grad():
         print('multiple_prjs_unet_alldirs')
-        z_prjs_file = 'z_prjs_testdata.txt'
+        z_prjs_file = '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/z_prjs_testdata.txt'
         z_prjs_arr = [line.strip().split(" ") for line in open(z_prjs_file)]
         # convert z_prjs into a dic
         z_prjs_keys = [z_prjs_arr[i][0] for i in range(0, len(z_prjs_arr))]

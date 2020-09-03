@@ -11,7 +11,7 @@ import scipy.io as scio
 if __name__ == '__main__':
     with torch.no_grad():
         print('single_D_unet')
-        for orien in ['left', 'right', 'forward', 'backward', 'central']:
+        for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132']:
             nibimage = nib.load(
                 '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo/renzo_' + orien + '_field.nii')
             image = nibimage.get_data()
