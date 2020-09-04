@@ -52,4 +52,6 @@ for j = 1:6
     fprintf(fileID,'%s %f %f %f\n',test_ID{j}, z_prjs_all(j,:) );
 end
 
+fprintf(fileID,'%s %f %f %f\n','central_bigAngle', [sqrt(2)/2, 0 , sqrt(2)/2] );
+
 fclose(fileID);

@@ -19,7 +19,8 @@ if __name__ == '__main__':
         z_prjs_values = [z_prjs_arr[i][1:4] for i in range(0, len(z_prjs_arr))]
         z_prjs_dict = dict(zip(z_prjs_keys, z_prjs_values))
 
-        for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132']:
+        # for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132']:
+        for orien in ['central_bigAngle']:
             nibimage = nib.load(
                 '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo/renzo_' + orien + '_field.nii')
             image = nibimage.get_data()

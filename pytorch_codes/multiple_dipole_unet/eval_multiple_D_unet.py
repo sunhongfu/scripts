@@ -11,7 +11,8 @@ import scipy.io as scio
 if __name__ == '__main__':
     with torch.no_grad():
         print('multiple_dipole_unet')
-        for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132']:
+        # for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132']:
+        for orien in ['central_bigAngle']:
             nibimage = nib.load(
                 '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo/renzo_' + orien + '_field.nii')
             image = nibimage.get_data()

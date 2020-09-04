@@ -50,7 +50,8 @@ def rotate(input_tensor, rotation_matrix):
                         normalised_locs_z], dim=4).view(Nb, d, h, w, 3)
     # here we use the destination voxel-positions and sample the input 3d data trilinearly
     rotated_signal = F.grid_sample(
-        input=input_tensor, grid=grid, mode='bilinear',  align_corners=True)
+        # input=input_tensor, grid=grid, mode='bilinear',  align_corners=True)
+        input=input_tensor, grid=grid, mode='bilinear')
     return rotated_signal
 
 

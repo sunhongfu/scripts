@@ -11,7 +11,7 @@ from dataload_unet_mixed import *
 
 def yangDataLoad(Batch_size):
     DATA_DIRECTORY = '/scratch/itee/uqhsun8/CommQSM/invivo'
-    z_prjs_file = '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs_alldirs_150k/z_prjs_alldirs.txt'
+    z_prjs_file = '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unet_mixed_alldirs_150k/z_prjs_alldirs.txt'
     dst = yangDataSet(DATA_DIRECTORY, z_prjs_file)
     print('dataLength: %d' % dst.__len__())
     trainloader = data.DataLoader(
@@ -93,4 +93,4 @@ if __name__ == '__main__':
     # use this line to check if all layers
     # are leanrable in this programe.
     # train network
-    yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=200, useGPU=True)
+    yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=50, useGPU=True)

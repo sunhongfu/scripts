@@ -11,8 +11,9 @@ from dataload_D_Unet import *
 
 def yangDataLoad(Batch_size):
     DATA_DIRECTORY = '/scratch/itee/uqhsun8/CommQSM/invivo'
-    z_prjs_file = '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs_alldirs_150k/z_prjs_alldirs.txt'
-    dst = yangDataSet(DATA_DIRECTORY, z_prjs_file)
+    DATA_LIST_PATH = '/scratch/itee/uqhsun8/CommQSM/invivo/invivo_IDs.txt'
+    z_prjs_file = '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/multiple_prjs_unet/z_prjs.txt'
+    dst = yangDataSet(DATA_DIRECTORY, DATA_LIST_PATH, z_prjs_file)
     print('dataLength: %d' % dst.__len__())
     trainloader = data.DataLoader(
         dst, batch_size=Batch_size, shuffle=True, drop_last=True)
@@ -24,10 +25,10 @@ def yangSaveNet(resnet, enSave=False):
     # save the
     if enSave:
         torch.save(
-            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/multiple_prjs_unet_alldirs_150k/multiple_prjs_unet_alldirs_150k.pth')
+            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/multiple_prjs_unet/multiple_prjs_unet.pth')
     else:
         torch.save(resnet.state_dict(
-        ), '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/multiple_prjs_unet_alldirs_150k/multiple_prjs_unet_alldirs_150k.pth')
+        ), '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/multiple_prjs_unet/multiple_prjs_unet.pth')
 
 
 def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
@@ -104,4 +105,4 @@ if __name__ == '__main__':
     # use this line to check if all layers
     # are leanrable in this programe.
     # train network
-    yangTrainNet(resnet,  LR=0.001, Batchsize=32, Epoches=50, useGPU=True)
+    yangTrainNet(resnet,  LR=0.001, Batchsize=32, Epoches=100, useGPU=True)
