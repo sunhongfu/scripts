@@ -260,6 +260,31 @@ vox = nii.hdr.dime.pixdim(2:4);
 
 z_prjs = [sqrt(2)/2, 0 , sqrt(2)/2];
 
+
+B = [0 0 1]';
+A = z_prjs';
+
+if A==B
+    U = eye(3);
+else
+    % rotation from unit vector A to B; 
+    % return rotation matrix U such that UA = B;
+    % and ||U||_2 = 1
+    GG = @(A,B) [ dot(A,B) -norm(cross(A,B)) 0;
+                    norm(cross(A,B)) dot(A,B)  0;
+                    0              0           1];
+
+    FFi = @(A,B) [ A (B-dot(A,B)*A)/norm(B-dot(A,B)*A) cross(B,A) ];
+    UU = @(Fi,G) Fi*G*(Fi\eye(3));      
+    U = UU(FFi(A,B), GG(A,B));
+end
+
+nii = make_nii(U);
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_bigAngle_rotmat.nii']);
+nii = make_nii(U');
+save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_bigAngle_invmat.nii']);
+
+
 [~, D, dipole, ~] = forward_field_calc(chi, vox, z_prjs);
 
 nii = make_nii(D,vox);
