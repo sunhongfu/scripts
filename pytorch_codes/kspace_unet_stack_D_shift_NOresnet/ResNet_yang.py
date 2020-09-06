@@ -84,9 +84,11 @@ class ResNet(nn.Module):
         x_k = x_k * 1e3
         # print(x_k.size())
         x_img = torch.ifft(x_k, 3)
+
+        x_img = x.permute(0, 4, 1, 2, 3)
         # get the real channel. 0： real channel, 1, imaginary channel.
-        x_img = x_img[:, :, :, :, 0]
-        x_img = torch.unsqueeze(x_img, 1)  # reshape as Nb * 1 * H * W * D
+        # x_img = x_img[:, :, :, :, 0]
+        # x_img = torch.unsqueeze(x_img, 1)  # reshape as Nb * 1 * H * W * D
         # print(x_img.size())
 
         # return x, x_img

@@ -162,17 +162,17 @@ class unrolledQSM(nn.Module):
         self.one_iter1 = one_iteration()
         self.one_iter2 = one_iteration()
         self.one_iter3 = one_iteration()
-        self.one_iter4 = one_iteration()
-        self.one_iter5 = one_iteration()
-        self.one_iter6 = one_iteration()
+        # self.one_iter4 = one_iteration()
+        # self.one_iter5 = one_iteration()
+        # self.one_iter6 = one_iteration()
 
     def forward(self, x, phi, D):
         x = self.one_iter1(x, phi, D)
         x = self.one_iter2(x, phi, D)
         x = self.one_iter3(x, phi, D)
-        x = self.one_iter4(x, phi, D)
-        x = self.one_iter5(x, phi, D)
-        x = self.one_iter6(x, phi, D)
+        # x = self.one_iter4(x, phi, D)
+        # x = self.one_iter5(x, phi, D)
+        # x = self.one_iter6(x, phi, D)
         return x
 
 

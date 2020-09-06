@@ -64,7 +64,8 @@ class data_QSM(data.Dataset):
 
         # extend into 2 channels (real + imag)
         field = torch.cat([field, torch.zeros(field.shape)], 0)
-        Dipole = torch.cat([Dipole, torch.zeros(Dipole.shape)], 0)
+        # this is for D to do point-wise multiplication
+        Dipole = torch.cat([Dipole, Dipole], 0)
         label = torch.cat([label, torch.zeros(label.shape)], 0)
 
         field = field.float()

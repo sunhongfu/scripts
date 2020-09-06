@@ -72,6 +72,8 @@ class yangDataSet(data.Dataset):
             [real_img.float(), imag_img.float(), D.float()], 0)
         label = torch.unsqueeze(label, 0)
 
+        label = torch.cat([label, torch.zeros(label.shape)], 0)
+
         real_imag_D = real_imag_D.float()
         label = label.float()
 

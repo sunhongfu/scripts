@@ -35,7 +35,7 @@ if __name__ == '__main__':
             print(D.size())
             D = D.float()
             D = torch.unsqueeze(D, 0)
-            D = torch.cat([D, torch.zeros(D.shape)], 0)
+            D = torch.cat([D, D], 0)
             D = torch.unsqueeze(D, 0)
 
             print('unrolledQSM')

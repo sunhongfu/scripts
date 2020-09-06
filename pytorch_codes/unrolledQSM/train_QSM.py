@@ -95,4 +95,4 @@ if __name__ == '__main__':
     # use this line to check if all layers
     # are leanrable in this programe.
     # train network
-    TrainNet(net, LR=0.001, Batchsize=16, Epoches=50, useGPU=True)
+    TrainNet(net, LR=0.001, Batchsize=32, Epoches=50, useGPU=True)

@@ -64,7 +64,9 @@ if __name__ == '__main__':
             pred = octnet(real_imag_D)
             print(pred.size())
             pred = torch.squeeze(pred, 0)
-            pred = torch.squeeze(pred, 0)
+
+            pred = pred[0, :, :, :]
+
             print(get_parameter_number(octnet))
             pred = pred.to('cpu')
             pred = pred.numpy()
