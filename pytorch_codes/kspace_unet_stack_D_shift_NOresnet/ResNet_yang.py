@@ -59,10 +59,10 @@ class ResNet(nn.Module):
         for encodingLayer in temp:
             temp_conv = self.EncodeConvs[encodingLayer - 1]
             x = temp_conv(x)
-            #print('EncodeConv' + str(encodingLayer) + str(x.size()))
+            # print('EncodeConv' + str(encodingLayer) + str(x.size()))
             names['EncodeX' + str(encodingLayer)] = x
             x = F.max_pool3d(x, 2)
-           #print('Pooling' + str(encodingLayer) + str(x.size()))
+            # print('Pooling' + str(encodingLayer) + str(x.size()))
 
         x = self.MidConv1(x)
         #print('Mid' + str(encodingLayer) + str(x.size()))
@@ -85,7 +85,7 @@ class ResNet(nn.Module):
         # print(x_k.size())
         x_img = torch.ifft(x_k, 3)
 
-        x_img = x.permute(0, 4, 1, 2, 3)
+        x_img = x_img.permute(0, 4, 1, 2, 3)
         # get the real channel. 0： real channel, 1, imaginary channel.
         # x_img = x_img[:, :, :, :, 0]
         # x_img = torch.unsqueeze(x_img, 1)  # reshape as Nb * 1 * H * W * D
