@@ -11,7 +11,7 @@ import scipy.io as scio
 if __name__ == '__main__':
     with torch.no_grad():
         print('kspace_unet_stack_D_shift_NOresnet')
-        for orien in ['left', 'right', 'forward', 'backward', 'central']:
+        for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132', 'central_bigAngle', 'resized']:
             nibimage = nib.load(
                 '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo/renzo_' + orien + '_field_kspace_shift_real.nii')
             real_image = nibimage.get_data()

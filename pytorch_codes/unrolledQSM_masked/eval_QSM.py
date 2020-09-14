@@ -1,4 +1,3 @@
-
 import torch
 import torch.nn as nn
 import numpy as np
@@ -45,7 +44,7 @@ if __name__ == '__main__':
             device = torch.device(
                 "cuda:0" if torch.cuda.is_available() else "cpu")
             net.load_state_dict(torch.load(
-                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM/unrolledQSM.pth'))
+                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_mask/unrolledQSM_mask.pth'))
             net.to(device)
             net.eval()
             print(net.state_dict)
@@ -62,10 +61,10 @@ if __name__ == '__main__':
             pred = pred.numpy()
             pred = pred[0, :, :, :]
 
-            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledQSM/renzo_' + \
-                orien + '_unrolledQSM.nii'
-            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledQSM/renzo_' + \
-                orien + '_unrolledQSM.mat'
+            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledQSM_mask/renzo_' + \
+                orien + '_unrolledQSM_mask.nii'
+            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledQSM_mask/renzo_' + \
+                orien + '_unrolledQSM_mask.mat'
             scio.savemat(path, {'PRED': pred})
             clipped_msk = nib.Nifti1Image(pred, aff)
             nib.save(clipped_msk, name_msk)

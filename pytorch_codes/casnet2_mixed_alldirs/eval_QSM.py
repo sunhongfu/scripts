@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 import nibabel as nib
-from CasNet import *
+from CasNet2 import *
 import scipy.io as scio
 
 
