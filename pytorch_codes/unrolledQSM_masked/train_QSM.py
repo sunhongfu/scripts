@@ -25,10 +25,10 @@ def SaveNet(net, enSave=False):
     # save the
     if enSave:
         torch.save(
-            net, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_mask/unrolledQSM_mask.pth')
+            net, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_masked/unrolledQSM_masked.pth')
     else:
         torch.save(net.state_dict(),
-                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_mask/unrolledQSM_mask.pth')
+                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_masked/unrolledQSM_masked.pth')
 
 
 def TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
@@ -63,7 +63,7 @@ def TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
                     # forward:
                     preds = net(torch.zeros(fields.shape),
                                 fields, Dipoles, masks)
-                    preds = preds*masks
+                    # preds = preds*masks
                     # loss
                     loss = criterion(preds, labels)
                     # loss = criterion(preds*masks, labels)
