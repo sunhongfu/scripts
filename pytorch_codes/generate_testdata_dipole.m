@@ -6,6 +6,8 @@ vox = [1 1 1];
 [~, D, ~, ~] = forward_field_calc(ones(imsize), vox, z_prjs);
 nii = make_nii(D,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_resized_D.nii');
+nii = make_nii(fftshift(D),vox);
+save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_resized_D_shift.nii');
 % finish resize for testing
 
 imsize = [256 256 128];
@@ -107,6 +109,9 @@ vox = [1 1 1];
 nii = make_nii(D,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_permute132_D.nii');
 
+nii = make_nii(fftshift(D),vox);
+save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_permute132_D_shift.nii');
+
 nii = make_nii(dipole,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_permute132_dipole.nii');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -124,6 +129,9 @@ z_prjs = [sqrt(2)/2, 0 , sqrt(2)/2];
 
 nii = make_nii(D,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_bigAngle_D.nii');
+
+nii = make_nii(fftshift(D),vox);
+save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_bigAngle_D_shift.nii');
 
 nii = make_nii(dipole,vox);
 save_nii(nii,'/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_bigAngle_dipole.nii');
