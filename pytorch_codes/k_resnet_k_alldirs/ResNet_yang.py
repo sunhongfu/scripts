@@ -28,8 +28,8 @@ class ResNet(nn.Module):
         for encodingLayer in temp:
             if encodingLayer == 1:
                 num_outputs = initial_num_layers * 2 ** (encodingLayer - 1)
-                # for the first input layer takes 3 channels HONGFU
-                self.EncodeConvs.append(EncodingBlocks(3, num_outputs))
+                # for the first input layer takes 2 channels HONGFU
+                self.EncodeConvs.append(EncodingBlocks(2, num_outputs))
             else:
                 num_outputs = initial_num_layers * 2 ** (encodingLayer - 1)
                 self.EncodeConvs.append(EncodingBlocks(
@@ -49,11 +49,11 @@ class ResNet(nn.Module):
                     DecodingBlocks(num_inputs, num_inputs // 2))
         self.DecodeConvs = nn.ModuleList(self.DecodeConvs)
         self.FinalConv = nn.Conv3d(num_inputs, 2, 1, stride=1, padding=0)
-        # final conv layer outputs 2 channels for ifft operation HONGFU
+        # final conv layer outputs 2 channels HONGFU
         # End Section 2 ##########################
 
     def forward(self, x):
-        # INPUT = x[:, 0:1, :, :, :]
+        INPUT = x
         names = self.__dict__
         temp = list(range(1, self.EncodingDepth + 1))
         for encodingLayer in temp:
@@ -73,27 +73,10 @@ class ResNet(nn.Module):
             x = temp_conv(x, x2)
             #print('DecodeConv' + str(decodingLayer) + str(x.size()))
 
-        # x = self.FinalConv(x)
-
-        # below adopted from Yang's unet_fft code
         x = self.FinalConv(x)
-        # x = x + INPUT  # removed the data consisteny block.
-        x[:, :, 0, 0, 0] = 0  # set the average of the recon as 0;
+        x = x + INPUT  # removed the data consisteny block.
 
-        x_k = x.permute(0, 2, 3, 4, 1)  # FFT reconstruciton block.
-        x_k = x_k * 1e3
-        # print(x_k.size())
-        x_img = torch.ifft(x_k, 3)
-
-        x_img = x_img.permute(0, 4, 1, 2, 3)
-        # get the real channel. 0： real channel, 1, imaginary channel.
-        # x_img = x_img[:, :, :, :, 0]
-        # x_img = torch.unsqueeze(x_img, 1)  # reshape as Nb * 1 * H * W * D
-        # print(x_img.size())
-
-        # return x, x_img
-
-        return x_img
+        return x
 
 
 def weights_init(m):

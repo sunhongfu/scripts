@@ -1,19 +1,21 @@
-import os
 import numpy as np
 import nibabel as nib
-import random
 import torch
 from torch.utils import data
 
 
 class yangDataSet(data.Dataset):
-    def __init__(self, root, list_path):
+    def __init__(self, root, z_prjs_file):
         super(yangDataSet, self).__init__()
         self.root = root
-        self.list_path = list_path
+
+        self.z_prjs_file = z_prjs_file
+        z_prjs_arr = [line.strip().split(" ") for line in open(z_prjs_file)]
+        # convert z_prjs into a dic
+        z_prjs_keys = [z_prjs_arr[i][0] for i in range(0, len(z_prjs_arr))]
 
         # get the number of files.
-        self.img_ids = [i_id.strip() for i_id in open(list_path)]
+        self.img_ids = [i_id.strip() for i_id in z_prjs_keys]
         # print(self.img_ids)
         # get all fil names, preparation for get_item.
         # for example, we have two files:
@@ -22,17 +24,11 @@ class yangDataSet(data.Dataset):
         # to get the full name of the input and label files.
         self.files = []
         for name in self.img_ids:
-            real_img_file = self.root + \
-                ("/field_kspace_shift/real_field_kspace_shift_%s.nii" % name)
-            imag_img_file = self.root + \
-                ("/field_kspace_shift/imag_field_kspace_shift_%s.nii" % name)
-            D = self.root + \
-                ("/D_shift/D_shift_%s.nii" % name)
-            label_file = self.root + ("/chi/chi_%s.nii" % name)
+            field_file = self.root + \
+                ("/alldirs_field/alldirs_field_%s.nii" % name)
+            label_file = self.root + ("/alldirs_chi/alldirs_chi_%s.nii" % name)
             self.files.append({
-                "real_img": real_img_file,
-                "imag_img": imag_img_file,
-                "D": D,
+                "field": field_file,
                 "label": label_file,
                 "name": name
             })
@@ -47,45 +43,47 @@ class yangDataSet(data.Dataset):
         '''load the datas'''
         name = datafiles["name"]
         # nifti read codes.
-        nibimage1 = nib.load(datafiles["real_img"])
-        nibimage2 = nib.load(datafiles["imag_img"])
-        nibD = nib.load(datafiles["D"])
+        nibfield = nib.load(datafiles["field"])
         niblabel = nib.load(datafiles["label"])
 
-        real_img = nibimage1.get_data()
-        imag_img = nibimage2.get_data()
-        D = nibD.get_data()
+        field = nibfield.get_data()
         label = niblabel.get_data()
 
-        real_img = np.array(real_img)
-        imag_img = np.array(imag_img)
-        D = np.array(D)
+        field = np.array(field)
         label = np.array(label)
 
-        # convert the image data to torch.tesors and return.
-        real_img = torch.from_numpy(real_img)
-        imag_img = torch.from_numpy(imag_img)
-        D = torch.from_numpy(D)
+        # convert the field data to torch.tesors and return.
+        field = torch.from_numpy(field)
         label = torch.from_numpy(label)
 
-        real_imag_D = torch.stack(
-            [real_img.float(), imag_img.float(), D.float()], 0)
-        label = torch.unsqueeze(label, 0)
+        # convert field and label into kspace
+        field = torch.unsqueeze(field, 3)
+        field = torch.cat([field, torch.zeros(field.shape)], 3)
+        label = torch.unsqueeze(label, 3)
+        label = torch.cat([label, torch.zeros(label.shape)], 3)
 
-        label = torch.cat([label, torch.zeros(label.shape)], 0)
+        field_k = torch.fft(field, 3)
+        # label_k = torch.fft(label, 3)
 
-        real_imag_D = real_imag_D.float()
+        field_k = field_k.permute(3, 0, 1, 2)
+        label = label.permute(3, 0, 1, 2)
+
+        field_k = field_k.float()
         label = label.float()
 
-        return real_imag_D, label, name
+        # field_k[:, 0, 0, 0] = 0  # set the average of the recon as 0;
+        # label_k[:, 0, 0, 0] = 0  # set the average of the recon as 0;
+
+        return field_k, label, name
 
 
 # before formal usage, test the validation of data loader.
 if __name__ == '__main__':
-    DATA_DIRECTORY = '/scratch/itee/uqhsun8/CommQSM/invivo'
-    DATA_LIST_PATH = '/scratch/itee/uqhsun8/CommQSM/invivo/invivo_IDs.txt'
+    DATA_DIRECTORY = '/Volumes/LaCie/CommQSM/invivo/data_for_training'
+    # DATA_LIST_PATH = '/Users/uqhsun8/Documents/MATLAB/scripts/pytorch_codes/invivo_IDs.txt'
+    z_prjs_file = '/Users/uqhsun8/Documents/MATLAB/scripts/pytorch_codes/image_unet_stack_prjs_alldirs/z_prjs_alldirs.txt'
     Batch_size = 4
-    dst = yangDataSet(DATA_DIRECTORY, DATA_LIST_PATH)
+    dst = yangDataSet(DATA_DIRECTORY, z_prjs_file)
     print(dst.__len__())
     # just for test,  so the mean is (0,0,0) to show the original images.
     # But when we are training a model, the mean should have another value
@@ -93,9 +91,9 @@ if __name__ == '__main__':
     trainloader = data.DataLoader(
         dst, batch_size=Batch_size, shuffle=False, drop_last=True)
     for i, Data in enumerate(trainloader):
-        real_imag_D, labels, names = Data
+        field_k, label, names = Data
         print(i)
         if i % 1 == 0:
             print(names)
-            print(real_imag_D.size())
-            print(labels.size())
+            print(field_k.size())
+            print(label.size())

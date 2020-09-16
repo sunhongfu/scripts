@@ -10,71 +10,56 @@ import scipy.io as scio
 
 if __name__ == '__main__':
     with torch.no_grad():
-        print('kspace_unet_stack_D_shift_NOresnet')
+        print('k_resnet_k_alldirs')
         for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132', 'central_bigAngle', 'resized']:
             nibimage = nib.load(
-                '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo/renzo_' + orien + '_field_kspace_shift_real.nii')
-            real_image = nibimage.get_data()
+                '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo/renzo_' + orien + '_field.nii')
+            field = nibimage.get_data()
             aff = nibimage.affine
-            real_image = np.array(real_image)
-            print('kspace_unet_stack_D_shift_NOresnet')
-            real_image = torch.from_numpy(real_image)
-            print(real_image.size())
-            real_image = real_image.float()
+            field = np.array(field)
+            print('k_resnet_k_alldirs')
+            field = torch.from_numpy(field)
+            print(field.size())
+            field = field.float()
 
-            nibimage = nib.load(
-                '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo/renzo_' + orien + '_field_kspace_shift_imag.nii')
-            imag_image = nibimage.get_data()
-            aff = nibimage.affine
-            imag_image = np.array(imag_image)
-            print('kspace_unet_stack_D_shift_NOresnet')
-            imag_image = torch.from_numpy(imag_image)
-            print(imag_image.size())
-            imag_image = imag_image.float()
+            field = torch.unsqueeze(field, 3)
+            field = torch.cat([field, torch.zeros(field.shape)], 3)
+            field_k = torch.fft(field, 3)
 
-            nibimage = nib.load(
-                '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo/renzo_' + orien + '_D_shift.nii')
-            D = nibimage.get_data()
-            aff = nibimage.affine
-            D = np.array(D)
-            print('kspace_unet_stack_D_shift_NOresnet')
-            D = torch.from_numpy(D)
-            print(D.size())
-            D = D.float()
+            field_k = field_k.permute(3, 0, 1, 2)
 
-            real_imag_D = torch.stack(
-                [real_image.float(), imag_image.float(), D.float()], 0)
-
-            real_imag_D = torch.unsqueeze(real_imag_D, 0)
-
-            print('kspace_unet_stack_D_shift_NOresnet')
+            print('k_resnet_k_alldirs')
             # load trained network
             octnet = ResNet(2)
             octnet = nn.DataParallel(octnet)
             device = torch.device(
                 "cuda:0" if torch.cuda.is_available() else "cpu")
             octnet.load_state_dict(torch.load(
-                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/kspace_unet_stack_D_shift_NOresnet/kspace_unet_stack_D_shift_NOresnet.pth'))
+                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/k_resnet_k_alldirs/k_resnet_k_alldirs.pth'))
             octnet.to(device)
             octnet.eval()
             print(octnet.state_dict)
             ################ Evaluation ##################
-            real_imag_D = real_imag_D.to(device)
+            field_k = field_k.to(device)
 
-            pred = octnet(real_imag_D)
+            pred = octnet(field_k)
             print(pred.size())
             pred = torch.squeeze(pred, 0)
 
-            pred = pred[0, :, :, :]
+            pred = pred.permute(3, 0, 1, 2)
+
+            pred = torch.fft(pred, 3)
+
+            pred = pred[:, :, :, 0]
 
             print(get_parameter_number(octnet))
             pred = pred.to('cpu')
             pred = pred.numpy()
 
-            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/kspace_unet_stack_D_shift_NOresnet/renzo_' + \
-                orien + '_kspace_unet_stack_D_shift_NOresnet.nii'
-            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/kspace_unet_stack_D_shift_NOresnet/renzo_' + \
-                orien + '_kspace_unet_stack_D_shift_NOresnet.mat'
+            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/k_resnet_k_alldirs/renzo_' + \
+                orien + '_k_resnet_k_alldirs.nii'
+            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/k_resnet_k_alldirs/renzo_' + \
+                orien + '_k_resnet_k_alldirs.mat'
             scio.savemat(path, {'PRED': pred})
             clipped_msk = nib.Nifti1Image(pred, aff)
             nib.save(clipped_msk, name_msk)
