@@ -70,8 +70,8 @@ class data_QSM(data.Dataset):
         Dipole = torch.unsqueeze(Dipole, 0)
         label = torch.unsqueeze(label, 0)
 
-        mask = torch.zeros(Dipole.shape)
-        mask[label == 0] = 1
+        mask = torch.ones(Dipole.shape)
+        mask[label == 0] = 0
 
         # extend into 2 channels (real + imag)
         field = torch.cat([field, torch.zeros(field.shape)], 0)

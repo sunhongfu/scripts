@@ -8,7 +8,8 @@ from model_QSM import get_parameter_number
 import os
 
 if __name__ == '__main__':
-    os.makedirs('/ scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_masked)
+    os.makedirs(
+        '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledQSM_masked', exist_ok=True)
     with torch.no_grad():
         print('unrolledQSM')
         for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132', 'central_bigAngle', 'resized']:
@@ -17,6 +18,14 @@ if __name__ == '__main__':
             image = nibimage.get_data()
             aff = nibimage.affine
             image = np.array(image)
+
+            # generate mask
+            mask = torch.ones(image.shape)
+            mask[image == 0] = 0
+            mask = mask.float()
+            mask = torch.unsqueeze(mask, 0)
+            mask = torch.unsqueeze(mask, 0)
+
             print('unrolledQSM')
             image = torch.from_numpy(image)
             print(image.size())
@@ -52,8 +61,9 @@ if __name__ == '__main__':
 
             image = image.to(device)
             D = D.to(device)
+            mask = mask.to(device)
 
-            pred = net(torch.zeros(image.shape), image, D)
+            pred = net(torch.zeros(image.shape), image, D, mask)
             print(pred.size())
             pred = torch.squeeze(pred, 0)
             # pred = torch.squeeze(pred, 0)
