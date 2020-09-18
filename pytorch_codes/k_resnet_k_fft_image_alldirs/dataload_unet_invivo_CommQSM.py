@@ -51,6 +51,7 @@ class yangDataSet(data.Dataset):
 
         field = np.array(field)
         label = np.array(label)
+        label = label - np.mean(label)  # set the average of the recon as 0;
 
         # convert the field data to torch.tesors and return.
         field = torch.from_numpy(field)
@@ -71,8 +72,7 @@ class yangDataSet(data.Dataset):
         field_k = field_k.float()
         label = label.float()
 
-        # field_k[:, 0, 0, 0] = 0  # set the average of the recon as 0;
-        # label_k[:, 0, 0, 0] = 0  # set the average of the recon as 0;
+        field_k[:, 0, 0, 0] = 0  # set the average of the recon as 0;
 
         return field_k, label, name
 

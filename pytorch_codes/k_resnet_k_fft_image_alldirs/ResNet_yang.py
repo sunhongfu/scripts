@@ -76,6 +76,7 @@ class ResNet(nn.Module):
         x = self.FinalConv(x)
         x = x + INPUT  # removed the data consisteny block.
 
+        x[:, :, 0, 0, 0] = 0
         x = x.permute(0, 2, 3, 4, 1)  # FFT reconstruciton block
         x = torch.ifft(x, 3)
         x = x.permute(0, 4, 1, 2, 3)
