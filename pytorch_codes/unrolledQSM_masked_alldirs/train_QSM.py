@@ -25,7 +25,7 @@ def SaveNet(net, enSave=False):
     print('save results')
     # save the
     os.makedirs(
-        '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_masked_alldirs')
+        '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_masked_alldirs', exist_ok=True)
     if enSave:
         torch.save(
             net, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_masked_alldirs/unrolledQSM_masked_alldirs.pth')

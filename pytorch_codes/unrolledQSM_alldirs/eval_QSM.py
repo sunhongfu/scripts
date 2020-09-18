@@ -8,7 +8,8 @@ from model_QSM import get_parameter_number
 import os
 
 if __name__ == '__main__':
-    os.makedirs('/ scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_alldirs)
+    os.makedirs(
+        '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_alldirs', exist_ok=True)
     with torch.no_grad():
         print('unrolledQSM_alldirs')
         for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132', 'central_bigAngle', 'resized']:

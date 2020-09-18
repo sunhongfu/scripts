@@ -63,7 +63,7 @@ if __name__ == '__main__':
             D = D.to(device)
             mask = mask.to(device)
 
-            pred = net(torch.zeros(image.shape), image, D, mask)
+            pred = net(torch.zeros(image.shape), image, D, mask)*mask
             print(pred.size())
             pred = torch.squeeze(pred, 0)
             # pred = torch.squeeze(pred, 0)

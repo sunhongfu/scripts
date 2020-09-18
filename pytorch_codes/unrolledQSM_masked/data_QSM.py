@@ -71,10 +71,10 @@ class data_QSM(data.Dataset):
         # Dipole = torch.cat([Dipole, Dipole], 0)
         label = torch.cat([label, torch.zeros(label.shape)], 0)
 
-        field = field.float()
+        mask = mask.float()
+        field = field.float()*mask
         Dipole = Dipole.float()
         label = label.float()
-        mask = mask.float()
 
         return field, Dipole, label, mask, name
 

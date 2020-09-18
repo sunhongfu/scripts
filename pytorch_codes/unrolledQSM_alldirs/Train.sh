@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=train_unrolledQSM
+#SBATCH --job-name=train_unrolledQSM_alldirs
 #SBATCH -n 1
 #SBATCH -c 1
 #SBATCH --mem=30000
-#SBATCH -e train_unrolledQSM.err
-#SBATCH -o train_unrolledQSM.out
+#SBATCH -e train_unrolledQSM_alldirs.err
+#SBATCH -o train_unrolledQSM_alldirs.out
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:2
 

@@ -8,6 +8,8 @@ from model_QSM import get_parameter_number
 
 
 if __name__ == '__main__':
+    os.makedirs(
+        '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledQSM_masked_alldirs', exist_ok=True)
     with torch.no_grad():
         print('unrolledQSM')
         for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132', 'central_bigAngle', 'resized']:
@@ -44,7 +46,7 @@ if __name__ == '__main__':
             device = torch.device(
                 "cuda:0" if torch.cuda.is_available() else "cpu")
             net.load_state_dict(torch.load(
-                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_mask/unrolledQSM_mask.pth'))
+                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_masked_alldirs/unrolledQSM_masked_alldirs.pth'))
             net.to(device)
             net.eval()
             print(net.state_dict)
@@ -61,10 +63,10 @@ if __name__ == '__main__':
             pred = pred.numpy()
             pred = pred[0, :, :, :]
 
-            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledQSM_mask/renzo_' + \
-                orien + '_unrolledQSM_mask.nii'
-            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledQSM_mask/renzo_' + \
-                orien + '_unrolledQSM_mask.mat'
+            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledQSM_masked_alldirs/renzo_' + \
+                orien + '_unrolledQSM_masked_alldirs.nii'
+            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledQSM_masked_alldirs/renzo_' + \
+                orien + '_unrolledQSM_masked_alldirs.mat'
             scio.savemat(path, {'PRED': pred})
             clipped_msk = nib.Nifti1Image(pred, aff)
             nib.save(clipped_msk, name_msk)

@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=train_unet_mixed_alldirs
+#SBATCH --job-name=train_unet_mixed_alldirs_150k
 #SBATCH -n 1
 #SBATCH -c 1
 #SBATCH --mem=30000
-#SBATCH -e train_unet_mixed_alldirs.err
-#SBATCH -o train_unet_mixed_alldirs.out
+#SBATCH -e train_unet_mixed_alldirs_150k.err
+#SBATCH -o train_unet_mixed_alldirs_150k.out
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:2
 
