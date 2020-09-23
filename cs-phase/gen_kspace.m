@@ -36,3 +36,62 @@ for i = 1:length(dirs)
     clear k mag ph
 end
 
+
+
+
+
+% generate more higher quality 1mm kspace
+dirs = {'/Users/uqhsun8/DATA/Amir/scans/QSM_R2S_PRISMA_iso/src', '/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_CENTER/QSM_SPGR_GE/src', '/Volumes/LaCie/FGATIR/sorted_dicoms/Hs/14903/QSM_1mm/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/Hs/14903/QSM_p75/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/B_A/14922/QSM_p75/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/Qmrims_025/14982/QSM_p75/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/Qmrims_022/14946/QSM_p75/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/Js/14902/QSM_1mm/QSM_SPGR_GE/src'};
+
+dirs = {'/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_BACKWARD/QSM_SPGR_GE/src','/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_FORWARD/QSM_SPGR_GE/src','/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_LEFT/QSM_SPGR_GE/src','/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_RIGHT/QSM_SPGR_GE/src'};
+
+for i = 1:length(dirs)
+    k = [];
+    cd(dirs{i});
+    for j = 1:9
+        mag_name = ['mag',num2str(j),'.nii'];
+        if ~isfile(mag_name)
+            break
+        else
+            nii  = load_nii(mag_name);
+            mag = single(nii.img);
+            ph_name = ['ph',num2str(j),'.nii'];
+            nii  = load_nii(ph_name);
+            ph = single(nii.img);
+
+            k0 = ifftshift(ifftn(mag.*exp(1j*ph)));
+            k = cat(4,k,k0);
+            k = single(k);
+        end
+    end
+    save('kspace.mat','k','-v7.3');
+
+    clear k mag ph
+end
+
+
+path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3_6'
+path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3_7'
+path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/center_new'
+qsm_r2s_prisma(path_mag, path_ph, path_out);
+
+path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3LEFT_13'
+path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3LEFT_14'
+path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/left_new'
+qsm_r2s_prisma(path_mag, path_ph, path_out);
+
+path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3RIGHT_20'
+path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3RIGHT_21'
+path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/right_new'
+qsm_r2s_prisma(path_mag, path_ph, path_out);
+
+path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3EXTENSION_27'
+path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3EXTENSION_28'
+path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/extension_new'
+qsm_r2s_prisma(path_mag, path_ph, path_out);
+
+path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3FLEXION_34'
+path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3FLEXION_35'
+path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/flexion_new'
+qsm_r2s_prisma(path_mag, path_ph, path_out);
+
