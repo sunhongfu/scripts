@@ -9,6 +9,7 @@ from model_QSM import weights_init
 from model_QSM import get_parameter_number
 from data_QSM import data_QSM
 import os
+from Net_Load import load_state_keywise
 
 
 def DataLoad(Batch_size):
@@ -95,6 +96,12 @@ if __name__ == '__main__':
     # create network
     net = unrolledQSM()
     net.apply(weights_init)
+
+    # net = nn.DataParallel(net)
+    # net.load_state_dict(torch.load('unrolledQSM_masked_alldirs.pth', map_location='cpu'))
+
+    load_state_keywise(net, 'unrolledQSM_masked_alldirs.pth')
+
     net.train()
     print('100 EPO-2L')
     print(net.state_dict)

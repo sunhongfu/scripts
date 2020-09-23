@@ -27,6 +27,7 @@ if __name__ == '__main__':
             field_k = torch.fft(field, 3)
 
             field_k = field_k.permute(3, 0, 1, 2)
+            field_k = torch.unsqueeze(field_k, 0)
 
             print('k_resnet_k_fft_image_alldirs')
             # load trained network

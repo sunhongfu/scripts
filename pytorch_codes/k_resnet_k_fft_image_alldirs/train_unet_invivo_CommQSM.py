@@ -6,13 +6,14 @@ import time
 import torch.optim.lr_scheduler as LS
 from ResNet_yang import *
 from dataload_unet_invivo_CommQSM import *
+import os
 #########  Section 1: DataSet Load #############
 
 
 def yangDataLoad(Batch_size):
     DATA_DIRECTORY = '/scratch/itee/uqhsun8/CommQSM/invivo'
-    DATA_LIST_PATH = '/scratch/itee/uqhsun8/CommQSM/invivo/invivo_IDs.txt'
-    dst = yangDataSet(DATA_DIRECTORY, DATA_LIST_PATH)
+    z_prjs_file = '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs_alldirs/z_prjs_alldirs.txt'
+    dst = yangDataSet(DATA_DIRECTORY, z_prjs_file)
     print('dataLength: %d' % dst.__len__())
     trainloader = data.DataLoader(
         dst, batch_size=Batch_size, shuffle=True, drop_last=True)
@@ -22,12 +23,14 @@ def yangDataLoad(Batch_size):
 def yangSaveNet(resnet, enSave=False):
     print('save results')
     # save the
+    os.makedirs(
+        '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/k_resnet_k_fft_image_alldirs', exist_ok=True)
     if enSave:
         torch.save(
-            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/kspace_unet_stack_D_shift_NOresnet/kspace_unet_stack_D_shift_NOresnet.pth')
+            resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/k_resnet_k_fft_image_alldirs/k_resnet_k_fft_image_alldirs.pth')
     else:
         torch.save(resnet.state_dict(),
-                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/kspace_unet_stack_D_shift_NOresnet/kspace_unet_stack_D_shift_NOresnet.pth')
+                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/k_resnet_k_fft_image_alldirs/k_resnet_k_fft_image_alldirs.pth')
 
 
 def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):

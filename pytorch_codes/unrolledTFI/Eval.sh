@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=eval_unet_mixed_alldirs_150k
+#SBATCH --job-name=eval_unrolledTFI
 #SBATCH -n 1
 #SBATCH -c 3
 #SBATCH --mem=100000
-#SBATCH -e eval_unet_mixed_alldirs_150k.err
-#SBATCH -o eval_unet_mixed_alldirs_150k.out
+#SBATCH -e eval_unrolledTFI.err
+#SBATCH -o eval_unrolledTFI.out
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:1
 
@@ -17,4 +17,4 @@ module load mvapich2
 module load matlab
 
 python --version
-srun python -u eval_unet_mixed.py
+srun python -u eval_QSM.py

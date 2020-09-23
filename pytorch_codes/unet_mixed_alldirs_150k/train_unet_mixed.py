@@ -57,7 +57,7 @@ def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False, RESU
                     path_checkpoint, resnet, optimizer, scheduler)
 
             resnet.to(device)
-            for epoch in range(1, Epoches + 1):
+            for epoch in range(start_epoch + 1, start_epoch + Epoches + 1):
                 acc_loss = 0.0
                 for i, data in enumerate(trainloader):
                     Inputs, Labels, Name = data
@@ -105,4 +105,5 @@ if __name__ == '__main__':
     # use this line to check if all layers
     # are leanrable in this programe.
     # train network
-    yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=50, useGPU=True)
+    yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=50, useGPU=True, RESUME=True,
+                 path_checkpoint='./checkpoints/RotNet_ckpt_training_50Epoch.pth', save_folder='./checkpoints')

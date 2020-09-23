@@ -11,10 +11,10 @@ import os
 
 if __name__ == '__main__':
     os.makedirs(
-        '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unet_mixed_alldirs_150k', exist_ok=True)
+        '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unetTFI', exist_ok=True)
     with torch.no_grad():
-        print('unet')
-        for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132', 'central_bigAngle']:
+        print('unetTFI')
+        for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132', 'central_bigAngle', 'resized']:
             nibimage = nib.load(
                 '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo/renzo_' + orien + '_field.nii')
             image = nibimage.get_data()
@@ -35,7 +35,7 @@ if __name__ == '__main__':
             device = torch.device(
                 "cuda:0" if torch.cuda.is_available() else "cpu")
             octnet.load_state_dict(torch.load(
-                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unet_mixed_alldirs_150k/unet_mixed_alldirs_150k.pth'))
+                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unetTFI/unetTFI.pth'))
             octnet.to(device)
             octnet.eval()
             print(octnet.state_dict)
@@ -49,10 +49,10 @@ if __name__ == '__main__':
             pred = pred.to('cpu')
             pred = pred.numpy()
 
-            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unet_mixed_alldirs_150k/renzo_' + \
-                orien + '_unet_mixed_alldirs_150k.nii'
-            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unet_mixed_alldirs_150k/renzo_' + \
-                orien + '_unet_mixed_alldirs_150k.mat'
+            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unetTFI/renzo_' + \
+                orien + '_unetTFI.nii'
+            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unetTFI/renzo_' + \
+                orien + '_unetTFI.mat'
             scio.savemat(path, {'PRED': pred})
             clipped_msk = nib.Nifti1Image(pred, aff)
             nib.save(clipped_msk, name_msk)

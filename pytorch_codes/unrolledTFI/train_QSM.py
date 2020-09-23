@@ -9,13 +9,14 @@ from model_QSM import weights_init
 from model_QSM import get_parameter_number
 from data_QSM import data_QSM
 import os
-from Net_Load import load_state_keywise
+from utils_checkpoints import *
 
 
 def DataLoad(Batch_size):
-    DATA_DIRECTORY = '/scratch/itee/uqhsun8/CommQSM/invivo'
-    z_prjs_file = '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/image_unet_stack_prjs_alldirs/z_prjs_alldirs.txt'
-    dataset = data_QSM(DATA_DIRECTORY, z_prjs_file)
+    DATA_DIRECTORY = '/scratch/itee/uqhsun8/CommQSM/invivo/TFI'
+    # DATA_LIST_PATH = '/scratch/itee/uqhsun8/CommQSM/invivo/invivo_IDs.txt'
+    # dataset = data_QSM(DATA_DIRECTORY, DATA_LIST_PATH)
+    dataset = data_QSM(DATA_DIRECTORY)
     print('dataLength: %d' % dataset.__len__())
     trainloader = data.DataLoader(
         dataset, batch_size=Batch_size, shuffle=True, drop_last=True)
@@ -26,17 +27,17 @@ def SaveNet(net, enSave=False):
     print('save results')
     # save the
     os.makedirs(
-        '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_alldirs', exist_ok=True)
+        '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledTFI', exist_ok=True)
     if enSave:
         torch.save(
-            net, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_alldirs/unrolledQSM_alldirs.pth')
+            net, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledTFI/unrolledTFI.pth')
     else:
-        torch.save(net.state_dict(),
-                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_alldirs/unrolledQSM_alldirs.pth')
+        torch.save(net.module.state_dict(),
+                   '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledTFI/unrolledTFI.pth')
 
 
-def TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
-    print('unrolledQSM_alldirs')
+def TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=False, RESUME=False, path_checkpoint=None, save_folder='./checkpoints'):
+    print('unrolledQSM')
     print('DataLoad')
     trainloader = DataLoad(Batchsize)
     print('Dataload Ends')
@@ -53,20 +54,31 @@ def TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
             device = torch.device(
                 "cuda:0" if torch.cuda.is_available() else "cpu")
             net = nn.DataParallel(net)
+
+            start_epoch = 0
+            # -- resume the checkpoints. --
+            if RESUME:
+                net, optimizer, scheduler, start_epoch = load_checkpoints(
+                    path_checkpoint, net, optimizer, scheduler)
+
             net.to(device)
-            for epoch in range(1, Epoches + 1):
+            for epoch in range(start_epoch + 1, start_epoch + Epoches + 1):
                 acc_loss = 0.0
                 for i, values in enumerate(trainloader):
-                    fields, Dipoles, labels, names = values
+                    fields, Dipoles, labels, masks, names = values
                     fields = fields.to(device)
                     Dipoles = Dipoles.to(device)
                     labels = labels.to(device)
+                    masks = masks.to(device)
                     # zero the gradient buffers
                     optimizer.zero_grad()
                     # forward:
-                    preds = net(torch.zeros(fields.shape), fields, Dipoles)
+                    preds = net(torch.zeros(fields.shape),
+                                fields, Dipoles, masks)
+                    # preds = preds*masks
                     # loss
-                    loss = criterion(preds, labels)
+                    # loss = criterion(preds, labels)
+                    loss = criterion(preds*masks, labels)
                     # backward
                     loss.backward()
                     # learning one single step
@@ -92,12 +104,6 @@ if __name__ == '__main__':
     # create network
     net = unrolledQSM()
     net.apply(weights_init)
-
-    # net = nn.DataParallel(net)
-    # net.load_state_dict(torch.load('unrolledQSM_alldirs.pth', map_location='cpu'))
-
-    load_state_keywise(net, 'unrolledQSM_alldirs.pth')
-
     net.train()
     print('100 EPO-2L')
     print(net.state_dict)
@@ -105,4 +111,5 @@ if __name__ == '__main__':
     # use this line to check if all layers
     # are leanrable in this programe.
     # train network
-    TrainNet(net, LR=0.001, Batchsize=32, Epoches=50, useGPU=True)
+    TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=True, RESUME=False,
+             path_checkpoint=None, save_folder='./checkpoints')

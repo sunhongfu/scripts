@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=eval_unet_mixed_alldirs_150k
+#SBATCH --job-name=eval_unetTFI
 #SBATCH -n 1
 #SBATCH -c 3
 #SBATCH --mem=100000
-#SBATCH -e eval_unet_mixed_alldirs_150k.err
-#SBATCH -o eval_unet_mixed_alldirs_150k.out
+#SBATCH -e eval_unetTFI.err
+#SBATCH -o eval_unetTFI.out
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:1
 

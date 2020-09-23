@@ -8,6 +8,8 @@ from model_QSM import unrolledQSM
 from model_QSM import weights_init
 from model_QSM import get_parameter_number
 from data_QSM import data_QSM
+import os
+from Net_Load import load_state_keywise
 
 
 def DataLoad(Batch_size):
@@ -23,6 +25,8 @@ def DataLoad(Batch_size):
 def SaveNet(net, enSave=False):
     print('save results')
     # save the
+    os.makedirs(
+        '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_masked', exist_ok=True)
     if enSave:
         torch.save(
             net, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_masked/unrolledQSM_masked.pth')
@@ -92,6 +96,12 @@ if __name__ == '__main__':
     # create network
     net = unrolledQSM()
     net.apply(weights_init)
+
+    # net = nn.DataParallel(net)
+    # net.load_state_dict(torch.load('unrolledQSM_masked.pth', map_location='cpu'))
+
+    load_state_keywise(net, 'unrolledQSM_masked.pth')
+
     net.train()
     print('100 EPO-2L')
     print(net.state_dict)

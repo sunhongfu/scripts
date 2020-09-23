@@ -8,6 +8,7 @@ from model_QSM import unrolledQSM
 from model_QSM import weights_init
 from model_QSM import get_parameter_number
 from data_QSM import data_QSM
+from Net_Load import load_state_keywise
 
 
 def DataLoad(Batch_size):
@@ -31,7 +32,7 @@ def SaveNet(net, enSave=False):
                    '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM/unrolledQSM.pth')
 
 
-def TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
+def TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=False, RESUME=False, path_checkpoint=None, save_folder='./checkpoints'):
     print('unrolledQSM')
     print('DataLoad')
     trainloader = DataLoad(Batchsize)
@@ -49,6 +50,13 @@ def TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
             device = torch.device(
                 "cuda:0" if torch.cuda.is_available() else "cpu")
             net = nn.DataParallel(net)
+
+            start_epoch = 0
+            # -- resume the checkpoints. --
+            if RESUME:
+                net, optimizer, scheduler, start_epoch = load_checkpoints(
+                    path_checkpoint, net, optimizer, scheduler)
+
             net.to(device)
             for epoch in range(1, Epoches + 1):
                 acc_loss = 0.0
@@ -75,12 +83,16 @@ def TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
                         print('Outside: Epoch : %d, batch: %d, Loss: %f,  lr1: %f, used time: %d s' %
                               (epoch, i + 1, acc_loss, optimizer.param_groups[0]['lr'], time_end - time_start))
                 scheduler.step()
+                if epoch % 10 == 0:
+                    save_checkpoints(net, optimizer,
+                                     scheduler, epoch, save_folder)
         else:
             pass
             print('No Cuda Device!')
             quit()
     print('Training Ends')
     SaveNet(net)
+    save_checkpoints(net, optimizer, scheduler, Epoches+1, save_folder)
 
 
 if __name__ == '__main__':
@@ -88,6 +100,12 @@ if __name__ == '__main__':
     # create network
     net = unrolledQSM()
     net.apply(weights_init)
+
+    # net = nn.DataParallel(net)
+    # net.load_state_dict(torch.load('unrolledQSM.pth', map_location='cpu'))
+
+    load_state_keywise(net, 'unrolledQSM.pth')
+
     net.train()
     print('100 EPO-2L')
     print(net.state_dict)

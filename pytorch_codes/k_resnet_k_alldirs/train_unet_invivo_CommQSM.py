@@ -24,7 +24,7 @@ def yangSaveNet(resnet, enSave=False):
     print('save results')
     # save the
     os.makedirs(
-        '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/k_resnet_k_alldirs')
+        '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/k_resnet_k_alldirs', exist_ok=True)
     if enSave:
         torch.save(
             resnet, '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/k_resnet_k_alldirs/k_resnet_k_alldirs.pth')

@@ -6,9 +6,12 @@ import numpy as np
 import nibabel as nib
 from ResNet_yang import *
 import scipy.io as scio
+import os
 ##########################################
 
 if __name__ == '__main__':
+    os.makedirs(
+        '/scratch/itee/uqhsun8/CommQSM/invivo/testing/k_resnet_k_alldirs', exist_ok=True)
     with torch.no_grad():
         print('k_resnet_k_alldirs')
         for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132', 'central_bigAngle', 'resized']:
@@ -27,6 +30,7 @@ if __name__ == '__main__':
             field_k = torch.fft(field, 3)
 
             field_k = field_k.permute(3, 0, 1, 2)
+            field_k = torch.unsqueeze(field_k, 0)
 
             print('k_resnet_k_alldirs')
             # load trained network
@@ -46,9 +50,9 @@ if __name__ == '__main__':
             print(pred.size())
             pred = torch.squeeze(pred, 0)
 
-            pred = pred.permute(3, 0, 1, 2)
+            pred = pred.permute(1, 2, 3, 0)
 
-            pred = torch.fft(pred, 3)
+            pred = torch.ifft(pred, 3)
 
             pred = pred[:, :, :, 0]
 

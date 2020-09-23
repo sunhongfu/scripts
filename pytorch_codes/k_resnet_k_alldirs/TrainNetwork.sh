@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --job-name=train_kspace_unet_stack_D_shift_NOresnet
+#SBATCH --job-name=train_k_resnet_k_alldirs
 #SBATCH -n 1
 #SBATCH -c 1
 #SBATCH --mem=30000
-#SBATCH -e train_kspace_unet_stack_D_shift_NOresnet.err
-#SBATCH -o train_kspace_unet_stack_D_shift_NOresnet.out
+#SBATCH -e train_k_resnet_k_alldirs.err
+#SBATCH -o train_k_resnet_k_alldirs.out
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:tesla-smx2:2
 

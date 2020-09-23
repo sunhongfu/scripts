@@ -9,16 +9,24 @@ import os
 
 if __name__ == '__main__':
     os.makedirs(
-        '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledQSM_alldirs', exist_ok=True)
+        '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledTFI', exist_ok=True)
     with torch.no_grad():
-        print('unrolledQSM_alldirs')
+        print('unrolledQSM')
         for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132', 'central_bigAngle', 'resized']:
             nibimage = nib.load(
                 '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo/renzo_' + orien + '_field.nii')
             image = nibimage.get_data()
             aff = nibimage.affine
             image = np.array(image)
-            print('unrolledQSM_alldirs')
+
+            # generate mask
+            mask = torch.ones(image.shape)
+            mask[image == 0] = 0
+            mask = mask.float()
+            mask = torch.unsqueeze(mask, 0)
+            mask = torch.unsqueeze(mask, 0)
+
+            print('unrolledQSM')
             image = torch.from_numpy(image)
             print(image.size())
             image = image.float()
@@ -31,7 +39,7 @@ if __name__ == '__main__':
             D = nibimage.get_data()
             aff = nibimage.affine
             D = np.array(D)
-            print('unrolledQSM_alldirs')
+            print('unrolledQSM')
             D = torch.from_numpy(D)
             print(D.size())
             D = D.float()
@@ -39,22 +47,23 @@ if __name__ == '__main__':
             D = torch.cat([D, D], 0)
             D = torch.unsqueeze(D, 0)
 
-            print('unrolledQSM_alldirs')
+            print('unrolledQSM')
             # load trained network
             net = unrolledQSM()
             net = nn.DataParallel(net)
             device = torch.device(
                 "cuda:0" if torch.cuda.is_available() else "cpu")
             net.load_state_dict(torch.load(
-                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledQSM_alldirs/unrolledQSM_alldirs.pth'))
+                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledTFI/unrolledTFI.pth'))
             net.to(device)
             net.eval()
             print(net.state_dict)
 
             image = image.to(device)
             D = D.to(device)
+            mask = mask.to(device)
 
-            pred = net(torch.zeros(image.shape), image, D)
+            pred = net(torch.zeros(image.shape), image, D, mask)*mask
             print(pred.size())
             pred = torch.squeeze(pred, 0)
             # pred = torch.squeeze(pred, 0)
@@ -63,10 +72,10 @@ if __name__ == '__main__':
             pred = pred.numpy()
             pred = pred[0, :, :, :]
 
-            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledQSM_alldirs/renzo_' + \
-                orien + '_unrolledQSM_alldirs.nii'
-            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledQSM_alldirs/renzo_' + \
-                orien + '_unrolledQSM_alldirs.mat'
+            name_msk = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledTFI/renzo_' + \
+                orien + '_unrolledTFI.nii'
+            path = '/scratch/itee/uqhsun8/CommQSM/invivo/testing/unrolledTFI/renzo_' + \
+                orien + '_unrolledTFI.mat'
             scio.savemat(path, {'PRED': pred})
             clipped_msk = nib.Nifti1Image(pred, aff)
             nib.save(clipped_msk, name_msk)

@@ -5,7 +5,7 @@ import nibabel as nib
 import scipy.io as scio
 from model_QSM import unrolledQSM
 from model_QSM import get_parameter_number
-
+import os
 
 if __name__ == '__main__':
     os.makedirs(
@@ -18,6 +18,14 @@ if __name__ == '__main__':
             image = nibimage.get_data()
             aff = nibimage.affine
             image = np.array(image)
+
+            # generate mask
+            mask = torch.ones(image.shape)
+            mask[image == 0] = 0
+            mask = mask.float()
+            mask = torch.unsqueeze(mask, 0)
+            mask = torch.unsqueeze(mask, 0)
+
             print('unrolledQSM')
             image = torch.from_numpy(image)
             print(image.size())
@@ -53,8 +61,9 @@ if __name__ == '__main__':
 
             image = image.to(device)
             D = D.to(device)
+            mask = mask.to(device)
 
-            pred = net(torch.zeros(image.shape), image, D)
+            pred = net(torch.zeros(image.shape), image, D, mask)*mask
             print(pred.size())
             pred = torch.squeeze(pred, 0)
             # pred = torch.squeeze(pred, 0)
