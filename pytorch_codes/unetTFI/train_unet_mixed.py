@@ -34,7 +34,7 @@ def yangSaveNet(resnet, enSave=False):
                    '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unetTFI/unetTFI.pth')
 
 
-def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
+def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False, RESUME=False, path_checkpoint=None, save_folder='./checkpoints'):
     print('ResNet')
     print('DataLoad')
     trainloader = yangDataLoad(Batchsize)
@@ -52,6 +52,13 @@ def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
             device = torch.device(
                 "cuda:0" if torch.cuda.is_available() else "cpu")
             resnet = nn.DataParallel(resnet)
+
+            start_epoch = 0
+            # -- resume the checkpoints. --
+            if RESUME:
+                resnet, optimizer, scheduler, start_epoch = load_checkpoints(
+                    path_checkpoint, resnet, optimizer, scheduler)
+
             resnet.to(device)
             for epoch in range(1, Epoches + 1):
                 acc_loss = 0.0
@@ -81,6 +88,9 @@ def yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=False):
                         print('Outside: Epoch : %d, batch: %d, Loss: %f,  lr1: %f, used time: %d s' %
                               (epoch, i + 1, acc_loss, optimizer.param_groups[0]['lr'], time_end - time_start))
                 scheduler.step()
+                if epoch % 10 == 0:
+                    save_checkpoints(resnet, optimizer,
+                                     scheduler, epoch, save_folder)
         else:
             pass
             print('No Cuda Device!')
@@ -101,4 +111,5 @@ if __name__ == '__main__':
     # use this line to check if all layers
     # are leanrable in this programe.
     # train network
-    yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=True)
+    yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=True,
+                 RESUME=False, path_checkpoint=None, save_folder='./checkpoints')
