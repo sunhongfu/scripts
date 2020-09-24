@@ -147,7 +147,7 @@ class one_iteration(nn.Module):
     def forward(self, x, phi, D, m):
         dc0 = self.dc(x, phi, D, m)
         dc0 = self.conv_scale(dc0)
-        reg0 = self.reg(x.m)
+        reg0 = self.reg(x, m)
         sum1 = x + dc0 + reg0
         return sum1
 

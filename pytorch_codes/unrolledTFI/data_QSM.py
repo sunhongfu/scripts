@@ -74,10 +74,10 @@ class data_QSM(data.Dataset):
         mask[label == 0] = 0
 
         # extend into 2 channels (real + imag)
-        field = torch.cat([field, torch.zeros(field.shape)], 0)
+        field = torch.cat([field, torch.zeros(field.shape).double()], 0)
         # keep Dipole single real channel, can do broadcasting during complex multiplication
         # Dipole = torch.cat([Dipole, Dipole], 0)
-        label = torch.cat([label, torch.zeros(label.shape)], 0)
+        label = torch.cat([label, torch.zeros(label.shape).double()], 0)
 
         mask = mask.float()
         field = field.float()*mask
