@@ -41,9 +41,44 @@ end
 
 
 % generate more higher quality 1mm kspace
-dirs = {'/Users/uqhsun8/DATA/Amir/scans/QSM_R2S_PRISMA_iso/src', '/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_CENTER/QSM_SPGR_GE/src', '/Volumes/LaCie/FGATIR/sorted_dicoms/Hs/14903/QSM_1mm/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/Hs/14903/QSM_p75/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/B_A/14922/QSM_p75/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/Qmrims_025/14982/QSM_p75/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/Qmrims_022/14946/QSM_p75/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/Js/14902/QSM_1mm/QSM_SPGR_GE/src'};
+path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3_6'
+path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3_7'
+path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/center_new'
+qsm_r2s_prisma(path_mag, path_ph, path_out);
 
-dirs = {'/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_BACKWARD/QSM_SPGR_GE/src','/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_FORWARD/QSM_SPGR_GE/src','/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_LEFT/QSM_SPGR_GE/src','/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_RIGHT/QSM_SPGR_GE/src'};
+path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3LEFT_13'
+path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3LEFT_14'
+path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/left_new'
+qsm_r2s_prisma(path_mag, path_ph, path_out);
+
+path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3RIGHT_20'
+path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3RIGHT_21'
+path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/right_new'
+qsm_r2s_prisma(path_mag, path_ph, path_out);
+
+path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3EXTENSION_27'
+path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3EXTENSION_28'
+path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/extension_new'
+qsm_r2s_prisma(path_mag, path_ph, path_out);
+
+path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3FLEXION_34'
+path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3FLEXION_35'
+path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/flexion_new'
+qsm_r2s_prisma(path_mag, path_ph, path_out);
+
+path_mag='/Users/uqhsun8/DATA/Amir/scans/PD_ME-GRE_PISA_9ECH__REP1_MAG_PD_ME-GRE/DICOM/PD_ME-GRE_PISA_9ECH__REP1_MAG'
+path_ph='/Users/uqhsun8/DATA/Amir/scans/PD_ME-GRE_PISA_9ECH__REP1_PHA_PD_ME-GRE/DICOM/PD_ME-GRE_PISA_9ECH__REP1_PHA'
+path_out='/Users/uqhsun8/DATA/Amir/scans/'
+qsm_r2s_prisma(path_mag, path_ph, path_out);
+
+
+
+dirs = {'/Users/uqhsun8/DATA/Amir/scans/QSM_R2S_PRISMA/src','/Volumes/LaCie/FGATIR/sorted_dicoms/Hs/14903/QSM_1mm/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/Hs/14903/QSM_p75/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/B_A/14922/QSM_p75/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/Qmrims_025/14982/QSM_p75/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/Qmrims_022/14946/QSM_p75/QSM_SPGR_GE/src','/Volumes/LaCie/FGATIR/sorted_dicoms/Js/14902/QSM_1mm/QSM_SPGR_GE/src'};
+
+dirs = {'/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_CENTER/QSM_SPGR_GE/src','/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_BACKWARD/QSM_SPGR_GE/src','/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_FORWARD/QSM_SPGR_GE/src','/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_LEFT/QSM_SPGR_GE/src','/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_RIGHT/QSM_SPGR_GE/src'};
+
+dirs = {'/Volumes/LaCie/COSMOS_3T/cosmos_prisma/center_new/QSM_R2S_PRISMA/src','/Volumes/LaCie/COSMOS_3T/cosmos_prisma/extension_new/QSM_R2S_PRISMA/src','/Volumes/LaCie/COSMOS_3T/cosmos_prisma/flexion_new/QSM_R2S_PRISMA/src','/Volumes/LaCie/COSMOS_3T/cosmos_prisma/left_new/QSM_R2S_PRISMA/src','/Volumes/LaCie/COSMOS_3T/cosmos_prisma/right_new/QSM_R2S_PRISMA/src'};
+
 
 for i = 1:length(dirs)
     k = [];
@@ -70,28 +105,27 @@ for i = 1:length(dirs)
 end
 
 
-path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3_6'
-path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3_7'
-path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/center_new'
-qsm_r2s_prisma(path_mag, path_ph, path_out);
 
-path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3LEFT_13'
-path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3LEFT_14'
-path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/left_new'
-qsm_r2s_prisma(path_mag, path_ph, path_out);
+for i = 1:length(dirs)
+    cd(dirs{i});
+    load('../all.mat','vox','TE','z_prjs','dicom_info');
+    save('params.mat','vox','TE','z_prjs','dicom_info','-v7.3');
 
-path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3RIGHT_20'
-path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3RIGHT_21'
-path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/right_new'
-qsm_r2s_prisma(path_mag, path_ph, path_out);
+    clear vox TE z_prjs dicom_info
+end
 
-path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3EXTENSION_27'
-path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3EXTENSION_28'
-path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/extension_new'
-qsm_r2s_prisma(path_mag, path_ph, path_out);
 
-path_mag='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3FLEXION_34'
-path_ph='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/swi_1mm_5TE_prisma4_r3FLEXION_35'
-path_out='/Volumes/LaCie/COSMOS_3T/cosmos_prisma/flexion_new'
-qsm_r2s_prisma(path_mag, path_ph, path_out);
+
+% MS lesions
+Path: /Volumes/LaCie/MS/2016-09-28 RR-018/QSM_SPGR_GE/RESHARP/TFI_resharp_lambda2000_smvrad2.nii
+Path: /Volumes/LaCie/MS/2016-08-05 RR-063/QSM_SPGR_GE/RESHARP/TFI_resharp_lambda2000_smvrad2.nii
+Path: /Volumes/LaCie/MS/2017-02-27 RR-142/QSM_SPGR_GE/RESHARP/TFI_resharp_lambda2000_smvrad2.nii
+Path: /Volumes/LaCie/MS/2016-01-28 RR-013/QSM_SPGR_GE/RESHARP/TFI_resharp_lambda2000_smvrad2.nii
+Path: /Volumes/LaCie/MS/2017-11-17 RR-208/QSM_SPGR_GE/RESHARP/TFI_resharp_lambda2000_smvrad2.nii
+
+dirs ={'/Volumes/LaCie/MS/2016-09-28 RR-018/QSM_SPGR_GE/', '/Volumes/LaCie/MS/2016-08-05 RR-063/QSM_SPGR_GE/', '/Volumes/LaCie/MS/2017-02-27 RR-142/QSM_SPGR_GE/', '/Volumes/LaCie/MS/2016-01-28 RR-013/QSM_SPGR_GE/', '/Volumes/LaCie/MS/2017-11-17 RR-208/QSM_SPGR_GE/'}
+
+
+rsync -aR '/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_CENTER/QSM_SPGR_GE/src/kspace.mat' '/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_BACKWARD/QSM_SPGR_GE/src/kspace.mat' '/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_FORWARD/QSM_SPGR_GE/src/kspace.mat' '/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_LEFT/QSM_SPGR_GE/src/kspace.mat' '/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_RIGHT/QSM_SPGR_GE/src/kspace.mat' '/Volumes/LaCie/COSMOS_3T/cosmos_prisma/center_new/QSM_R2S_PRISMA/src/kspace.mat' '/Volumes/LaCie/COSMOS_3T/cosmos_prisma/extension_new/QSM_R2S_PRISMA/src/kspace.mat' '/Volumes/LaCie/COSMOS_3T/cosmos_prisma/flexion_new/QSM_R2S_PRISMA/src/kspace.mat' '/Volumes/LaCie/COSMOS_3T/cosmos_prisma/left_new/QSM_R2S_PRISMA/src/kspace.mat' '/Volumes/LaCie/COSMOS_3T/cosmos_prisma/right_new/QSM_R2S_PRISMA/src/kspace.mat' '/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_CENTER/QSM_SPGR_GE/src/params.mat' '/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_BACKWARD/QSM_SPGR_GE/src/params.mat' '/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_FORWARD/QSM_SPGR_GE/src/params.mat' '/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_LEFT/QSM_SPGR_GE/src/params.mat' '/Users/uqhsun8/DATA/5_orientations_1mm/QSM_SPGRE_RIGHT/QSM_SPGR_GE/src/params.mat' '/Volumes/LaCie/COSMOS_3T/cosmos_prisma/center_new/QSM_R2S_PRISMA/src/params.mat' '/Volumes/LaCie/COSMOS_3T/cosmos_prisma/extension_new/QSM_R2S_PRISMA/src/params.mat' '/Volumes/LaCie/COSMOS_3T/cosmos_prisma/flexion_new/QSM_R2S_PRISMA/src/params.mat' '/Volumes/LaCie/COSMOS_3T/cosmos_prisma/left_new/QSM_R2S_PRISMA/src/params.mat' '/Volumes/LaCie/COSMOS_3T/cosmos_prisma/right_new/QSM_R2S_PRISMA/src/params.mat' '/Volumes/LaCie/MS/2016-09-28 RR-018/QSM_SPGR_GE/src/kspace.mat'  '/Volumes/LaCie/MS/2016-08-05 RR-063/QSM_SPGR_GE/src/kspace.mat'  '/Volumes/LaCie/MS/2017-02-27 RR-142/QSM_SPGR_GE/src/kspace.mat'  '/Volumes/LaCie/MS/2016-01-28 RR-013/QSM_SPGR_GE/src/kspace.mat'  '/Volumes/LaCie/MS/2017-11-17 RR-208/QSM_SPGR_GE/src/kspace.mat' kspace_for_csqsm_testing
+
 
