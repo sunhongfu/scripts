@@ -27,11 +27,11 @@ def load_checkpoints(path_checkpoint, net, optimizer, lr_scheduler):
     # load optimizer parameters
     optimizer.load_state_dict(checkpoint["optimizer"])
 
-    # ## transfer optimizer buffer from cpu to gpu;
-    # for k, v in optimizer.state.items():    # key is Parameter, val is a dict {key='momentum_buffer':tensor(...)}
-    #     if 'momentum_buffer' not in v:
-    #         continue
-    #     optimizer.state[k]['momentum_buffer'] = optimizer.state[k]['momentum_buffer'].cuda()
+    # transfer optimizer buffer from cpu to gpu;
+    for state in optimizer.state.values():
+        for k, v in state.items():
+            if torch.is_tensor(v):
+                state[k] = v.cuda()
 
     lr_scheduler_saved = LS.MultiStepLR(
         optimizer, milestones=[50, 80], gamma=0.1)
