@@ -10,7 +10,7 @@ from model_QSM import get_parameter_number
 from data_QSM import data_QSM
 import os
 from Net_Load import load_state_keywise
-from utils_checkpoints import save_checkpoints
+from utils_checkpoints import *
 
 
 def DataLoad(Batch_size):
@@ -120,4 +120,4 @@ if __name__ == '__main__':
     # use this line to check if all layers
     # are leanrable in this programe.
     # train network
-    TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=True)
+    TrainNet(net, LR=0.001, Batchsize=32, Epoches=50, useGPU=True)

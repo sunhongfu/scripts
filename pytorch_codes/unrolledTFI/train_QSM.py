@@ -75,10 +75,9 @@ def TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=False, RESUME=Fals
                     # forward:
                     preds = net(torch.zeros(fields.shape),
                                 fields, Dipoles, masks)
-                    # preds = preds*masks
+                    preds = preds*masks
                     # loss
-                    # loss = criterion(preds, labels)
-                    loss = criterion(preds*masks, labels)
+                    loss = criterion(preds, labels)
                     # backward
                     loss.backward()
                     # learning one single step
