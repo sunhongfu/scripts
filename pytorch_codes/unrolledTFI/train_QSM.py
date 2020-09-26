@@ -75,10 +75,9 @@ def TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=False, RESUME=Fals
                     # forward:
                     preds = net(torch.zeros(fields.shape),
                                 fields, Dipoles, masks)
-                    # preds = preds*masks
+                    preds = preds*masks
                     # loss
-                    # loss = criterion(preds, labels)
-                    loss = criterion(preds*masks, labels)
+                    loss = criterion(preds, labels)
                     # backward
                     loss.backward()
                     # learning one single step
@@ -91,6 +90,9 @@ def TrainNet(net, LR=0.001, Batchsize=32, Epoches=100, useGPU=False, RESUME=Fals
                         print('Outside: Epoch : %d, batch: %d, Loss: %f,  lr1: %f, used time: %d s' %
                               (epoch, i + 1, acc_loss, optimizer.param_groups[0]['lr'], time_end - time_start))
                 scheduler.step()
+                if epoch % 10 == 0:
+                    save_checkpoints(net, optimizer,
+                                     scheduler, epoch, save_folder)
         else:
             pass
             print('No Cuda Device!')

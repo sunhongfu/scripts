@@ -7,6 +7,7 @@ import torch.optim.lr_scheduler as LS
 from ResNet_yang import *
 from data_QSM import *
 import os
+from utils_checkpoints import *
 #########  Section 1: DataSet Load #############
 
 
@@ -111,5 +112,5 @@ if __name__ == '__main__':
     # use this line to check if all layers
     # are leanrable in this programe.
     # train network
-    yangTrainNet(resnet, LR=0.001, Batchsize=32, Epoches=100, useGPU=True,
+    yangTrainNet(resnet, LR=0.001, Batchsize=16, Epoches=100, useGPU=True,
                  RESUME=False, path_checkpoint=None, save_folder='./checkpoints')
