@@ -6,20 +6,22 @@ import numpy as np
 import nibabel as nib
 from D_Unet import *
 import scipy.io as scio
+import os
 ##########################################
 
 if __name__ == '__main__':
+    os.makedirs(
+        '/scratch/itee/uqhsun8/CommQSM/invivo/testing/multiple_prjs_unet_alldirs_150k', exist_ok=True)
     with torch.no_grad():
         print('multiple_prjs_unet_alldirs_150k')
-        z_prjs_file = 'z_prjs_testdata.txt'
+        z_prjs_file = '../z_prjs_testdata.txt'
         z_prjs_arr = [line.strip().split(" ") for line in open(z_prjs_file)]
         # convert z_prjs into a dic
         z_prjs_keys = [z_prjs_arr[i][0] for i in range(0, len(z_prjs_arr))]
         z_prjs_values = [z_prjs_arr[i][1:4] for i in range(0, len(z_prjs_arr))]
         z_prjs_dict = dict(zip(z_prjs_keys, z_prjs_values))
 
-        # for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132']:
-        for orien in ['central_bigAngle']:
+        for orien in ['left', 'right', 'forward', 'backward', 'central', 'central_permute132', 'central_bigAngle']:
             nibimage = nib.load(
                 '/scratch/itee/uqhsun8/CommQSM/invivo/testing/renzo/renzo_' + orien + '_field.nii')
             image = nibimage.get_data()
@@ -66,7 +68,7 @@ if __name__ == '__main__':
             device = torch.device(
                 "cuda:0" if torch.cuda.is_available() else "cpu")
             multiple_prjs_unet_alldirs_150k.load_state_dict(torch.load(
-                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/multiple_prjs_unet_alldirs_150k/multiple_prjs_unet_alldirs_150k.pth'))
+                '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/multiple_prjs_unet_alldirs_150k/multiple_prjs_unet_alldirs_150k.pth')["net"])
             multiple_prjs_unet_alldirs_150k.to(device)
             multiple_prjs_unet_alldirs_150k.eval()
             print(multiple_prjs_unet_alldirs_150k.state_dict)
