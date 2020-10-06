@@ -53,7 +53,7 @@ if __name__ == '__main__':
             net = nn.DataParallel(net)
             device = torch.device(
                 "cuda:0" if torch.cuda.is_available() else "cpu")
-            net.load_state_dict(torch.load(
+            net.module.load_state_dict(torch.load(
                 '/scratch/itee/uqhsun8/CommQSM/pytorch_codes/unrolledTFI/unrolledTFI.pth'))
             net.to(device)
             net.eval()
