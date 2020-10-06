@@ -1,138 +1,114 @@
-%% !! The same mask from central position was used for all
 
-% generate mask for each orientation based on the registeration
-unix('/usr/share/fsl/5.0/bin/convert_xfm -omat /home/hongfu/Desktop/9175/QSM_SPGRE_LEFT/mask_flirt.mat -inverse /home/hongfu/Desktop/9175/QSM_SPGRE_LEFT/mag_flirt.mat');
-unix('/usr/share/fsl/5.0/bin/flirt -in /home/hongfu/Desktop/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/BET_mask.nii -applyxfm -init /home/hongfu/Desktop/9175/QSM_SPGRE_LEFT/mask_flirt.mat -out /home/hongfu/Desktop/9175/QSM_SPGRE_LEFT/mask_flirt.nii -paddingsize 0.0 -interp trilinear -ref /home/hongfu/Desktop/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/BET_mask.nii');
+% apply the transformation to local field map
+unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG_left.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_LEFT/mag_flirt.mat -out "/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG_left_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
 
-unix('/usr/share/fsl/5.0/bin/convert_xfm -omat /home/hongfu/Desktop/9175/QSM_SPGRE_RIGHT/mask_flirt.mat -inverse /home/hongfu/Desktop/9175/QSM_SPGRE_RIGHT/mag_flirt.mat');
-unix('/usr/share/fsl/5.0/bin/flirt -in /home/hongfu/Desktop/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/BET_mask.nii -applyxfm -init /home/hongfu/Desktop/9175/QSM_SPGRE_RIGHT/mask_flirt.mat -out /home/hongfu/Desktop/9175/QSM_SPGRE_RIGHT/mask_flirt.nii -paddingsize 0.0 -interp trilinear -ref /home/hongfu/Desktop/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/BET_mask.nii');
+unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG_right.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_RIGHT/mag_flirt.mat -out "/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG_right_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
 
-unix('/usr/share/fsl/5.0/bin/convert_xfm -omat /home/hongfu/Desktop/9175/QSM_SPGRE_FORWARD/mask_flirt.mat -inverse /home/hongfu/Desktop/9175/QSM_SPGRE_FORWARD/mag_flirt.mat');
-unix('/usr/share/fsl/5.0/bin/flirt -in /home/hongfu/Desktop/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/BET_mask.nii -applyxfm -init /home/hongfu/Desktop/9175/QSM_SPGRE_FORWARD/mask_flirt.mat -out /home/hongfu/Desktop/9175/QSM_SPGRE_FORWARD/mask_flirt.nii -paddingsize 0.0 -interp trilinear -ref /home/hongfu/Desktop/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/BET_mask.nii');
+unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG_forward.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_FORWARD/mag_flirt.mat -out "/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG_forward_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
 
-unix('/usr/share/fsl/5.0/bin/convert_xfm -omat /home/hongfu/Desktop/9175/QSM_SPGRE_BACKWARD/mask_flirt.mat -inverse /home/hongfu/Desktop/9175/QSM_SPGRE_BACKWARD/mag_flirt.mat');
-unix('/usr/share/fsl/5.0/bin/flirt -in /home/hongfu/Desktop/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/BET_mask.nii -applyxfm -init /home/hongfu/Desktop/9175/QSM_SPGRE_BACKWARD/mask_flirt.mat -out /home/hongfu/Desktop/9175/QSM_SPGRE_BACKWARD/mask_flirt.nii -paddingsize 0.0 -interp trilinear -ref /home/hongfu/Desktop/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/BET_mask.nii');
+unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG-backward.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_BACKWARD/mag_flirt.mat -out "/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG-backward_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
 
 
-%%%%%% do for each orientation
-load all.mat
-r_mask = 0;
-nii = load_nii('BET_mask.nii');
-mask = double(nii.img);
+% calculate the angles of B0 with registered local field maps
+% R is transformation matrix from individual image space to common space (FLIRT matrix)
+% common space coordinates = R* object image space coordinates
+load /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_LEFT/mag_flirt.mat -ASCII
+R_t(:,:,1) = mag_flirt(1:3,1:3);
+load /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_RIGHT/mag_flirt.mat -ASCII
+R_t(:,:,2) = mag_flirt(1:3,1:3);
+load /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_FORWARD/mag_flirt.mat -ASCII
+R_t(:,:,3) = mag_flirt(1:3,1:3);
+load /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_BACKWARD/mag_flirt.mat -ASCII
+R_t(:,:,4) = mag_flirt(1:3,1:3);
+R_t(:,:,5) = eye(3);
 
+% (each orientation has own R and z_prjs)
+% R is the rotation matrix from image space to common space
+load /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_LEFT/QSM_SPGR_GE/z_prjs.mat
+z_prjs_o(:,1) = z_prjs';
+load /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_RIGHT/QSM_SPGR_GE/z_prjs.mat
+z_prjs_o(:,2) = z_prjs';
+load /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_FORWARD/QSM_SPGR_GE/z_prjs.mat
+z_prjs_o(:,3) = z_prjs';
+load /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_BACKWARD/QSM_SPGR_GE/z_prjs.mat
+z_prjs_o(:,4) = z_prjs';
+load /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/z_prjs.mat
+z_prjs_o(:,5) = z_prjs';
 
-% phase offset correction
-% if unipolar
-if strcmpi('unipolar',readout)
-    ph_corr = geme_cmb(mag.*exp(1j*ph),vox,TE,mask);
-% if bipolar
-elseif strcmpi('bipolar',readout)
-    ph_corr = zeros(imsize);
-    ph_corr(:,:,:,1:2:end) = geme_cmb(mag(:,:,:,1:2:end).*exp(1j*ph(:,:,:,1:2:end)),vox,TE(1:2:end),mask);
-    ph_corr(:,:,:,2:2:end) = geme_cmb(mag(:,:,:,2:2:end).*exp(1j*ph(:,:,:,2:2:end)),vox,TE(2:2:end),mask);
-else
-    error('is the sequence unipolar or bipolar readout?')
+for i = 1:5
+    z_prjs_c(:,i) = R_t(:,:,i)'*z_prjs_o(:,i);
 end
 
-% save offset corrected phase niftis
-for echo = 1:imsize(4)
-    nii = make_nii(ph_corr(:,:,:,echo),vox);
-    save_nii(nii,['src/ph_corr' num2str(echo) '.nii']);
-end
+%% COSMOS reconstruction with closed-form solution
+% load in registered local field shift maps
+unix('gunzip -f "/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/"*.gz');
+nii = load_nii('/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG_left_flirt.nii');
+lfs(:,:,:,1) = double(nii.img);
+
+nii = load_nii('/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG_right_flirt.nii');
+lfs(:,:,:,2) = double(nii.img);
+
+nii = load_nii('/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG_forward_flirt.nii');
+lfs(:,:,:,3) = double(nii.img);
+
+nii = load_nii('/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG-backward_flirt.nii');
+lfs(:,:,:,4) = double(nii.img);
+
+nii = load_nii('/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG_center.nii');
+lfs(:,:,:,5) = double(nii.img);
+
+mask = and(and(and(and(lfs(:,:,:,1),lfs(:,:,:,2)),lfs(:,:,:,3)),lfs(:,:,:,4)),lfs(:,:,:,5));
+mask = double(mask);
 
 
-disp('--> unwrap aliasing phase for all TEs using prelude...');
-setenv('echo_num',num2str(imsize(4)));
-bash_command = sprintf(['for ph in src/ph_corr[1-$echo_num].nii\n' ...
-'do\n' ...
-'   base=`basename $ph`;\n' ...
-'   dir=`dirname $ph`;\n' ...
-'   mag=$dir/"mag"${base:7};\n' ...
-'   unph="unph"${base:7};\n' ...
-'   prelude -a $mag -p $ph -u $unph -m BET_mask.nii -n 12&\n' ...
-'done\n' ...
-'wait\n' ...
-'gunzip -f unph*.gz\n']);
-unix(bash_command);
+% construct k-space kernel for each orientation
+% create K-space filter kernel D
+%%%%% make this a seperate function in the future
+vox = [1 1 1];
 
-unph = zeros(imsize);
-for echo = 1:imsize(4)
-    nii = load_nii(['unph' num2str(echo) '.nii']);
-    unph(:,:,:,echo) = double(nii.img);
-end
+Nx = size(lfs,1);
+Ny = size(lfs,2);
+Nz = size(lfs,3);
 
+for i = 1:5
+    FOV = vox.*[Nx,Ny,Nz];
+    FOVx = FOV(1);
+    FOVy = FOV(2);
+    FOVz = FOV(3);
 
-nii = load_nii('unph_diff.nii');
-unph_diff = double(nii.img);
+    x = -Nx/2:Nx/2-1;
+    y = -Ny/2:Ny/2-1;
+    z = -Nz/2:Nz/2-1;
+    [kx,ky,kz] = ndgrid(x/FOVx,y/FOVy,z/FOVz);
+    % D = 1/3 - kz.^2./(kx.^2 + ky.^2 + kz.^2);
+    D = 1/3 - (kx.*z_prjs_c(1,i)+ky.*z_prjs_c(2,i)+kz.*z_prjs_c(3,i)).^2./(kx.^2 + ky.^2 + kz.^2);
+    D(floor(Nx/2+1),floor(Ny/2+1),floor(Nz/2+1)) = 0;
+    D = fftshift(D);
 
-for echo = 2:imsize(4)
-    meandiff = unph(:,:,:,echo)-unph(:,:,:,1)-double(echo-1)*unph_diff;
-    meandiff = meandiff(mask==1);
-    meandiff = mean(meandiff(:));
-    njump = round(meandiff/(2*pi));
-    disp(['    ' num2str(njump) ' 2pi jumps for TE' num2str(echo)]);
-    unph(:,:,:,echo) = unph(:,:,:,echo) - njump*2*pi;
-    unph(:,:,:,echo) = unph(:,:,:,echo).*mask;
-end
-
-% fit phase images with echo times
-disp('--> magnitude weighted LS fit of phase to TE ...');
-[tfs, fit_residual] = echofit(unph,mag,TE,0); 
-
-% extra filtering according to fitting residuals
-if r_mask
-    % generate reliability map
-    fit_residual_blur = smooth3(fit_residual,'box',round(1./vox)*2+1); 
-    nii = make_nii(fit_residual_blur,vox);
-    save_nii(nii,'fit_residual_blur.nii');
-    R = ones(size(fit_residual_blur));
-    R(fit_residual_blur >= fit_thr) = 0;
-else
-    R = 1;
+    kernel(:,:,:,i) = D;
 end
 
 
-% normalize to main field
-% ph = gamma*dB*TE
-% dB/B = ph/(gamma*TE*B0)
-% units: TE s, gamma 2.675e8 rad/(sT), B0 4.7T
-tfs = -tfs/(2.675e8*dicom_info.MagneticFieldStrength)*1e6; % unit ppm
+for i = 1:5
+    lfs_k(:,:,:,i) = fftn(lfs(:,:,:,i).*mask);
+end
 
-nii = make_nii(tfs,vox);
-save_nii(nii,'tfs.nii');
+kernel_sum = sum(abs(kernel).^2, 4);
 
-disp('--> RESHARP to remove background field ...');
-[lfs_resharp, mask_resharp] = resharp(tfs,mask.*R,vox,smv_rad,tik_reg,cgs_num);
-% % 3D 2nd order polyfit to remove any residual background
-% lfs_resharp= poly3d(lfs_resharp,mask_resharp);
+chi_cosmos = real( ifftn( sum(kernel .* lfs_k, 4) ./ (eps + kernel_sum) ) ) .* mask;
 
-% save nifti
-mkdir('RESHARP');
-nii = make_nii(lfs_resharp,vox);
-save_nii(nii,['RESHARP/lfs_resharp_tik_', num2str(tik_reg), '_num_', num2str(cgs_num), '.nii']);
-
-% inversion of susceptibility 
-disp('--> TV susceptibility inversion on RESHARP...');
-sus_resharp = tvdi(lfs_resharp,mask_resharp,vox,tv_reg,mag(:,:,:,end),z_prjs,inv_num); 
-
-% save nifti
-nii = make_nii(sus_resharp.*mask_resharp,vox);
-save_nii(nii,['RESHARP/sus_resharp_tik_', num2str(tik_reg), '_tv_', num2str(tv_reg), '_num_', num2str(inv_num), '.nii']);
-
-save all_new.mat
-
-%%%% finish recon of each orientation
+nii = make_nii(chi_cosmos,vox);
+save_nii(nii,'/Users/uqhsun8/OneDrive - The University of Queensland/share/for_yang/kspace_for_csqsm_testing/cosmos_5orientations/IMG-net/IMG_COSMOS.nii');
 
 
-
-% run iLSQR
-chi_iLSQR_0 = QSM_iLSQR(lfs_resharp*(2.675e8*dicom_info.MagneticFieldStrength)/1e6,double(mask_resharp),'H',z_prjs,'voxelsize',vox,'niter',50,'TE',1000,'B0',dicom_info.MagneticFieldStrength);
-nii = make_nii(chi_iLSQR_0,vox);
-save_nii(nii,'chi_iLSQR_smvrad1.nii');
-
-
-% register to neutral
-/usr/local/fsl/bin/flirt -in /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/chi_iLSQR_smvrad1.nii -applyxfm -init /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/mag_flirt.mat -out /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/chi_iLSQR_smvrad1_to_neutral.nii -paddingsize 0.0 -interp trilinear -ref /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/chi_iLSQR_smvrad1.nii
-
-/usr/local/fsl/bin/flirt -in /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/sus_resharp_tik_0.0001_tv_0.0005_num_500.nii -applyxfm -init /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/mag_flirt.mat -out /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/sus_resharp_tik_0.0001_tv_0.0005_num_500_to_neutral.nii -paddingsize 0.0 -interp trilinear -ref /Users/uqhsun8/Desktop/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/sus_resharp_tik_0.0001_tv_0.0005_num_500.nii
-
+%%%% inversion of each orientation on registered LFS
+nii = load_nii('/media/data/QSM_data/COSMOS_renzo/sorted/patient/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/src/mag1.nii');
+mag = double(nii.img);
+for i = 1:5
+    disp('--> TV susceptibility inversion on RESHARP...');
+    sus_resharp(:,:,:,i) = tvdi(lfs(:,:,:,i),mask,vox,tv_reg,mag,z_prjs_c(:,i),inv_num); 
+   
+    % save nifti
+    nii = make_nii(sus_resharp(:,:,:,i).*mask,vox);
+    save_nii(nii,['sus_resharp_tik_', num2str(tik_reg), '_tv_', num2str(tv_reg), '_num_', num2str(inv_num), '_orien_' num2str(i) '.nii']);
+end
