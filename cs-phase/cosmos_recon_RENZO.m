@@ -1,12 +1,12 @@
 
 % apply the transformation to local field map
-unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/left/lfs_resharp_tik_0.0001_num_200.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_LEFT/mag_flirt.mat -out "/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/left/lfs_resharp_tik_0.0001_num_200_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
+unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/left/lfs_resharp_tik_0.0001_num_200.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_LEFT/mag_flirt.mat -out "//Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/left/lfs_resharp_tik_0.0001_num_200_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
 
-unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/right/lfs_resharp_tik_0.0001_num_200.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_RIGHT/mag_flirt.mat -out "/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/right/lfs_resharp_tik_0.0001_num_200_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
+unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/right/lfs_resharp_tik_0.0001_num_200.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_RIGHT/mag_flirt.mat -out "/Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/right/lfs_resharp_tik_0.0001_num_200_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
 
-unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/forward/lfs_resharp_tik_0.0001_num_200.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_FORWARD/mag_flirt.mat -out "/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/forward/lfs_resharp_tik_0.0001_num_200_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
+unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/forward/lfs_resharp_tik_0.0001_num_200.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_FORWARD/mag_flirt.mat -out "/Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/forward/lfs_resharp_tik_0.0001_num_200_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
 
-unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/backward/lfs_resharp_tik_0.0001_num_200.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_BACKWARD/mag_flirt.mat -out "/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/backward/lfs_resharp_tik_0.0001_num_200_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
+unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/backward/lfs_resharp_tik_0.0001_num_200.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_BACKWARD/mag_flirt.mat -out "/Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/backward/lfs_resharp_tik_0.0001_num_200_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
 
 
 % calculate the angles of B0 with registered local field maps
@@ -41,23 +41,23 @@ end
 
 %% COSMOS reconstruction with closed-form solution
 % load in registered local field shift maps
-unix('gunzip -f /Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/left/lfs_resharp_tik_0.0001_num_200_flirt.nii.gz');
-nii = load_nii('/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/left/lfs_resharp_tik_0.0001_num_200_flirt.nii');
+unix('gunzip -f /Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/left/lfs_resharp_tik_0.0001_num_200_flirt.nii.gz');
+nii = load_nii('//Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/left/lfs_resharp_tik_0.0001_num_200_flirt.nii');
 lfs(:,:,:,1) = double(nii.img);
 
-unix('gunzip -f /Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/right/lfs_resharp_tik_0.0001_num_200_flirt.nii.gz');
-nii = load_nii('/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/right/lfs_resharp_tik_0.0001_num_200_flirt.nii');
+unix('gunzip -f /Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/right/lfs_resharp_tik_0.0001_num_200_flirt.nii.gz');
+nii = load_nii('/Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/right/lfs_resharp_tik_0.0001_num_200_flirt.nii');
 lfs(:,:,:,2) = double(nii.img);
 
-unix('gunzip -f /Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/forward/lfs_resharp_tik_0.0001_num_200_flirt.nii.gz');
-nii = load_nii('/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/forward/lfs_resharp_tik_0.0001_num_200_flirt.nii');
+unix('gunzip -f /Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/forward/lfs_resharp_tik_0.0001_num_200_flirt.nii.gz');
+nii = load_nii('/Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/forward/lfs_resharp_tik_0.0001_num_200_flirt.nii');
 lfs(:,:,:,3) = double(nii.img);
 
-unix('gunzip -f /Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/backward/lfs_resharp_tik_0.0001_num_200_flirt.nii.gz');
-nii = load_nii('/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/backward/lfs_resharp_tik_0.0001_num_200_flirt.nii');
+unix('gunzip -f /Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/backward/lfs_resharp_tik_0.0001_num_200_flirt.nii.gz');
+nii = load_nii('/Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/backward/lfs_resharp_tik_0.0001_num_200_flirt.nii');
 lfs(:,:,:,4) = double(nii.img);
 
-nii = load_nii('/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/backward/lfs_resharp_tik_0.0001_num_200.nii');
+nii = load_nii('/Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/central/lfs_resharp_tik_0.0001_num_200.nii');
 lfs(:,:,:,5) = double(nii.img);
 
 mask = and(and(and(and(lfs(:,:,:,1),lfs(:,:,:,2)),lfs(:,:,:,3)),lfs(:,:,:,4)),lfs(:,:,:,5));
@@ -101,7 +101,7 @@ kernel_sum = sum(abs(kernel).^2, 4);
 chi_cosmos = real( ifftn( sum(kernel .* lfs_k, 4) ./ (eps + kernel_sum) ) ) .* mask;
 
 nii = make_nii(chi_cosmos,vox);
-save_nii(nii,'/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/IMG_COSMOS.nii');
+save_nii(nii,'/Users/uqhsun8/Downloads/cosmos_5orientations/LFS/FullySampled/FullySampled_COSMOS.nii');
 
 
 %%%% inversion of each orientation on registered LFS
