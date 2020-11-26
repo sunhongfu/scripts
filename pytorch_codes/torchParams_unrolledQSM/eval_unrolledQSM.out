@@ -1,0 +1,2642 @@
+Python 3.7.3
+unrolledQSM
+unrolledQSM
+torch.Size([256, 256, 128])
+unrolledQSM
+torch.Size([256, 256, 128])
+unrolledQSM
+<bound method Module.state_dict of DataParallel(
+  (module): unrolledQSM(
+    (one_iter1): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter2): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter3): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+  )
+)>
+torch.Size([1, 1, 256, 256, 128])
+{'Total': 1340640, 'Trainable': 1340640}
+end2
+unrolledQSM
+torch.Size([256, 256, 128])
+unrolledQSM
+torch.Size([256, 256, 128])
+unrolledQSM
+<bound method Module.state_dict of DataParallel(
+  (module): unrolledQSM(
+    (one_iter1): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter2): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter3): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+  )
+)>
+torch.Size([1, 1, 256, 256, 128])
+{'Total': 1340640, 'Trainable': 1340640}
+end2
+unrolledQSM
+torch.Size([256, 256, 128])
+unrolledQSM
+torch.Size([256, 256, 128])
+unrolledQSM
+<bound method Module.state_dict of DataParallel(
+  (module): unrolledQSM(
+    (one_iter1): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter2): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter3): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+  )
+)>
+torch.Size([1, 1, 256, 256, 128])
+{'Total': 1340640, 'Trainable': 1340640}
+end2
+unrolledQSM
+torch.Size([256, 256, 128])
+unrolledQSM
+torch.Size([256, 256, 128])
+unrolledQSM
+<bound method Module.state_dict of DataParallel(
+  (module): unrolledQSM(
+    (one_iter1): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter2): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter3): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+  )
+)>
+torch.Size([1, 1, 256, 256, 128])
+{'Total': 1340640, 'Trainable': 1340640}
+end2
+unrolledQSM
+torch.Size([256, 256, 128])
+unrolledQSM
+torch.Size([256, 256, 128])
+unrolledQSM
+<bound method Module.state_dict of DataParallel(
+  (module): unrolledQSM(
+    (one_iter1): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter2): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter3): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+  )
+)>
+torch.Size([1, 1, 256, 256, 128])
+{'Total': 1340640, 'Trainable': 1340640}
+end2
+unrolledQSM
+torch.Size([256, 128, 256])
+unrolledQSM
+torch.Size([256, 128, 256])
+unrolledQSM
+<bound method Module.state_dict of DataParallel(
+  (module): unrolledQSM(
+    (one_iter1): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter2): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter3): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+  )
+)>
+torch.Size([1, 1, 256, 128, 256])
+{'Total': 1340640, 'Trainable': 1340640}
+end2
+unrolledQSM
+torch.Size([256, 256, 128])
+unrolledQSM
+torch.Size([256, 256, 128])
+unrolledQSM
+<bound method Module.state_dict of DataParallel(
+  (module): unrolledQSM(
+    (one_iter1): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter2): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter3): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+  )
+)>
+torch.Size([1, 1, 256, 256, 128])
+{'Total': 1340640, 'Trainable': 1340640}
+end2
+unrolledQSM
+torch.Size([48, 48, 48])
+unrolledQSM
+torch.Size([48, 48, 48])
+unrolledQSM
+<bound method Module.state_dict of DataParallel(
+  (module): unrolledQSM(
+    (one_iter1): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter2): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+    (one_iter3): one_iteration(
+      (dc): DataConsistency()
+      (reg): WideResNet(
+        (input): Sequential(
+          (0): Conv3d(1, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+          (1): ReLU(inplace=True)
+        )
+        (wideResBlocks): Sequential(
+          (wBlock0): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock1): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock2): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock3): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock4): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock5): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock6): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+          (wBlock7): WideResBlock(
+            (convBlock): Sequential(
+              (0): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (1): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+              (2): ReLU(inplace=True)
+            )
+            (dropout): Dropout3d(p=0.5, inplace=False)
+            (_WideResBlock__conv2): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (_WideResBlock__bn2): BatchNorm3d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+            (_WideResBlock__Relu2): ReLU(inplace=True)
+          )
+        )
+        (output): Sequential(
+          (0): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (1): ReLU(inplace=True)
+          (2): Conv3d(32, 32, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+          (3): ReLU(inplace=True)
+          (4): Conv3d(32, 1, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        )
+      )
+    )
+  )
+)>
+torch.Size([1, 1, 48, 48, 48])
+{'Total': 1340640, 'Trainable': 1340640}
+end2

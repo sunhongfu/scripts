@@ -1,0 +1,34 @@
+/var/spool/slurm/job298596/slurm_script: line 15: gnu/5.4.0: No such file or directory
+Lmod has detected the following error: These module(s) exist but cannot be
+loaded as requested: "mvapich2"
+   Try: "module spider mvapich2" to see how to load the module(s).
+
+
+
+../torch/csrc/autograd/generated/python_variable_methods.cpp:1299: UserWarning: This overload of add is deprecated:
+add(Number alpha, Tensor other)
+Consider using one of the following signatures instead:
+add(Tensor other, Number alpha)
+../torch/csrc/autograd/generated/python_variable_methods.cpp:1334: UserWarning: This overload of add_ is deprecated:
+add_(Number alpha, Tensor other)
+Consider using one of the following signatures instead:
+add_(Tensor other, Number alpha)
+../torch/csrc/autograd/generated/python_variable_methods.cpp:1550: UserWarning: This overload of addcmul_ is deprecated:
+addcmul_(Number value, Tensor tensor1, Tensor tensor2)
+Consider using one of the following signatures instead:
+addcmul_(Tensor tensor1, Tensor tensor2, Number value)
+../torch/csrc/autograd/generated/python_variable_methods.cpp:1480: UserWarning: This overload of addcdiv_ is deprecated:
+addcdiv_(Number value, Tensor tensor1, Tensor tensor2)
+Consider using one of the following signatures instead:
+addcdiv_(Tensor tensor1, Tensor tensor2, Number value)
+Traceback (most recent call last):
+  File "train_QSM.py", line 122, in <module>
+    path_checkpoint='res.pth', save_folder='./checkpoints')
+  File "train_QSM.py", line 80, in TrainNet
+    optimizer.step()
+  File "/opt/ohpc/pub/apps/pytorch_1.14_openmpi/lib/python3.7/site-packages/torch/optim/lr_scheduler.py", line 67, in wrapper
+    return wrapped(*args, **kwargs)
+  File "/opt/ohpc/pub/apps/pytorch_1.14_openmpi/lib/python3.7/site-packages/torch/optim/adam.py", line 95, in step
+    exp_avg.mul_(beta1).add_(1 - beta1, grad)
+RuntimeError: expected device cpu but got device cuda:0
+srun: error: gpunode-1-2: task 0: Exited with exit code 1
