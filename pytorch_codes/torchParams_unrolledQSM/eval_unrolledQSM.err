@@ -1,0 +1,10 @@
+eval_QSM.py:17: DeprecationWarning: get_data() is deprecated in favor of get_fdata(), which has a more predictable return type. To obtain get_data() behavior going forward, use numpy.asanyarray(img.dataobj).
+
+* deprecated from version: 3.0
+* Will raise <class 'nibabel.deprecator.ExpiredDeprecationError'> as of version: 5.0
+  image = nibimage.get_data()
+eval_QSM.py:30: DeprecationWarning: get_data() is deprecated in favor of get_fdata(), which has a more predictable return type. To obtain get_data() behavior going forward, use numpy.asanyarray(img.dataobj).
+
+* deprecated from version: 3.0
+* Will raise <class 'nibabel.deprecator.ExpiredDeprecationError'> as of version: 5.0
+  D = nibimage.get_data()

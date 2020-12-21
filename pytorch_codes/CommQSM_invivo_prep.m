@@ -86,6 +86,14 @@ for i = 1:5:15000
     % generate D and Field
     vox = [1 1 1];
     for j = 1:size(z_prjs_all,1)
+<<<<<<< .merge_file_ZbecFp
+=======
+        [~, D256, ~, ~] = forward_field_calc(ones([256,256,256]), vox, z_prjs_all(j,:));
+        D256 = fftshift(D256);
+        nii = make_nii(D256, vox);
+        save_nii(nii,['/Volumes/LaCie/CommQSM/invivo/data_for_training/D256_shift/D256_shift_' num2str(i) '-' num2str(j) '.nii']);
+
+>>>>>>> .merge_file_SKzS6l
         [field, D, dipole, field_kspace] = forward_field_calc(img, vox, z_prjs_all(j,:));
         D = fftshift(D);
         field_kspace = fftshift(field_kspace);
