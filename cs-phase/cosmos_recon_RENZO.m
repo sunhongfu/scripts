@@ -57,7 +57,7 @@ unix('gunzip -f /Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/b
 nii = load_nii('/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/backward/lfs_resharp_tik_0.0001_num_200_flirt.nii');
 lfs(:,:,:,4) = double(nii.img);
 
-nii = load_nii('/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/backward/lfs_resharp_tik_0.0001_num_200.nii');
+nii = load_nii('/Users/uqhsun8/Downloads/cosmos_5orientations_lfs/FullySampled/center/lfs_resharp_tik_0.0001_num_200.nii');
 lfs(:,:,:,5) = double(nii.img);
 
 mask = and(and(and(and(lfs(:,:,:,1),lfs(:,:,:,2)),lfs(:,:,:,3)),lfs(:,:,:,4)),lfs(:,:,:,5));
