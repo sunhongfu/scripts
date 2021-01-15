@@ -21,58 +21,81 @@
 
 
 
+clear 
+clc
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+imds = imageDatastore('./*_mag.nii', 'FileExtensions', '.nii');
 
-% path_recon = '/Users/uqhsun8/DATA/CS-phase/prevent198/oct/AF2_DC';
-% path_orig = '/Users/uqhsun8/DATA/CS-phase/prevent198';
+files = imds.Files; 
 
-% % load([path_recon '/UnetRecon.mat']);
-% % nii = make_nii(abs(rec));
-% % save_nii(nii,'unet_mag.nii');
-% % nii = make_nii(angle(rec));
-% % save_nii(nii,'unet_pha.nii');
+curDir = pwd; 
 
-% cd(path_recon);
+%addpath('./NIFTI')
+addpath(genpath('~/QSM'))
+for num_file = 2 : length(files)
+    
+full_path = files{num_file};
 
-% % nii = load_nii('CCREC_imaag_198.nii');
-% % cc_imag = single(nii.img);
-% % nii = load_nii('CCREC_REAL_198.nii');
-% % cc_real = single(nii.img);
-% % rec = cc_real + 1j* cc_imag;
-% % mag = abs(rec);
-% % ph = angle(rec);
+dataDir = split(full_path, '_mag.nii'); %% data directory
+dataDir = dataDir{1};
 
-% nii = load_nii('OCtREC_DC_yangmask2_mag_198.nii');
-% mag = single(nii.img);
-% nii = load_nii('OCtREC_DC_yangmask2_phase_198.nii');
-% ph = single(nii.img);
+path_recon = split(full_path, '/rec'); %% data directory
+path_recon = path_recon {1};
 
+%path_recon = './';
+path_orig = './';
 
+% load([path_recon '/UnetRecon.mat']);
+% nii = make_nii(abs(rec));
+% save_nii(nii,'unet_mag.nii');
+% nii = make_nii(angle(rec));
+% save_nii(nii,'unet_pha.nii');
 
-path_recon = '/Users/uqhsun8/DATA/CS-phase/prevent198/pc/AF4';
-path_orig = '/Users/uqhsun8/DATA/CS-phase/prevent198';
+% cd(path_recon); % original 
+cd(path_recon);  % my code; 
 
-cd(path_recon);
+% nii = load_nii('CCrec_01EG_imaag_198.nii');
+% cc_imag = single(nii.img);
+% nii = load_nii('CCrec_01EG_REAL_198.nii');
+% cc_real = single(nii.img);
+% rec = cc_real + 1j* cc_imag;
 
-nii = load_nii('mag.nii');
-mag = single(nii.img);
-nii = load_nii('ph.nii');
+% folder = './';
+% file = 'rec_01EG_Unet_img_16';
+%file = files{num_file};
+
+QSM_folder = [dataDir, '_QSM', ]
+
+phpath = [dataDir '_ph.nii'];
+magpath = [dataDir, '_mag.nii'];
+
+%phpath = [folder, file, '_ph.nii'];
+%magpath = [folder, file, '_mag.nii'];
+
+nii = load_nii(phpath);
 ph = single(nii.img);
-% re-orient
-mag = flip(flip(mag,1),2);
-ph = flip(flip(ph,1),2);
 
+nii = load_nii(magpath);
+mag = single(nii.img);
+
+% mag = abs(rec);
+% ph = angle(rec);
 imsize = size(mag);
 
 
 % load in dicom parameters
-load([path_orig '/all.mat'], 'vox');
-load([path_orig '/all.mat'], 'TE');
-load([path_orig '/all.mat'], 'z_prjs');
-load([path_orig '/all.mat'], 'dicom_info');
+
+load([path_orig '/params.mat'], 'vox');
+load([path_orig '/params.mat'], 'TE');
+load([path_orig '/params.mat'], 'z_prjs');
+load([path_orig '/params.mat'], 'dicom_info');
+
+% load([path_orig '/all.mat'], 'vox');
+% load([path_orig '/all.mat'], 'TE');
+% load([path_orig '/all.mat'], 'z_prjs');
+% load([path_orig '/all.mat'], 'dicom_info');
+
+% TE = TE(1:4);
 
 % load in default parameters
 if ~ exist('options','var') || isempty(options)
@@ -163,7 +186,7 @@ interp     = options.interp;
 
 
 % define output directories
-path_qsm = ['QSM_CS_DL'];
+path_qsm = QSM_folder;
 [~,~,~] = mkdir(path_qsm);
 init_dir = pwd;
 cd(path_qsm);
@@ -191,19 +214,20 @@ unix('gunzip -f BET_mask.nii.gz');
 nii = load_nii('BET_mask.nii');
 mask = double(nii.img);
 
+ph_corr = ph;
 
-% phase offset correction
-% if unipolar
-if strcmpi('unipolar',readout)
-    ph_corr = geme_cmb(mag.*exp(1j*ph),vox,TE,mask);
-% if bipolar
-elseif strcmpi('bipolar',readout)
-    ph_corr = zeros(imsize);
-    ph_corr(:,:,:,1:2:end) = geme_cmb(mag(:,:,:,1:2:end).*exp(1j*ph(:,:,:,1:2:end)),vox,TE(1:2:end),mask);
-    ph_corr(:,:,:,2:2:end) = geme_cmb(mag(:,:,:,2:2:end).*exp(1j*ph(:,:,:,2:2:end)),vox,TE(2:2:end),mask);
-else
-    error('is the sequence unipolar or bipolar readout?')
-end
+% % phase offset correction
+% % if unipolar
+% if strcmpi('unipolar',readout)
+%     ph_corr = geme_cmb(mag.*exp(1j*ph),vox,TE,mask);
+% % if bipolar
+% elseif strcmpi('bipolar',readout)
+%     ph_corr = zeros(imsize);
+%     ph_corr(:,:,:,1:2:end) = geme_cmb(mag(:,:,:,1:2:end).*exp(1j*ph(:,:,:,1:2:end)),vox,TE(1:2:end),mask);
+%     ph_corr(:,:,:,2:2:end) = geme_cmb(mag(:,:,:,2:2:end).*exp(1j*ph(:,:,:,2:2:end)),vox,TE(2:2:end),mask);
+% else
+%     error('is the sequence unipolar or bipolar readout?')
+% end
 
 % save offset corrected phase niftis
 for echo = 1:imsize(4)
@@ -422,27 +446,27 @@ if sum(strcmpi('resharp',bkg_rm))
     chi_iLSQR = QSM_iLSQR(lfs_resharp*(2.675e8*dicom_info.MagneticFieldStrength)/1e6,mask_resharp,'H',z_prjs,'voxelsize',vox,'niter',50,'TE',1000,'B0',dicom_info.MagneticFieldStrength);
     nii = make_nii(chi_iLSQR,vox);
     save_nii(nii,['RESHARP/chi_iLSQR_smvrad' num2str(smv_rad) '.nii']);
-    
-    % MEDI
-    %%%%% normalize signal intensity by noise to get SNR %%%
-    %%%% Generate the Magnitude image %%%%
-    iMag = sqrt(sum(mag.^2,4));
-    % [iFreq_raw N_std] = Fit_ppm_complex(ph_corr);
-    matrix_size = single(imsize(1:3));
-    voxel_size = vox;
-    delta_TE = TE(2) - TE(1);
-    B0_dir = z_prjs';
-    CF = dicom_info.ImagingFrequency *1e6;
-    iFreq = [];
-    N_std = 1;
-    RDF = lfs_resharp*2.675e8*dicom_info.MagneticFieldStrength*delta_TE*1e-6;
-    Mask = mask_resharp;
-    save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
-         voxel_size delta_TE CF B0_dir;
-    QSM = MEDI_L1('lambda',1000);
-    nii = make_nii(QSM.*Mask,vox);
-    save_nii(nii,['RESHARP/MEDI1000_RESHARP_smvrad' num2str(smv_rad) '.nii']);
-
+%% MEDI    
+%     % MEDI
+%     %%%%% normalize signal intensity by noise to get SNR %%%
+%     %%%% Generate the Magnitude image %%%%
+%     iMag = sqrt(sum(mag.^2,4));
+%     % [iFreq_raw N_std] = Fit_ppm_complex(ph_corr);
+%     matrix_size = single(imsize(1:3));
+%     voxel_size = vox;
+%     delta_TE = TE(2) - TE(1);
+%     B0_dir = z_prjs';
+%     CF = dicom_info.ImagingFrequency *1e6;
+%     iFreq = [];
+%     N_std = 1;
+%     RDF = lfs_resharp*2.675e8*dicom_info.MagneticFieldStrength*delta_TE*1e-6;
+%     Mask = mask_resharp;
+%     save RDF.mat RDF iFreq iMag N_std Mask matrix_size...
+%          voxel_size delta_TE CF B0_dir;
+%     QSM = MEDI_L1('lambda',1000);
+%     nii = make_nii(QSM.*Mask,vox);
+%     save_nii(nii,['RESHARP/MEDI1000_RESHARP_smvrad' num2str(smv_rad) '.nii']);
+%% 
 % other MEDI regularization weights
     % QSM = MEDI_L1('lambda',2000);
     % nii = make_nii(QSM.*Mask,vox);
@@ -537,3 +561,10 @@ end
 
 [~,~] = unix('rm *.dat ');
 save('all.mat','-v7.3');
+
+
+cd ..
+cd(curDir); % my code
+end
+rmpath(genpath('~/QSM'))
+

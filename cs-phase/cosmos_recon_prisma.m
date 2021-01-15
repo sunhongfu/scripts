@@ -1,38 +1,38 @@
 
 % apply the transformation to local field map
-unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_left.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/cosmos_prisma/LEFT/flirt_qsm_12DOF.mat -out "/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_left_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/cosmos_prisma/center_new/QSM_R2S_PRISMA/RESHARP/lfs_resharp.nii');
+unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/left/lfs_resharp_tik_0.0001_num_200.nii" -applyxfm -init /Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/LEFT/flirt_qsm_12DOF.mat -out "/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/left/lfs_left_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/center_new/QSM_R2S_PRISMA/RESHARP/lfs_resharp.nii');
 
-unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_right.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/cosmos_prisma/RIGHT/flirt_qsm_12DOF.mat -out "/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_right_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/cosmos_prisma/center_new/QSM_R2S_PRISMA/RESHARP/lfs_resharp.nii');
+unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/right/lfs_resharp_tik_0.0001_num_200.nii" -applyxfm -init /Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/RIGHT/flirt_qsm_12DOF.mat -out "/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/right/lfs_right_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/center_new/QSM_R2S_PRISMA/RESHARP/lfs_resharp.nii');
 
-unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_flexion.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/cosmos_prisma/FLEXION/flirt_qsm_12DOF.mat -out "/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_flexion_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/cosmos_prisma/center_new/QSM_R2S_PRISMA/RESHARP/lfs_resharp.nii');
+unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/flexion/lfs_resharp_tik_0.0001_num_200.nii" -applyxfm -init /Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/FLEXION/flirt_qsm_12DOF.mat -out "/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/flexion//lfs_flexion_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/center_new/QSM_R2S_PRISMA/RESHARP/lfs_resharp.nii');
 
-unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_extension.nii" -applyxfm -init /Volumes/LaCie/COSMOS_3T/cosmos_prisma/EXTENSION/flirt_qsm_12DOF.mat -out "/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_extension_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie/COSMOS_3T/cosmos_prisma/center_new/QSM_R2S_PRISMA/RESHARP/lfs_resharp.nii');
+unix('/usr/local/fsl/bin/flirt -in "/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/extension/lfs_resharp_tik_0.0001_num_200.nii" -applyxfm -init /Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/EXTENSION/flirt_qsm_12DOF.mat -out "/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/extension/lfs_extension_flirt.nii" -paddingsize 0.0 -interp trilinear -ref /Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/center_new/QSM_R2S_PRISMA/RESHARP/lfs_resharp.nii');
 
 
 % calculate the angles of B0 with registered local field maps
 % R is transformation matrix from individual image space to common space (FLIRT matrix)
 % common space coordinates = R* object image space coordinates
-load /Volumes/LaCie/COSMOS_3T/cosmos_prisma/LEFT/flirt_qsm.mat -ASCII
+load /Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/LEFT/flirt_qsm.mat -ASCII
 R_t(:,:,1) = flirt_qsm(1:3,1:3);
-load /Volumes/LaCie/COSMOS_3T/cosmos_prisma/RIGHT/flirt_qsm.mat -ASCII
+load /Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/RIGHT/flirt_qsm.mat -ASCII
 R_t(:,:,2) = flirt_qsm(1:3,1:3);
-load /Volumes/LaCie/COSMOS_3T/cosmos_prisma/FLEXION/flirt_qsm.mat -ASCII
+load /Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/FLEXION/flirt_qsm.mat -ASCII
 R_t(:,:,3) = flirt_qsm(1:3,1:3);
-load /Volumes/LaCie/COSMOS_3T/cosmos_prisma/EXTENSION/flirt_qsm.mat -ASCII
+load /Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/EXTENSION/flirt_qsm.mat -ASCII
 R_t(:,:,4) = flirt_qsm(1:3,1:3);
 R_t(:,:,5) = eye(3);
 
 % (each orientation has own R and z_prjs)
 % R is the rotation matrix from image space to common space
-load('/Volumes/LaCie/COSMOS_3T/cosmos_prisma/LEFT/QSM_R2S_PRISMA/all.mat','z_prjs')
+load('/Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/LEFT/QSM_R2S_PRISMA/all.mat','z_prjs')
 z_prjs_o(:,1) = z_prjs';
-load('/Volumes/LaCie/COSMOS_3T/cosmos_prisma/RIGHT/QSM_R2S_PRISMA/all.mat','z_prjs')
+load('/Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/RIGHT/QSM_R2S_PRISMA/all.mat','z_prjs')
 z_prjs_o(:,2) = z_prjs';
-load('/Volumes/LaCie/COSMOS_3T/cosmos_prisma/FLEXION/QSM_R2S_PRISMA/all.mat','z_prjs')
+load('/Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/FLEXION/QSM_R2S_PRISMA/all.mat','z_prjs')
 z_prjs_o(:,3) = z_prjs';
-load('/Volumes/LaCie/COSMOS_3T/cosmos_prisma/EXTENSION/QSM_R2S_PRISMA/all.mat','z_prjs')
+load('/Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/EXTENSION/QSM_R2S_PRISMA/all.mat','z_prjs')
 z_prjs_o(:,4) = z_prjs';
-load('/Volumes/LaCie/COSMOS_3T/cosmos_prisma/NEUTRAL/QSM_R2S_PRISMA/all.mat','z_prjs')
+load('/Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/NEUTRAL/QSM_R2S_PRISMA/all.mat','z_prjs')
 z_prjs_o(:,5) = z_prjs';
 
 for i = 1:5
@@ -41,23 +41,23 @@ end
 
 %% COSMOS reconstruction with closed-form solution
 % load in registered local field shift maps
-unix('gunzip -f /Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_left_flirt.nii.gz');
-nii = load_nii('/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_left_flirt.nii');
+unix('gunzip -f /Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/left/lfs_left_flirt.nii.gz');
+nii = load_nii('/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/left/lfs_left_flirt.nii');
 lfs(:,:,:,1) = double(nii.img);
 
-unix('gunzip -f /Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_right_flirt.nii.gz');
-nii = load_nii('/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_right_flirt.nii');
+unix('gunzip -f /Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/right/lfs_right_flirt.nii.gz');
+nii = load_nii('/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/right/lfs_right_flirt.nii');
 lfs(:,:,:,2) = double(nii.img);
 
-unix('gunzip -f /Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_flexion_flirt.nii.gz');
-nii = load_nii('/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_flexion_flirt.nii');
+unix('gunzip -f /Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/flexion/lfs_flexion_flirt.nii.gz');
+nii = load_nii('/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/flexion/lfs_flexion_flirt.nii');
 lfs(:,:,:,3) = double(nii.img);
 
-unix('gunzip -f /Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_extension_flirt.nii.gz');
-nii = load_nii('/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_extension_flirt.nii');
+unix('gunzip -f /Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/extension/lfs_extension_flirt.nii.gz');
+nii = load_nii('/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/extension/lfs_extension_flirt.nii');
 lfs(:,:,:,4) = double(nii.img);
 
-nii = load_nii('/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_lfs_center.nii');
+nii = load_nii('/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/center/lfs_resharp_tik_0.0001_num_200.nii');
 lfs(:,:,:,5) = double(nii.img);
 
 mask = and(and(and(and(lfs(:,:,:,1),lfs(:,:,:,2)),lfs(:,:,:,3)),lfs(:,:,:,4)),lfs(:,:,:,5));
@@ -101,11 +101,18 @@ kernel_sum = sum(abs(kernel).^2, 4);
 chi_cosmos = real( ifftn( sum(kernel .* lfs_k, 4) ./ (eps + kernel_sum) ) ) .* mask;
 
 nii = make_nii(-chi_cosmos,vox);
-save_nii(nii,'/Users/uqhsun8/Downloads/cosmos_prisma/LFS/k_net/knet_COSMOS.nii');
+save_nii(nii,'/Users/uqhsun8/Downloads/COSMOS/cosmos_prisma/ZeroFilling/COSMOS.nii');
+
+
+
+
+
+
+
 
 
 %%%% inversion of each orientation on registered LFS
-nii = load_nii('/media/data/QSM_data/COSMOS_renzo/sorted/patient/9175/QSM_SPGRE_CENTER/QSM_SPGR_GE/src/mag1.nii');
+nii = load_nii('/Volumes/LaCie_Bottom/COSMOS_3T/cosmos_prisma/center_new/QSM_R2S_PRISMA/src/mag1.nii');
 mag = double(nii.img);
 for i = 1:5
     disp('--> TV susceptibility inversion on RESHARP...');
