@@ -1,18 +1,18 @@
-nii = load_nii('espirit_combined_noDC_mag.nii');
-mag_corr = double(nii.img) ;
+nii = load_nii('espritRecon_HS_coils_mag_zf.nii');
+mag_corr = flip(flip(permute(double(nii.img), [3, 1, 2, 4]),3),2) ;
 
-nii = load_nii('espirit_combined_noDC_ph.nii');
-ph_corr = double(nii.img) ;
+nii = load_nii('espritRecon_HS_coils_ph_zf.nii');
+ph_corr = flip(flip(permute(double(nii.img), [3, 1, 2, 4]),3),2) ;
 
-img = mag_corr.*exp(1j*ph_corr);
+% img = mag_corr.*exp(1j*ph_corr);
 
-mkdir espirit_combined
-cd espirit_combined
+mkdir QSM
+cd QSM
+
 % coil combination % smoothing factor 10?
 TE = 3.4 + [0:7]*3.5;
 TE = TE/1000;
 vox = [1,1,1];
-
 
 imsize = size(mag_corr);
 
@@ -131,19 +131,19 @@ nii = load_nii('BET_mask.nii');
 mask = double(nii.img);
 
 
-[ph_corr,mag_corr] = geme_cmb(img,vox,TE,mask,[],0);
+% [ph_corr,mag_corr] = geme_cmb(img,vox,TE,mask,[],0);
 
-mkdir('src');
-for echo = 1:size(mag_corr,4)
-    nii = make_nii(mag_corr(:,:,:,echo),vox);
-    save_nii(nii,['src/mag_corr' num2str(echo) '.nii']);
+% mkdir('src');
+% for echo = 1:size(mag_corr,4)
+%     nii = make_nii(mag_corr(:,:,:,echo),vox);
+%     save_nii(nii,['src/mag_corr' num2str(echo) '.nii']);
 
-    % setenv('echo',num2str(echo));
-    % unix('N4BiasFieldCorrection -i src/mag_corr${echo}.nii -o src/mag_corr${echo}_n4.nii');
+%     % setenv('echo',num2str(echo));
+%     % unix('N4BiasFieldCorrection -i src/mag_corr${echo}.nii -o src/mag_corr${echo}_n4.nii');
 
-    nii = make_nii(ph_corr(:,:,:,echo),vox);
-    save_nii(nii,['src/ph_corr' num2str(echo) '.nii']);
-end
+%     nii = make_nii(ph_corr(:,:,:,echo),vox);
+%     save_nii(nii,['src/ph_corr' num2str(echo) '.nii']);
+% end
 
 
 
@@ -301,3 +301,5 @@ save_nii(nii,['RESHARP/chi_iLSQR_smvrad' num2str(smv_rad) '.nii']);
 
 % Hongfu code ends
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

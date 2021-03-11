@@ -1,13 +1,13 @@
-nii = load_nii('espirit_combined_noDC_mag.nii');
+nii = load_nii('cspc_recon_espirit_recon_mag.nii');
 mag_corr = double(nii.img) ;
 
-nii = load_nii('espirit_combined_noDC_ph.nii');
+nii = load_nii('cspc_recon_espirit_recon_ph.nii');
 ph_corr = double(nii.img) ;
 
 img = mag_corr.*exp(1j*ph_corr);
 
-mkdir espirit_combined
-cd espirit_combined
+mkdir espirit_cspc
+cd espirit_cspc
 % coil combination % smoothing factor 10?
 TE = 3.4 + [0:7]*3.5;
 TE = TE/1000;

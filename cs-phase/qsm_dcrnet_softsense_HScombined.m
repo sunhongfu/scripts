@@ -1,13 +1,13 @@
-nii = load_nii('espirit_combined_noDC_mag.nii');
+nii = load_nii('DCRNet_recon_HSCoil_Espirit_mag.nii');
 mag_corr = double(nii.img) ;
 
-nii = load_nii('espirit_combined_noDC_ph.nii');
+nii = load_nii('DCRNet_recon_HSCoil_Espirit_ph.nii');
 ph_corr = double(nii.img) ;
 
 img = mag_corr.*exp(1j*ph_corr);
 
-mkdir espirit_combined
-cd espirit_combined
+mkdir DCRNet_recon_HSCoil_Espirit
+cd DCRNet_recon_HSCoil_Espirit
 % coil combination % smoothing factor 10?
 TE = 3.4 + [0:7]*3.5;
 TE = TE/1000;
@@ -131,19 +131,19 @@ nii = load_nii('BET_mask.nii');
 mask = double(nii.img);
 
 
-[ph_corr,mag_corr] = geme_cmb(img,vox,TE,mask,[],0);
+% [ph_corr,mag_corr] = geme_cmb(img,vox,TE,mask,[],0);
 
-mkdir('src');
-for echo = 1:size(mag_corr,4)
-    nii = make_nii(mag_corr(:,:,:,echo),vox);
-    save_nii(nii,['src/mag_corr' num2str(echo) '.nii']);
+% mkdir('src');
+% for echo = 1:size(mag_corr,4)
+%     nii = make_nii(mag_corr(:,:,:,echo),vox);
+%     save_nii(nii,['src/mag_corr' num2str(echo) '.nii']);
 
-    % setenv('echo',num2str(echo));
-    % unix('N4BiasFieldCorrection -i src/mag_corr${echo}.nii -o src/mag_corr${echo}_n4.nii');
+%     % setenv('echo',num2str(echo));
+%     % unix('N4BiasFieldCorrection -i src/mag_corr${echo}.nii -o src/mag_corr${echo}_n4.nii');
 
-    nii = make_nii(ph_corr(:,:,:,echo),vox);
-    save_nii(nii,['src/ph_corr' num2str(echo) '.nii']);
-end
+%     nii = make_nii(ph_corr(:,:,:,echo),vox);
+%     save_nii(nii,['src/ph_corr' num2str(echo) '.nii']);
+% end
 
 
 

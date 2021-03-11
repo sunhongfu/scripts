@@ -1,18 +1,18 @@
-nii = load_nii('espirit_combined_noDC_mag.nii');
-mag_corr = double(nii.img) ;
+nii = load_nii('espritRecon_ESpirit_coils_mag_zf.nii');
+mag_corr = flip(flip(permute(double(nii.img), [3, 1, 2, 4]),3),2) ;
 
-nii = load_nii('espirit_combined_noDC_ph.nii');
-ph_corr = double(nii.img) ;
+nii = load_nii('espritRecon_ESpirit_coils_ph_zf.nii');
+ph_corr = flip(flip(permute(double(nii.img), [3, 1, 2, 4]),3),2) ;
 
 img = mag_corr.*exp(1j*ph_corr);
 
-mkdir espirit_combined
-cd espirit_combined
+mkdir QSM
+cd QSM
+
 % coil combination % smoothing factor 10?
 TE = 3.4 + [0:7]*3.5;
 TE = TE/1000;
 vox = [1,1,1];
-
 
 imsize = size(mag_corr);
 
@@ -301,3 +301,5 @@ save_nii(nii,['RESHARP/chi_iLSQR_smvrad' num2str(smv_rad) '.nii']);
 
 % Hongfu code ends
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

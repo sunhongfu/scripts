@@ -1,24 +1,49 @@
-nii = load_nii('espirit_combined_noDC_mag.nii');
-mag_corr = double(nii.img) ;
+img = zeros(256,128,256,8,32);
+for i = 1:8
+    nii = load_nii(['mac_ne_' num2str(i) '.nii']);
+    mag = single(nii.img);
+    nii = load_nii(['ph_ne_' num2str(i) '.nii']);
+    ph = single(nii.img);
+    img(:,:,:,i,:) = mag.*exp(1j*ph);
+end
+img = permute(img, [3, 1, 2, 4, 5]) ;
+clear mag ph
+mkdir QSM
+cd QSM
 
-nii = load_nii('espirit_combined_noDC_ph.nii');
-ph_corr = double(nii.img) ;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hongfu code
+vox = [1,1,1];
 
-img = mag_corr.*exp(1j*ph_corr);
+% BEGIN THE QSM RECON PIPELINE
+% initial quick brain mask
+% simple sum-of-square combination
+mag1_sos = sqrt(sum(abs(img(:,:,:,1,:)).^2,5));
+nii = make_nii(mag1_sos,vox);
+save_nii(nii,'mag1_sos.nii');
 
-mkdir espirit_combined
-cd espirit_combined
+% unix('N4BiasFieldCorrection -i mag1_sos.nii -o mag1_sos_n4.nii');
+
+unix('bet2 mag1_sos.nii BET -f 0.2 -m');
+% set a lower threshold for postmortem
+% unix('bet2 mag1_sos.nii BET -f 0.1 -m');
+unix('gunzip -f BET.nii.gz');
+unix('gunzip -f BET_mask.nii.gz');
+nii = load_nii('BET_mask.nii');
+mask = double(nii.img);
+
 % coil combination % smoothing factor 10?
 TE = 3.4 + [0:7]*3.5;
 TE = TE/1000;
-vox = [1,1,1];
 
+% (1) if unipolar
+[ph_corr,mag_corr] = geme_cmb(img,vox,TE,mask,[],0);
 
 imsize = size(mag_corr);
 
 % save niftis after coil combination
 mkdir('src');
-for echo = 1:size(mag_corr,4)
+for echo = 1:size(img,4)
     nii = make_nii(mag_corr(:,:,:,echo),vox);
     save_nii(nii,['src/mag_corr' num2str(echo) '.nii']);
 
@@ -28,6 +53,9 @@ for echo = 1:size(mag_corr,4)
     nii = make_nii(ph_corr(:,:,:,echo),vox);
     save_nii(nii,['src/ph_corr' num2str(echo) '.nii']);
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 
 % load in default parameters
@@ -129,21 +157,6 @@ unix('gunzip -f BET.nii.gz');
 unix('gunzip -f BET_mask.nii.gz');
 nii = load_nii('BET_mask.nii');
 mask = double(nii.img);
-
-
-[ph_corr,mag_corr] = geme_cmb(img,vox,TE,mask,[],0);
-
-mkdir('src');
-for echo = 1:size(mag_corr,4)
-    nii = make_nii(mag_corr(:,:,:,echo),vox);
-    save_nii(nii,['src/mag_corr' num2str(echo) '.nii']);
-
-    % setenv('echo',num2str(echo));
-    % unix('N4BiasFieldCorrection -i src/mag_corr${echo}.nii -o src/mag_corr${echo}_n4.nii');
-
-    nii = make_nii(ph_corr(:,:,:,echo),vox);
-    save_nii(nii,['src/ph_corr' num2str(echo) '.nii']);
-end
 
 
 
@@ -298,6 +311,3 @@ z_prjs = [0 0 1];
 chi_iLSQR = QSM_iLSQR(lfs_resharp*(2.675e8*dicom_info.MagneticFieldStrength)/1e6,mask_resharp,'H',z_prjs,'voxelsize',vox,'niter',50,'TE',1000,'B0',dicom_info.MagneticFieldStrength);
 nii = make_nii(chi_iLSQR,vox);
 save_nii(nii,['RESHARP/chi_iLSQR_smvrad' num2str(smv_rad) '.nii']);
-
-% Hongfu code ends
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

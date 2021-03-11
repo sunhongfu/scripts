@@ -1,0 +1,10 @@
+#!/bin/bash
+#PBS -A UQ-EAIT-ITEE
+#PBS -l select=1:ncpus=4:mem=4GB
+#PBS -l walltime=02:00:00
+
+module load anaconda 
+
+export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=4
+cd /home/uqhsun8/Documents/scripts/preschool
+python3 ants_magSoS_to_b0_hpc.py PS16_003
