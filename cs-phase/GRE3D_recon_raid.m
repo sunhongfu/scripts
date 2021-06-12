@@ -10,9 +10,8 @@ addpath(genpath('./_src'));
 %--------------------------------------------------------------------------
 %% fixed file path option
 %--------------------------------------------------------------------------
-sFile = 'meas_MID00024_FID03085_a_gre_cs8.dat';
-sPath = '/Volumes/DEEPMRI-Q1041/2021_03_18_CS_GRE_Phantom/';
-
+sFile = 'meas_MID00085_FID08813_a_gre_cs_FA4.dat';
+sPath = '/Volumes/LaCie_Top/CS-phase/invivo/2021_06_04_CS_QSM_002/RAW/';
 
 %--------------------------------------------------------------------------
 %% select a file (optional)
@@ -56,7 +55,7 @@ if exist('ARG', 'var')~=true
     ARG.pc_const_shift = 0;      % no EPI
     ARG.pc_linea_shift = 0;      % no EPI <- can be highjacked to introduce subvoxel shift
     
-    ARG.multiraid      = true;
+    ARG.multiraid      = false;
 
     % save setting
     save([sPath sFile(1:(end-4)) '_ARG.mat'],'ARG');
@@ -139,7 +138,42 @@ for echo = 1:8
     k_full(:,:,:,echo,:) = kData;
 end
 
+
+
+% kData_s2 = ifftshift(ifft(ifftshift(ifftshift(ifft(ifftshift(ifftshift(ifft(ifftshift(kData_s1,1),[],1),1),3),[],3),3),2),[],2),2);
+
+
+
+% save('k_full_512','k_full','-v7.3');
+
 k_full = k_full(129:128+256,:,:,:,:);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% calculate magnitude sen
+vox = [1,1,1];
+% mag_sos = sqrt(sum(abs(k_full).^2,5)/size(k_full,5));
+mag_sos = sqrt(sum(abs(k_full).^2,5));
+nii = make_nii(mag_sos,vox);
+save_nii(nii,'mag_sos.nii');
+
+nii = make_nii(abs(k_full(:,:,:,1,:)),vox);
+save_nii(nii,'mag1_all.nii');
+
+
+sen = squeeze(abs(k_full(:,:,:,1,:)))./repmat(mag_sos(:,:,:,1),[1 1 1 size(k_full,5)]);
+nii = make_nii(sen,vox);
+save_nii(nii,'sen_mag_raw.nii');
+
+
+% smooth the coil sensitivity
+for chan = 1:size(k_full,5) 
+    sen_smooth(:,:,:,chan) = smooth3(sen(:,:,:,chan),'box',round(8./vox)*2+1); 
+end
+
+nii = make_nii(sen_smooth,vox);
+save_nii(nii,'sen_mag_smooth.nii');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 img = k_full;
 clear k_full
@@ -189,6 +223,7 @@ for echo = 1:size(img,4)
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+clear img kData
 
 
 
@@ -446,6 +481,7 @@ chi_iLSQR = QSM_iLSQR(lfs_resharp*(2.675e8*dicom_info.MagneticFieldStrength)/1e6
 nii = make_nii(chi_iLSQR,vox);
 save_nii(nii,['RESHARP/chi_iLSQR_smvrad' num2str(smv_rad) '.nii']);
 
+save all.mat
 % Hongfu code ends
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

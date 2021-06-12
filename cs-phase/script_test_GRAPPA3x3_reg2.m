@@ -1,26 +1,194 @@
-% nii = load_nii('cspc_HScoils_recon_mag.nii');
-nii = load_nii('cspc_mag.nii');
-mag_corr = double(nii.img) ;
+%--------------------------------------------------------------------------
+%% load data
+%--------------------------------------------------------------------------
 
-% nii = load_nii('cspc_HScoils_recon_ph.nii');
-nii = load_nii('cspc_ph.nii');
-ph_corr = double(nii.img) ;
+addpath(genpath('/Users/uqhsun8/Documents/MATLAB/functions/GRAPPA_berkin/LIBRARY/'))
 
-img = mag_corr.*exp(1j*ph_corr);
 
-mkdir cspc_HScoils
-cd cspc_HScoils
+% dt_fa04 = mapVBVD('meas_MID152_fl3d_mtv_FA_4_FID5350.dat', 'removeOS');
+dt_fa04 = mapVBVD('/Volumes/LaCie_Top/CS-phase/invivo/2021_06_04_CS_QSM_001/RAW/meas_MID00116_FID08844_gre_full_3x3.dat', 'removeOS');
+mkdir('/Volumes/LaCie_Top/CS-phase/invivo/2021_06_04_CS_QSM_001/GRAPPA3X3_reg');
+cd('/Volumes/LaCie_Top/CS-phase/invivo/2021_06_04_CS_QSM_001/GRAPPA3X3_reg');
+
+% prot = read_meas_prot('/Volumes/LaCie_Top/CS-phase/invivo/2021_06_04_CS_QSM_001/RAW/meas_MID00116_FID08844_gre_full_3x3.dat');
+
+
+%--------------------------------------------------------------------------
+%% 
+%--------------------------------------------------------------------------
+
+dat = squeeze(dt_fa04.image());
+dat = permute(dat, [1,3,4,2,5]);
+
+% pad due to accl
+dat = padarray(dat, [0,2,0,0,0]);
+dat = padarray(dat, [0,0,1,0,0]);
+%%
+num_ro = s(dat,1);
+
+% pad ref data in readout to match mtx size
+ref = squeeze(dt_fa04.refscan());
+ref = permute(ref, [1,3,4,2,5]);
+
+ref = ref(:,:,:,:,1);
+
+ref = padarray(ref, [(num_ro - size(ref,1)), 0, 0, 0] / 2);
+
+
+%--------------------------------------------------------------------------
+%% compress to 32 chan
+%--------------------------------------------------------------------------
+
+% num_chan = 32;
+% 
+% [REF_svd, cmp_mtx] = svd_compress3d(ref, num_chan, 1);
+% 
+% 
+% size_new = size(dat);
+% size_new(4) = num_chan;
+% 
+% DAT_svd = zeross( size_new );
+% 
+% for t = 1:size_new(5)  
+%     DAT_svd(:,:,:,:,t) = svd_apply3d(dat(:,:,:,:,t), cmp_mtx);
+% end
+
+
+%% ifft over kx -> x,ky,kz,chan,te
+ref = ifftc( ref, 1 );
+dat = ifftc( dat, 1 );
+
+
+% clear DAT_svd REF_svd
+
+
+%--------------------------------------------------------------------------
+%% select slice
+%--------------------------------------------------------------------------
+Img_R2 = zeros(256,192,144,32,8);
+
+for slice_select = 1:256 % for loop here
+
+    dat_all = sq( dat(slice_select, :,:,:,:) ); % ky,kz,chan,echo
+
+    ref_all = sq( ref(slice_select, :,:,:) );
+
+
+    img_dat_slc = ifft2call( dat_all );
+
+    img_ref_slc = ifft2call( ref_all );
+
+
+%     mosaic( rsos(img_ref_slc,3), 1, 3, 10, '', [0,15e-4], -90 ),  
+%     mosaic( rsos(img_dat_slc,3), 1, 3, 11, '', [0,5e-4], -90 ),  
+
+
+
+
+    Kspace_Sampled = dat_all;
+    Kspace_Acs = ref_all;
+
+
+    size_kspace = size(Kspace_Sampled(:,:,1,1,1));
+    size_ref = size(Kspace_Acs(:,:,1,1,1));
+
+
+    Kspace_Acs = padarray( Kspace_Acs, [size_kspace-size_ref, 0, 0, 0]/2 );
+
+
+%     mosaic( rsos(rsos(rsos(Kspace_Acs,3),4),5),1,1,1,'',[0,1e-4] ), setGcf(0.2)
+%     mosaic( rsos(rsos(rsos(Kspace_Sampled,3),4),5),1,1,2,'',[0,1e-4] ), setGcf(0.2)
+
+
+    [N(1), N(2), num_chan, num_echo, num_flip] = size(Kspace_Sampled);
+
+
+
+
+    %--------------------------------------------------------------------------
+    %% grappa: apply PAT2 recon to get ~ground truth
+    %--------------------------------------------------------------------------
+
+
+    num_eco = 8;
+
+    Rz = 3;
+    Ry = 3;
+
+    del_ky=1*ones(num_chan,1);
+    del_kz=3*ones(num_chan,1);
+
+    compute_gfactor = 0;
+    lambda_tik = 1e-8;
+    % lambda_tik = eps;
+
+
+    num_acs = [24,24]-2;        % size reduced due to 1 voxel circshift
+    kernel_size = [3,3];        % odd kernel size
+
+
+    Img_Grappa = zeros([N, num_chan, num_eco]);
+
+
+    tic
+    for t = 1:num_eco
+        kspace_sampled = Kspace_Sampled(:,:,:,t);
+
+        Img_Grappa(:,:,:,t) = grappa_gfactor_2d_jvc2( kspace_sampled, Kspace_Acs, Rz, Ry, num_acs, kernel_size, lambda_tik, 0, del_kz, del_ky );
+    end
+    toc
+
+
+    Img_R2(slice_select,:,:,:,:) = Img_Grappa;
+end
+
+% mosaic(reshape(rsos(Img_R2, 3), [N, num_eco]),1,1,1,'',[0,3e-3],-90)
+% 
+% %%
+% mosaic(rsos(Kspace_Acs,3),1,1,1), 
+% 
+% mosaic(rsos(kspace_sampled,3),1,1,1), setGcf(.5)
+
+
+save('all_grappa.mat','-v7.3');
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hongfu code
+vox = [1,1,1];
+
+img = permute(Img_R2,[1 2 3 5 4]);
+clear Img_R2 dat
+
+% BEGIN THE QSM RECON PIPELINE
+% initial quick brain mask
+% simple sum-of-square combination
+mag1_sos = sqrt(sum(abs(img(:,:,:,1,:)).^2,5));
+nii = make_nii(mag1_sos,vox);
+save_nii(nii,'mag1_sos.nii');
+
+% unix('N4BiasFieldCorrection -i mag1_sos.nii -o mag1_sos_n4.nii');
+
+unix('bet2 mag1_sos.nii BET -f 0.2 -m');
+% set a lower threshold for postmortem
+% unix('bet2 mag1_sos.nii BET -f 0.1 -m');
+unix('gunzip -f BET.nii.gz');
+unix('gunzip -f BET_mask.nii.gz');
+nii = load_nii('BET_mask.nii');
+mask = double(nii.img);
+
 % coil combination % smoothing factor 10?
 TE = 3.4 + [0:7]*3.5;
 TE = TE/1000;
-vox = [1,1,1];
 
+% (1) if unipolar
+[ph_corr,mag_corr] = geme_cmb(img,vox,TE,mask,[],0);
 
 imsize = size(mag_corr);
 
 % save niftis after coil combination
 mkdir('src');
-for echo = 1:size(mag_corr,4)
+for echo = 1:size(img,4)
     nii = make_nii(mag_corr(:,:,:,echo),vox);
     save_nii(nii,['src/mag_corr' num2str(echo) '.nii']);
 
@@ -30,6 +198,10 @@ for echo = 1:size(mag_corr,4)
     nii = make_nii(ph_corr(:,:,:,echo),vox);
     save_nii(nii,['src/ph_corr' num2str(echo) '.nii']);
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+clear img kData
+
 
 
 % load in default parameters
@@ -131,21 +303,6 @@ unix('gunzip -f BET.nii.gz');
 unix('gunzip -f BET_mask.nii.gz');
 nii = load_nii('BET_mask.nii');
 mask = double(nii.img);
-
-
-% [ph_corr,mag_corr] = geme_cmb(img,vox,TE,mask,[],0);
-
-% mkdir('src');
-% for echo = 1:size(mag_corr,4)
-%     nii = make_nii(mag_corr(:,:,:,echo),vox);
-%     save_nii(nii,['src/mag_corr' num2str(echo) '.nii']);
-
-%     % setenv('echo',num2str(echo));
-%     % unix('N4BiasFieldCorrection -i src/mag_corr${echo}.nii -o src/mag_corr${echo}_n4.nii');
-
-%     nii = make_nii(ph_corr(:,:,:,echo),vox);
-%     save_nii(nii,['src/ph_corr' num2str(echo) '.nii']);
-% end
 
 
 
@@ -301,6 +458,7 @@ chi_iLSQR = QSM_iLSQR(lfs_resharp*(2.675e8*dicom_info.MagneticFieldStrength)/1e6
 nii = make_nii(chi_iLSQR,vox);
 save_nii(nii,['RESHARP/chi_iLSQR_smvrad' num2str(smv_rad) '.nii']);
 
-save all.mat
+% save all.mat
 % Hongfu code ends
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

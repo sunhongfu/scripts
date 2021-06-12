@@ -5,10 +5,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % METHOD 2: re-estimate coil sensitivities
-img = zeros(256,256,128,8,32);
+% img = zeros(256,192,128,8,32);
+img = zeros(256,192,128,8,32);
 for echo = 1:8
-    load(['rec_DC_MC_ne_' num2str(echo) '_facttor0.2.mat']);
-    img(:,:,:,echo,:) = permute(rec_dc_mc, [3, 1, 2, 4]); 
+    load(['rec_DC_MC_ne_' num2str(echo) '_facttor0.8.mat']);
+    % img(:,:,:,echo,:) = permute(rec_dc_mc, [3, 1, 2, 4]); 
+    img(:,:,:,echo,:) = rec_dc_mc; 
 end
 clear rec_dc_mc
 
@@ -40,6 +42,8 @@ TE = TE/1000;
 
 % (1) if unipolar
 [ph_corr,mag_corr] = geme_cmb(img,vox,TE,mask,[],0);
+
+clear img
 
 imsize = size(mag_corr);
 
@@ -314,5 +318,6 @@ chi_iLSQR = QSM_iLSQR(lfs_resharp*(2.675e8*dicom_info.MagneticFieldStrength)/1e6
 nii = make_nii(chi_iLSQR,vox);
 save_nii(nii,['RESHARP/chi_iLSQR_smvrad' num2str(smv_rad) '.nii']);
 
+save all.mat
 % Hongfu code ends
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

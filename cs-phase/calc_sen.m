@@ -1,6 +1,7 @@
 load('k_full.mat');
 vox = [1,1,1];
-mag_sos = sqrt(sum(abs(k_full).^2,5)/size(k_full,5));
+% mag_sos = sqrt(sum(abs(k_full).^2,5)/size(k_full,5));
+mag_sos = sqrt(sum(abs(k_full).^2,5));
 nii = make_nii(mag_sos,vox);
 save_nii(nii,'mag_sos.nii');
 
