@@ -1,20 +1,20 @@
-nii1 = load_untouch_nii('/Volumes/LaCie_Top/Amir/hongfu_for_ich/AIBL2314_T1/2314_T1_MRI_GREMagNorm_Raw.nii');
+nii1 = load_untouch_nii('/Volumes/LaCie_Top/Amir/QSM/113W_T0_014_gre_qsm_5echoes_Iso1mm_gre_qsm_5echoes_Iso1mm___ORIGINAL____PRIMARY____M____NORM____DIS2D__.nii');
 mag = single(nii1.img);
 
-nii2 = load_untouch_nii('/Volumes/LaCie_Top/Amir/hongfu_for_ich/AIBL2314_T1/2314_T1_MRI_GREPha_Raw.nii');
+nii2 = load_untouch_nii('/Volumes/LaCie_Top/Amir/QSM/113W_T0_016_gre_qsm_5echoes_Iso1mm_gre_qsm_5echoes_Iso1mm___ORIGINAL____PRIMARY____P____DIS2D__.nii');
 pha = single(nii2.img);
 pha = 2*pi.*(pha - min(pha(:)))/(max(pha(:)) - min(pha(:))) - pi;
 
 vox = nii1.hdr.dime.pixdim(2:4);
 imsize = size(mag);
 
-jsontext = fileread('/Volumes/LaCie_Top/Amir/hongfu_for_ich/AIBL2314_T1/2314_T1_MRI_GREMagNorm_Raw.json');
+jsontext = fileread('/Volumes/LaCie_Top/Amir/QSM/113W_T0_016_gre_qsm_5echoes_Iso1mm_gre_qsm_5echoes_Iso1mm___ORIGINAL____PRIMARY____P____DIS2D__.json');
 params = jsondecode(jsontext);
 TE = params.time.samples.EchoTime/1000;
 
 
-mkdir('2314_T1_recon')
-cd('2314_T1_recon')
+mkdir('113W_T0_015_recon')
+cd('113W_T0_015_recon')
 
 % save('raw.mat','-v7.3');
 
@@ -136,7 +136,7 @@ save_nii(nii,'fit_residual_0.nii');
 
 
 % for hemorrhage
-fit_thr = 250
+fit_thr = 20
 
 % extra filtering according to fitting residuals
 % generate reliability map

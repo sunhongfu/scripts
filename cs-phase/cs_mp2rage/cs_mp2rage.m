@@ -10,7 +10,7 @@ addpath(genpath('/Users/uqhsun8/Documents/MATLAB/scripts/cs-phase/_src'));
 %--------------------------------------------------------------------------
 %% fixed file path option
 %--------------------------------------------------------------------------
-sFile = 'meas_MID00277_FID15747_wip925b_TI2_EC2_VC_CS8_p75iso.dat';
+sFile = 'meas_MID00274_FID15744_wip925b_TI2_ECHO9_VC_CS9_SAM54.dat';
 sPath = '/Volumes/LaCie_Top/CS_MP2RAGE_19Aug21/';
 
 %--------------------------------------------------------------------------
@@ -20,7 +20,9 @@ if exist('sFile', 'var')~=true
     [sFile, sPath] = uigetfile('*.dat');
 end
 
-cd(sPath)
+% cd(sPath)
+mkdir('meas_MID00274_FID15744_wip925b_TI2_ECHO9_VC_CS9_SAM54');
+cd('meas_MID00274_FID15744_wip925b_TI2_ECHO9_VC_CS9_SAM54');
 
 %--------------------------------------------------------------------------
 %% settings
@@ -100,8 +102,10 @@ nPh = twix_obj.hdr.Config.NImageLins;  % nPh = round(twix_obj.image.NLin/ARG.PF)
 nPa = twix_obj.hdr.Config.NPar; 
 nCh = twix_obj.image.NCha;
 NEco = twix_obj.image.NEco;
+NSet = twix_obj.image.NSet;
 
-k_full = zeros(nRe,nPh,nPa,NEco,nCh,2);
+% k_full = zeros([nRe*2,nPh,nPa,NEco,nCh,NSet],'single');
+k_full = zeros([nRe*2,nPh,nPa,NEco,nCh],'single');
 
 for echo = 1:NEco
 
@@ -124,68 +128,97 @@ for echo = 1:NEco
     end
 
     imsize = size(kData);
-    pad_size = [0, nPh-imsize(2), nPa-imsize(3), 0];
+    pad_size = [0, nPh-imsize(2), nPa-imsize(3), 0, 0];
     kData = padarray(kData,pad_size,'post');
 
     % pre-padding for asymmetric echo
-    kData = padarray(kData,[nRe*2-imsize(1),0,0,0],'pre');
+    kData = padarray(kData,[nRe*2-imsize(1),0,0,0, 0],'pre');
 
     %--------------------------------------------------------------------------
     %% tmp
     %--------------------------------------------------------------------------
 
-    tmp = sum(abs(kData),4);
-    save('tmp.mat','tmp');
-    
-    kData = fftshift(fft(fftshift(fftshift(fft(fftshift(fftshift(fft(fftshift(kData,1),[],1),1),3),[],3),3),2),[],2),2);
+    % tmp = sum(abs(kData),4);
+    % save('tmp.mat','tmp');
 
-    k_full(:,:,:,echo,:,:) = kData(nRe/2+1:end-nRe/2,:,:,:,:);
+    save(['k_full_echo' num2str(echo)],'kData','-v7.3');
+
+    % keep only the 2nd inversion
+    k_full(:,:,:,echo,:) = kData(:,:,:,:,2);
+    
+    % kData = fftshift(fft(fftshift(fftshift(fft(fftshift(fftshift(fft(fftshift(kData,1),[],1),1),3),[],3),3),2),[],2),2);
+    % k_full(:,:,:,echo,:,:) = kData(nRe/2+1:end-nRe/2,:,:,:,:);
 end
 
+% save('k_full','k_full','-v7.3');
+clear kData
 
 
 % kData_s2 = ifftshift(ifft(ifftshift(ifftshift(ifft(ifftshift(ifftshift(ifft(ifftshift(kData_s1,1),[],1),1),3),[],3),3),2),[],2),2);
+for necho = 1:NEco
+    % for nset = 1:NSet
+    % k_full(:,:,:,necho,:,nset) = fftshift(fft(fftshift(fftshift(fft(fftshift(fftshift(fft(fftshift(k_full(:,:,:,necho,:,nset),1),[],1),1),3),[],3),3),2),[],2),2);
+    k_full(:,:,:,necho,:) = fftshift(fft(fftshift(fftshift(fft(fftshift(fftshift(fft(fftshift(k_full(:,:,:,necho,:),1),[],1),1),3),[],3),3),2),[],2),2);
+    % end
+end
 
+% k_full = k_full(nRe/2+1:end-nRe/2,:,:,:,:,:);
+% k_full([1:nRe/2,3*nRe/2+1:2*nRe],:,:,:,:,:) = [];
+k_full([1:nRe/2,3*nRe/2+1:2*nRe],:,:,:,:) = [];
 
 
 % save('k_full_512','k_full','-v7.3');
 
-k_full = k_full(129:128+256,:,:,:,:);
+% k_full = k_full(129:128+256,:,:,:,:);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % calculate magnitude sen
-vox = [1,1,1];
+vox = [0.75 0.75 0.75];
 % mag_sos = sqrt(sum(abs(k_full).^2,5)/size(k_full,5));
-mag_sos = sqrt(sum(abs(k_full).^2,5));
+mag_sos = squeeze(sqrt(sum(abs(k_full).^2,5)));
 nii = make_nii(mag_sos,vox);
-save_nii(nii,'mag_sos.nii');
+save_nii(nii,'inv2_mag_sos.nii');
 
 nii = make_nii(abs(k_full(:,:,:,1,:)),vox);
-save_nii(nii,'mag1_all.nii');
+save_nii(nii,'inv2_mag1_all.nii');
 
 
 sen = squeeze(abs(k_full(:,:,:,1,:)))./repmat(mag_sos(:,:,:,1),[1 1 1 size(k_full,5)]);
 nii = make_nii(sen,vox);
-save_nii(nii,'sen_mag_raw.nii');
+save_nii(nii,'inv2_sen_mag_raw.nii');
 
-
+sen_smooth = zeros(size(sen),'single');
 % smooth the coil sensitivity
 for chan = 1:size(k_full,5) 
     sen_smooth(:,:,:,chan) = smooth3(sen(:,:,:,chan),'box',round(8./vox)*2+1); 
 end
 
 nii = make_nii(sen_smooth,vox);
-save_nii(nii,'sen_mag_smooth.nii');
+save_nii(nii,'inv2_ssen_mag_smooth.nii');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 img = k_full;
-clear k_full
+clear k_full mag_sos sen sen_smooth
+
+
+
+
+
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Hongfu code
-vox = [1,1,1];
+vox = [0.75 0.75 0.75];
+% TE = 1.92 + (0:3)*3.02;
+TE = 1.79 + (0:8)*2.75;
+
+TE = TE/1000;
+
+% % keep only the 2nd inversion
+% img = img(:,:,:,:,:,2);
 
 % BEGIN THE QSM RECON PIPELINE
 % initial quick brain mask
@@ -194,19 +227,15 @@ mag1_sos = sqrt(sum(abs(img(:,:,:,1,:)).^2,5));
 nii = make_nii(mag1_sos,vox);
 save_nii(nii,'mag1_sos.nii');
 
-% unix('N4BiasFieldCorrection -i mag1_sos.nii -o mag1_sos_n4.nii');
+unix('N4BiasFieldCorrection -i mag1_sos.nii -o mag1_sos_n4.nii');
 
-unix('bet2 mag1_sos.nii BET -f 0.2 -m');
+unix('bet2 mag1_sos_n4.nii BET -f 0.8 -m');
 % set a lower threshold for postmortem
 % unix('bet2 mag1_sos.nii BET -f 0.1 -m');
 unix('gunzip -f BET.nii.gz');
 unix('gunzip -f BET_mask.nii.gz');
 nii = load_nii('BET_mask.nii');
 mask = double(nii.img);
-
-% coil combination % smoothing factor 10?
-TE = 3.4 + [0:7]*3.5;
-TE = TE/1000;
 
 % (1) if unipolar
 [ph_corr,mag_corr] = geme_cmb(img,vox,TE,mask,[],0);
@@ -227,7 +256,7 @@ for echo = 1:size(img,4)
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-clear img kData
+clear img 
 
 
 
@@ -245,11 +274,11 @@ if ~ isfield(options,'r_mask')
 end
 
 if ~ isfield(options,'fit_thr')
-    options.fit_thr = 20;
+    options.fit_thr = 5;
 end
 
 if ~ isfield(options,'bet_thr')
-    options.bet_thr = 0.3;
+    options.bet_thr = 0.6;
 end
 
 if ~ isfield(options,'bet_smooth')
@@ -463,7 +492,7 @@ end
 % ph = gamma*dB*TE
 % dB/B = ph/(gamma*TE*B0)
 % units: TE s, gamma 2.675e8 rad/(sT), B0 3T
-dicom_info.MagneticFieldStrength = 3.0;
+dicom_info.MagneticFieldStrength = 7.0;
 tfs = tfs/(2.675e8*dicom_info.MagneticFieldStrength)*1e6; % unit ppm
 
 nii = make_nii(tfs,vox);
