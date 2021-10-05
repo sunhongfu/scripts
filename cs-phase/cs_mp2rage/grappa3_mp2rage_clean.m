@@ -7,9 +7,9 @@ addpath(genpath('/Users/uqhsun8/Documents/MATLAB/functions/GRAPPA_berkin/'))
 
 
 % dt_fa04 = mapVBVD('meas_MID152_fl3d_mtv_FA_4_FID5350.dat', 'removeOS');
-dt_fa04 = mapVBVD('/Volumes/LaCie_Top/CS_MP2RAGE_19Aug21/meas_MID00273_FID15743_wip925b_TI2_EC2_VC_PAT3_p75iso.dat', 'removeOS');
-mkdir('/Volumes/LaCie_Top/CS_MP2RAGE_19Aug21/meas_MID00273_FID15743_wip925b_TI2_EC2_VC_PAT3_p75iso');
-cd('/Volumes/LaCie_Top/CS_MP2RAGE_19Aug21/meas_MID00273_FID15743_wip925b_TI2_EC2_VC_PAT3_p75iso');
+dt_fa04 = mapVBVD('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00335_FID05049_wip925b_TI2_EC2_VC_PAT3_p75iso.dat', 'removeOS');
+mkdir('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00335_FID05049_wip925b_TI2_EC2_VC_PAT3_p75iso');
+cd('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00335_FID05049_wip925b_TI2_EC2_VC_PAT3_p75iso');
 
 % prot = read_meas_prot([data_path, 'meas_MID150_fl3d_mtv_FA_20_FID5348.dat'])
 
@@ -100,7 +100,7 @@ for slice_select = 1:num_ro % for loop here
     Ry = 1;
 
     del_ky=0*ones(num_chan,1);
-    del_kz=0*ones(num_chan,1);
+    del_kz=1*ones(num_chan,1);
 
     compute_gfactor = 0;
     lambda_tik = 1e-8;
@@ -117,7 +117,7 @@ for slice_select = 1:num_ro % for loop here
         kspace_acs = Kspace_Acs;
 
         % Img_Grappa(:,:,:,t) = grappa_gfactor_2d_jvc2( kspace_sampled, kspace_acs, Rz, Ry, num_acs, kernel_size, lambda_tik, 0, del_kz, del_ky );
-        img_grappa = grappa_gfactor_2d_jvc2(kspace_sampled, kspace_acs, Rz, Ry, num_acs, kernel_size, lambda_tik, 0 );
+        img_grappa = grappa_gfactor_2d_jvc2(kspace_sampled, kspace_acs, Rz, Ry, num_acs, kernel_size, lambda_tik, 0 , del_kz, del_ky );
         % Img_Grappa(:,:,:,t) = grappa_gfactor_2d_jvc2( kspace_sampled, kspace_acs, Rz, Ry, num_acs, kernel_size, lambda_tik, 0 );
 
         Ksp_Grappa(:,:,:,t) = fft2c(img_grappa);
@@ -133,8 +133,8 @@ end
 Ksp_inv2 = fftc( Ksp_inv2, 1 );
 
 
-% remove zero padding
-Ksp_inv2 = Ksp_inv2(:,2:end-1,:,:,:);
+% % remove zero padding
+% Ksp_inv2 = Ksp_inv2(:,2:end-1,:,:,:);
 
 save('Ksp_inv2','Ksp_inv2','-v7.3');
 
@@ -145,7 +145,7 @@ save('Ksp_inv2','Ksp_inv2','-v7.3');
 Ksp_inv2 = padarray(Ksp_inv2,[0,0,2/6*size(Ksp_inv2,3),0,0],'pre');
 
 % looping through echo and inversion
-for echo_num = 1:4
+for echo_num = 1:num_echo
         Ksp = Ksp_inv2(:,:,:,:,echo_num);
         [~, Ksp] = pocs(permute(Ksp,[4,1,2,3]),20);
         Ksp = permute(Ksp, [2,3,4,1]);
@@ -164,16 +164,16 @@ for echo_num = 1:4
 end
 
 
-% asymmetric echo
-Ksp_inv2 = padarray(Ksp_inv2,[68,0,0,0,0,0],'pre');
+% % asymmetric echo
+% Ksp_inv2 = padarray(Ksp_inv2,[68,0,0,0,0,0],'pre');
 
-% looping through echo and inversion
-for echo_num = 1:4
-        Ksp = Ksp_inv2(:,:,:,:,echo_num);
-        [~, Ksp] = pocs(permute(Ksp,[4,1,2,3]),20);
-        Ksp = permute(Ksp, [2,3,4,1]);
-        Ksp_inv2(:,:,:,:,echo_num) = Ksp;
-end
+% % looping through echo and inversion
+% for echo_num = 1:4
+%         Ksp = Ksp_inv2(:,:,:,:,echo_num);
+%         [~, Ksp] = pocs(permute(Ksp,[4,1,2,3]),20);
+%         Ksp = permute(Ksp, [2,3,4,1]);
+%         Ksp_inv2(:,:,:,:,echo_num) = Ksp;
+% end
 
 
 % save the matrix
@@ -202,7 +202,8 @@ Img_inv2 = flip(flip(Img_inv2,2),3);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Hongfu code for QSM
 vox = [0.75 0.75 0.75];
-TE = [1.9 4.92 7.94 10.96]*1e-3;
+% TE = [1.9 4.92 7.94 10.96]*1e-3;
+TE = [2.33 4.53 6.73 8.93 11.13]*1e-3;
 z_prjs = [0 0 1];
 
 % define output directories
@@ -338,7 +339,7 @@ save('raw.mat','unph','-append');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % set parameters
-fit_thr = 20;
+fit_thr = 10;
 tik_reg = 1e-6;
 cgs_num = 500;
 lsqr_num = 500;

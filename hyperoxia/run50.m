@@ -44,8 +44,8 @@ for zCount = 1 : imsize(3)
 
 end
 
-mkdir('HR_recon_QSM_O2=50_10');
-cd HR_recon_QSM_O2=50_10;
+mkdir('recon_QSM_O2=50_10');
+cd recon_QSM_O2=50_10;
 
 img = single(img);
 
@@ -70,7 +70,7 @@ for echo = 1:imsize(4)
     save_nii(nii,['combine/mag_cmb' num2str(echo) '.nii']);
 end
 
-bet_thr = 0.2;
+bet_thr = 0.4;
 % generate mask from combined magnitude of the 1th echo
 disp('--> extract brain volume and generate mask ...');
 setenv('bet_thr',num2str(bet_thr));
@@ -81,7 +81,17 @@ unix('gunzip -f BET_mask.nii.gz');
 nii = load_nii('BET_mask.nii');
 mask = double(nii.img);
 
-% remove phase offsets
+
+mask_unwrp = uint8(abs(mask)*255);
+fid = fopen('mask_unwrp.dat','w');
+fwrite(fid,mask_unwrp,'uchar');
+fclose(fid);
+
+unix('cp /home/hsun/Documents/MATLAB/3DSRNCP 3DSRNCP');
+setenv('nv',num2str(imsize(1)));
+setenv('np',num2str(imsize(2)));
+setenv('ns',num2str(imsize(3)));
+
 ph_cmb = geme_cmb(img,vox,TE,mask);
 
 % save niftis for each echotime
@@ -132,8 +142,7 @@ fid = fopen('mask_unwrp.dat','w');
 fwrite(fid,mask_unwrp,'uchar');
 fclose(fid);
 
-[pathstr, ~, ~] = fileparts(which('3DSRNCP.m'));
-setenv('pathstr',pathstr);
+unix('cp /home/hsun/Documents/MATLAB/3DSRNCP 3DSRNCP');
 setenv('nv',num2str(imsize(1)));
 setenv('np',num2str(imsize(2)));
 setenv('ns',num2str(imsize(3)));
@@ -146,7 +155,7 @@ for echo_num = 1:imsize(4)
     fwrite(fid,ph_cmb(:,:,:,echo_num),'float');
     fclose(fid);
 
-    bash_script = ['${pathstr}/3DSRNCP wrapped_phase${echo_num}.dat mask_unwrp.dat ' ...
+    bash_script = ['./3DSRNCP wrapped_phase${echo_num}.dat mask_unwrp.dat ' ...
         'unwrapped_phase${echo_num}.dat $nv $np $ns reliability${echo_num}.dat'];
     unix(bash_script) ;
 
@@ -177,6 +186,12 @@ save_nii(nii,'unph_cmb.nii');
 % check and correct for 2pi jump between echoes
 disp('--> correct for potential 2pi jumps between TEs ...')
 
+% nii = load_nii('unph_cmb1.nii');
+% unph1 = double(nii.img);
+% nii = load_nii('unph_cmb2.nii');
+% unph2 = double(nii.img);
+% unph_diff = unph2 - unph1;
+
 nii = load_nii('unph_diff.nii');
 unph_diff = double(nii.img);
 
@@ -197,7 +212,7 @@ disp('--> magnitude weighted LS fit of phase to TE ...');
 
 r_mask = 1;
 % fit_thr = 10;
-fit_thr = 40;
+fit_thr = 30;
 if r_mask
     % generate reliability map
     fit_residual_blur = smooth3(fit_residual,'box',round(2./vox/2)*2+1); 
@@ -217,43 +232,11 @@ end
 tfs = -tfs/(2.675e8*dicom_info.MagneticFieldStrength)*1e6; % unit ppm
 
 
-smv_rad = 3;
+smv_rad = 4;
 tik_reg = 1e-3;
-tv_reg = 8e-4;
+tv_reg = 5e-4;
 inv_num = 500;
 cgs_num = 500;
-
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
-% % LBV to remove background field
-
-% % LBV
-% % if sum(strcmpi('lbv',bkg_rm))
-%     disp('--> LBV to remove background field ...');
-%     lfs_lbv = LBV(tfs,mask,size(tfs),vox,0.01,2); % strip 2 layers
-%     mask_lbv = ones(size(mask));
-%     mask_lbv(lfs_lbv==0) = 0;
-%     % 3D 2nd order polyfit to remove any residual background
-%     % lfs_lbv= poly3d(lfs_lbv,mask_lbv);
-
-%     % save nifti
-%     mkdir('LBV');
-%     nii = make_nii(lfs_lbv,vox);
-%     save_nii(nii,'LBV/lfs_lbv.nii');
-
-%     % inversion of susceptibility 
-%     disp('--> TV susceptibility inversion on lbv...');
-%     sus_lbv = tvdi(lfs_lbv,mask_lbv,vox,tv_reg, ...
-%         abs(img_cmb),z_prjs,inv_num);   
-
-%     % save nifti
-%     nii = make_nii(sus_lbv.*mask_lbv,vox);
-%     save_nii(nii,'LBV/sus_lbv.nii');
-% % end
-
-
-
-clear ph_cmb unph_cmb
 
 disp('--> RESHARP to remove background field ...');
 [lfs_resharp, mask_resharp] = resharp(tfs,mask.*R,vox,smv_rad,tik_reg,cgs_num);
@@ -261,7 +244,7 @@ disp('--> RESHARP to remove background field ...');
 % save nifti
 mkdir('RESHARP');
 nii = make_nii(lfs_resharp,vox);
-save_nii(nii,['RESHARP/lfs_resharp_' num2str(tik_reg) '_' num2str(smv_rad) '.nii']);
+save_nii(nii,['RESHARP/lfs_resharp_' num2str(tik_reg) '.nii']);
 
 % inversion of susceptibility 
 disp('--> TV susceptibility inversion on RESHARP...');
