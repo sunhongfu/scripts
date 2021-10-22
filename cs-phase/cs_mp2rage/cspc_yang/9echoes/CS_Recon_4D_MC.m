@@ -27,8 +27,8 @@ addpath(genpath('/home/uqhsun8/Documents/MATLAB/functions/phase_cycling-master')
 tic
 
 
-nii = load_nii('/QRISdata/Q1041/CSMEMP2RAGE/CSPC_CSMP2RAGE/meas_MID00274_FID15744_wip925b_TI2_ECHO9_VC_CS9_SAM54/offsets_smooth.nii');
-maps = single(nii.img);
+% nii = load_nii('/QRISdata/Q1041/CSMEMP2RAGE/CSPC_CSMP2RAGE/meas_MID00274_FID15744_wip925b_TI2_ECHO9_VC_CS9_SAM54/offsets_smooth.nii');
+% maps = single(nii.img);
 
 
 for invNo = 1 : 2
@@ -48,8 +48,8 @@ for invNo = 1 : 2
             mask = ksp_1slice ~= 0;
             
             disp(slice)
-            % img_pc = CS_Recon_2D_MC(ksp_1slice, mask);
-            img_pc = CS_Recon_2D_MC(ksp_1slice, mask, squeeze(maps(slice,:,:,:)));
+            img_pc = CS_Recon_2D_MC(ksp_1slice, mask);
+            % img_pc = CS_Recon_2D_MC(ksp_1slice, mask, squeeze(maps(slice,:,:,:)));
             
             if max(abs(img_pc)) == 0
                 error('Wrong Reconstruction');

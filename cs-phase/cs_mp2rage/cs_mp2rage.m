@@ -194,7 +194,7 @@ for chan = 1:size(k_full,5)
 end
 
 nii = make_nii(sen_smooth,vox);
-save_nii(nii,'inv2_ssen_mag_smooth.nii');
+save_nii(nii,'inv2_sen_mag_smooth.nii');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

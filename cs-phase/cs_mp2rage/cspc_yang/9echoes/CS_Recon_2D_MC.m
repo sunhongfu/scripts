@@ -1,4 +1,5 @@
-function img_pc = CS_Recon_2D_MC(ksp, mask, maps, isNor, eval)
+function img_pc = CS_Recon_2D_MC(ksp, mask, isNor, eval)
+% function img_pc = CS_Recon_2D_MC(ksp, mask, maps, isNor, eval)
 %CS_RECON2D_MC Summary of this function goes here
 %   Detailed explanation goes here
 % CS_Recon_2D: reconstruct one 2D slice using two conventional methods.
@@ -71,13 +72,13 @@ C = Identity;
 % % weights = ones(256, 128); 
 
 ksize = [6, 6];
-% [maps, weights] = ecalib(y, 24, ksize);
-[maps_old, weights] = ecalib(y, 24, ksize);
+[maps, weights] = ecalib(y, 24, ksize);
+% [maps_old, weights] = ecalib(y, 24, ksize);
 
 %%%%%%%%%%%%%%%%%%%%%%%
 % ref coil to channel 32
-% maps = maps./repmat(maps(:,:,32)./abs(maps(:,:,32)),[1 1 32]);
-maps = abs(maps_old).*exp(1j*maps); % load your own offsets
+maps = maps./repmat(maps(:,:,1)./abs(maps(:,:,1)),[1 1 32]);
+% maps = abs(maps_old).*exp(1j*maps); % load your own offsets
 maps(isnan(maps))=0;
 maps(isinf(maps))=0;
 %%%%%%%%%%%%%%%%%%%%%%%

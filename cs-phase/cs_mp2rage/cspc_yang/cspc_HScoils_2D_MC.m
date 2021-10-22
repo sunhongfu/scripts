@@ -1,4 +1,4 @@
-function img_pc = CS_Recon_2D_MC(ksp, mask, isNor, eval)
+function img_pc = cspc_HScoils_2D_MC(ksp, mask, maps, isNor, eval)
 % function img_pc = CS_Recon_2D_MC(ksp, mask, maps, isNor, eval)
 %CS_RECON2D_MC Summary of this function goes here
 %   Detailed explanation goes here
@@ -71,54 +71,17 @@ C = Identity;
 % % % maps = ones([sx,sy,nc]);
 % % weights = ones(256, 128); 
 
-
-
-
-
-
-% % method 2
-% %% SVD coil compression:
-% % the first eigenmode has smooth phase devoid of singularities at 3T
-% % this can be used as phase reference to remove anatomical phase from coil 
-% % sensitivities without introducing singularities
-% %--------------------------------------------------------------------------
-% num_svd = 16;                   % no of SVD channels for compression (num_svd = 16 works well for 32 chan array)
-% N = [sx, sy]
-% temp = reshape(y, [prod(N), nc]);
-% [V,D] = eig(temp'*temp);
-% V = flip(V,2);
-% % coil compressed image, where 1st chan is the virtual body coil to be used as phase reference:
-% y = reshape(temp * V(:,1:num_svd), [N, num_svd]);
-% nc = num_svd;
-% mask = mask(:,:,1:num_svd);
-
-
-
 ksize = [6, 6];
-[maps, weights] = ecalib(y, 24, ksize);
-% [maps_old, weights] = ecalib(y, 24, ksize);
+% [maps, weights] = ecalib(y, 24, ksize);
+[maps_old, weights] = ecalib(y, 24, ksize);
 
-
-
-
-
-% method 1
 %%%%%%%%%%%%%%%%%%%%%%%
-% ref coil to channel 1
-maps = maps./repmat(maps(:,:,1)./abs(maps(:,:,1)),[1 1 32]);
-% maps = abs(maps_old).*exp(1j*maps); % load your own offsets
+% ref coil to channel 32
+% maps = maps./repmat(maps(:,:,1)./abs(maps(:,:,1)),[1 1 32]);
+maps = abs(maps_old).*exp(1j*maps); % load your own phase offsets
 maps(isnan(maps))=0;
 maps(isinf(maps))=0;
 %%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-
-
-
-
-
 
 S = ESPIRiT(maps, weights);
 F = p2DFT(mask,[sx, sy, nc]);

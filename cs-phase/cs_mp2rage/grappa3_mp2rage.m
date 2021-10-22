@@ -2,15 +2,16 @@
 %% load data
 %--------------------------------------------------------------------------
 
-addpath(genpath('/Users/uqhsun8/Documents/MATLAB/functions/GRAPPA_berkin/LIBRARY/'))
+% addpath(genpath('/Users/uqhsun8/Documents/MATLAB/functions/GRAPPA_berkin/LIBRARY/'))
+addpath(genpath('/Users/uqhsun8/Documents/MATLAB/functions/GRAPPA_berkin/'))
 
 
 % dt_fa04 = mapVBVD('meas_MID152_fl3d_mtv_FA_4_FID5350.dat', 'removeOS');
-dt_fa04 = mapVBVD('/Volumes/LaCie_Top/CS_MP2RAGE_19Aug21/meas_MID00273_FID15743_wip925b_TI2_EC2_VC_PAT3_p75iso.dat', 'removeOS');
-mkdir('/Volumes/LaCie_Top/CS_MP2RAGE_19Aug21/meas_MID00273_FID15743_wip925b_TI2_EC2_VC_PAT3_p75iso');
-cd('/Volumes/LaCie_Top/CS_MP2RAGE_19Aug21/meas_MID00273_FID15743_wip925b_TI2_EC2_VC_PAT3_p75iso');
+dt_fa04 = mapVBVD('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_19Aug21/meas_MID00273_FID15743_wip925b_TI2_EC2_VC_PAT3_p75iso.dat', 'removeOS');
+mkdir('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_19Aug21/meas_MID00273_FID15743_wip925b_TI2_EC2_VC_PAT3_p75iso');
+cd('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_19Aug21/meas_MID00273_FID15743_wip925b_TI2_EC2_VC_PAT3_p75iso');
 
-% prot = read_meas_prot([data_path, 'meas_MID150_fl3d_mtv_FA_20_FID5348.dat'])
+[prot,header,text] = read_meas_prot('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_19Aug21/meas_MID00273_FID15743_wip925b_TI2_EC2_VC_PAT3_p75iso.dat');
 
 
 %--------------------------------------------------------------------------
@@ -21,7 +22,7 @@ dat = squeeze(dt_fa04.image());
 dat = permute(dat, [1,3,4,2,5,6]);
 
 % % pad due to accl
-dat = padarray(dat, [0,1,0,0,0,0]);
+% dat = padarray(dat, [0,1,0,0,0,0]);
 %%
 num_ro = s(dat,1);
 
@@ -29,9 +30,7 @@ num_ro = s(dat,1);
 ref = squeeze(dt_fa04.refscan());
 ref = permute(ref, [1,3,4,2,5,6]);
 
-ref = ref(:,:,:,:,1,:);
-
-ref = padarray(ref, [(num_ro - size(ref,1)), 0, 0, 0] / 2);
+ref = padarray(ref, [(size(dat,1) - size(ref,1)), 0, 0, 0, 0, 0] / 2);
 
 
 %--------------------------------------------------------------------------
@@ -64,179 +63,150 @@ dat = ifftc( dat, 1 );
 %--------------------------------------------------------------------------
 %% select slice
 %--------------------------------------------------------------------------
-dat_size = size(dat);
+size_dat = size(dat);
 
-Ksp_inv1 = zeros(dat_size(1:5),'single');
-
-
-%%%%% first inversion
-inv_select = 1
+%%%%% 2nd inversion
+inv_select = 2;
+Ksp_inv2 = zeros(size_dat(1:5),'single');
 
 
-for slice_select = 1:num_ro % for loop here
-    
+for slice_select = 1:num_ro % for loop here  
 
     dat_all = sq( dat(slice_select, :,:,:,:,inv_select) ); % ky,kz,chan,echo
-
-    ref_all = sq( ref(slice_select, :,:,:) );
-
+    ref_all = sq( ref(slice_select, :,:,:,1,2) ); % always use the 2nd inversion 1st TE
 
     % img_dat_slc = ifft2call( dat_all );
     % img_ref_slc = ifft2call( ref_all );
     % mosaic( rsos(img_ref_slc,3), 1, 4, 10, '', '', -90 ),  
     % mosaic( rsos(img_dat_slc,3), 1, 4, 11, '', '', -90 ),  
 
-
-
-
     Kspace_Sampled = dat_all;
     Kspace_Acs = ref_all;
 
+    size_kspace = size(Kspace_Sampled(:,:,1,1));
+    size_ref = size(Kspace_Acs(:,:,1));
 
-    size_kspace = size(Kspace_Sampled(:,:,1,1,1));
-    size_ref = size(Kspace_Acs(:,:,1,1,1));
-
-
-    Kspace_Acs = padarray( Kspace_Acs, [size_kspace-size_ref, 0, 0, 0]/2 );
-
+    Kspace_Acs = padarray( Kspace_Acs, [size_kspace-size_ref, 0]/2 );
 
 %     mosaic( rsos(rsos(rsos(Kspace_Acs,3),4),5),1,1,1,'',[0,1e-4] ), setGcf(0.2)
 %     mosaic( rsos(rsos(rsos(Kspace_Sampled,3),4),5),1,1,2,'',[0,1e-4] ), setGcf(0.2)
 
-
-    [N(1), N(2), num_chan, num_echo, num_flip] = size(Kspace_Sampled);
-
-
-
+    [N(1), N(2), num_chan, num_echo] = size(Kspace_Sampled);
 
     %--------------------------------------------------------------------------
     %% grappa: apply PAT2 recon to get ~ground truth
     %--------------------------------------------------------------------------
-
-
-    num_eco = num_echo;
-
     Rz = 3;
     Ry = 1;
 
     del_ky=0*ones(num_chan,1);
-    del_kz=0*ones(num_chan,1);
+    del_kz=2*ones(num_chan,1);
 
     compute_gfactor = 0;
-    lambda_tik = 1e-4;
+    lambda_tik = 1e-8;
     % lambda_tik = eps;
 
-
-    num_acs = [24,24]-2;        % size reduced due to 1 voxel circshift
+    num_acs = size_ref-2;        % size reduced due to 1 voxel circshift
     kernel_size = [3,3];        % odd kernel size
 
+    Ksp_Grappa = zeros([N, num_chan, num_echo],'single');
 
-    Ksp_Grappa = zeros([N, num_chan, num_eco],'single');
+    tic
+    for t = 1:num_echo
+        kspace_sampled = Kspace_Sampled(:,:,:,t);
+        kspace_acs = Kspace_Acs;
 
+        % Img_Grappa(:,:,:,t) = grappa_gfactor_2d_jvc2( kspace_sampled, kspace_acs, Rz, Ry, num_acs, kernel_size, lambda_tik, 0, del_kz, del_ky );
+        img_grappa = grappa_gfactor_2d_jvc2(kspace_sampled, kspace_acs, Rz, Ry, num_acs, kernel_size, lambda_tik, 0 , del_kz, del_ky );
+        % Img_Grappa(:,:,:,t) = grappa_gfactor_2d_jvc2( kspace_sampled, kspace_acs, Rz, Ry, num_acs, kernel_size, lambda_tik, 0 );
 
-        tic
-        for t = 1:num_eco
-            kspace_sampled = Kspace_Sampled(:,:,:,t);
-
-            % Img_Grappa(:,:,:,t) = grappa_gfactor_2d_jvc2( kspace_sampled, Kspace_Acs, Rz, Ry, num_acs, kernel_size, lambda_tik, 0, del_kz, del_ky );
-            tmp = grappa_gfactor_2d_jvc2( kspace_sampled, Kspace_Acs, Rz, Ry, num_acs, kernel_size, lambda_tik, 0 );
-            % Img_Grappa(:,:,:,t) = grappa_gfactor_2d_jvc2( kspace_sampled, Kspace_Acs, Rz, Ry, num_acs, kernel_size, lambda_tik, 0 );
-
-            Ksp_Grappa(:,:,:,t) = fft2c(tmp);
-
-        end
-        toc
+        Ksp_Grappa(:,:,:,t) = fft2c(img_grappa);
+    end
+    toc
 
 
-    % Img_R2(slice_select,:,:,:,:,inv_select) = Img_Grappa;
-    Ksp_all(slice_select,:,:,:,:,inv_select) = Ksp_Grappa;
+    % Img_inv2(slice_select,:,:,:,:,inv_select) = Img_Grappa;
+    Ksp_inv2(slice_select,:,:,:,:) = Ksp_Grappa;
 end
 
 % Fourier transform of first dim
-Ksp_all = fftc( Ksp_all, 1 );
+Ksp_inv2 = fftc( Ksp_inv2, 1 );
 
 
-% remove zero padding
-Ksp_all = Ksp_all(:,2:end-1,:,:,:,:);
+% % remove zero padding
+% Ksp_inv2 = Ksp_inv2(:,2:end-1,:,:,:);
+
+save('Ksp_inv2','Ksp_inv2','-v7.3');
+
 
 
 % perform POCS for partial fourier 6/8 undersampling
 % zero padding for PF to full size
-Ksp_all = padarray(Ksp_all,[0,0,2/6*size(Ksp_all,3),0,0,0],'pre');
-
+Ksp_inv2 = padarray(Ksp_inv2,[0,0,2/6*size(Ksp_inv2,3),0,0],'pre');
 
 % looping through echo and inversion
-for echo_num = 1:4
-    for inv_num= 1:2
-        Ksp = Ksp_all(:,:,:,:,echo_num,inv_num);
+for echo_num = 1:num_echo
+        Ksp = Ksp_inv2(:,:,:,:,echo_num);
         [~, Ksp] = pocs(permute(Ksp,[4,1,2,3]),20);
         Ksp = permute(Ksp, [2,3,4,1]);
-        Ksp_all(:,:,:,:,echo_num,inv_num) = Ksp;
-    end
+        Ksp_inv2(:,:,:,:,echo_num) = Ksp;
 end
 
 
-Ksp_all = padarray(Ksp_all,[0,2/6*size(Ksp_all,2),0,0,0,0],'pre');
+Ksp_inv2 = padarray(Ksp_inv2,[0,2/6*size(Ksp_inv2,2),0,0,0],'pre');
 
 % looping through echo and inversion
 for echo_num = 1:4
-    for inv_num= 1:2
-        Ksp = Ksp_all(:,:,:,:,echo_num,inv_num);
+        Ksp = Ksp_inv2(:,:,:,:,echo_num);
         [~, Ksp] = pocs(permute(Ksp,[4,1,2,3]),20);
         Ksp = permute(Ksp, [2,3,4,1]);
-        Ksp_all(:,:,:,:,echo_num,inv_num) = Ksp;
-    end
+        Ksp_inv2(:,:,:,:,echo_num) = Ksp;
 end
 
 
 % asymmetric echo
-Ksp_all = padarray(Ksp_all,[68,0,0,0,0,0],'pre');
+Ksp_inv2 = padarray(Ksp_inv2,[68,0,0,0,0,0],'pre');
 
 % looping through echo and inversion
 for echo_num = 1:4
-    for inv_num= 1:2
-        Ksp = Ksp_all(:,:,:,:,echo_num,inv_num);
+        Ksp = Ksp_inv2(:,:,:,:,echo_num);
         [~, Ksp] = pocs(permute(Ksp,[4,1,2,3]),20);
         Ksp = permute(Ksp, [2,3,4,1]);
-        Ksp_all(:,:,:,:,echo_num,inv_num) = Ksp;
-    end
+        Ksp_inv2(:,:,:,:,echo_num) = Ksp;
 end
 
 
-
-% % asymmetric echo
-% Ksp_all = padarray(Ksp_all,[68,0,0,0,0,0],'pre');
-
 % save the matrix
-save('Ksp_all','Ksp_all','-v7.3');
+save('Ksp_inv2_pocs','Ksp_inv2','-v7.3');
 
 
-Ksp_all = ifftc( Ksp_all, 1 );
-Ksp_all = ifftc( Ksp_all, 2 );
-Ksp_all = ifftc( Ksp_all, 3 );
 
-Img_R2 = Ksp_all;
-clear Ksp_all dat dat_all img_dat_slc Ksp Ksp_Grappa Kspace_Sampled ref ref_all 
 
-Img_R2 = flip(flip(Img_R2,2),3);
-% mosaic(reshape(rsos(Img_R2, 3), [N, num_eco]),1,1,1,'',[0,3e-3],-90)
-% 
-% %%
-% mosaic(rsos(Kspace_Acs,3),1,1,1), 
-% 
-% mosaic(rsos(kspace_sampled,3),1,1,1), setGcf(.5)
+
+Ksp_inv2 = ifftc( Ksp_inv2, 1 );
+Ksp_inv2 = ifftc( Ksp_inv2, 2 );
+Ksp_inv2 = ifftc( Ksp_inv2, 3 );
+
+Img_inv2 = Ksp_inv2;
+clear Ksp_inv2 dat dat_all Ksp Ksp_Grappa Kspace_Sampled Kspace_Acs ref ref_all 
+
+Img_inv2 = flip(flip(Img_inv2,2),3);
+
+
+
+
 
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Hongfu code
+% Hongfu code for QSM
 vox = [0.75 0.75 0.75];
-TE = [1.9 4.92 7.94 10.96]*1e-3;
+TE = prot.alTE*1e-6;
 z_prjs = [0 0 1];
 
 % define output directories
-path_qsm = 'QSM_MEMP2RAGE_7T_1e-4';
+path_qsm = 'QSM_MEMP2RAGE_7T_1e-8';
 mkdir(path_qsm);
 init_dir = pwd;
 cd(path_qsm);
@@ -244,15 +214,14 @@ cd(path_qsm);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % use only the second inversion
-Img_R2 = Img_R2(:,:,:,:,:,2);
-mag_all_i2 = abs(Img_R2)*1e6;
-ph_all_i2 = angle(Img_R2);
-clear Img_R2
+Mag_inv2 = abs(Img_inv2)*1e6;
+Ph_inv2 = angle(Img_inv2);
+clear Img_inv2
 
-mag_all_i2 = permute(mag_all_i2,[1 2 3 5 4]);
-ph_all_i2 = permute(ph_all_i2,[1 2 3 5 4]);
+Mag_inv2 = permute(Mag_inv2,[1 2 3 5 4]);
+Ph_inv2 = permute(Ph_inv2,[1 2 3 5 4]);
 
-imsize = size(ph_all_i2);
+imsize = size(Ph_inv2);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -263,7 +232,7 @@ save('raw.mat','-v7.3');
 % BEGIN THE QSM RECON PIPELINE
 % initial quick brain mask
 % simple sum-of-square combination
-mag1_sos = sqrt(sum(mag_all_i2(:,:,:,1,:).^2,5));
+mag1_sos = sqrt(sum(Mag_inv2(:,:,:,1,:).^2,5));
 nii = make_nii(mag1_sos,vox);
 save_nii(nii,'mag1_sos.nii');
 
@@ -278,17 +247,24 @@ nii = load_nii('BET_mask.nii');
 mask = double(nii.img);
 
 % coil combination % smoothing factor 10?
-% ph_corr = zeros(imsize(1:4));
-% mag_corr = zeros(imsize(1:4));
 
-[ph_corr,mag_corr] = geme_cmb(mag_all_i2.*exp(1j*ph_all_i2),vox,TE,mask);
 
-% [ph_corr(:,:,:,1:2:end),mag_corr(:,:,:,1:2:end)] = geme_cmb(mag_all_i2(:,:,:,1:2:end,:).*exp(1j*ph_all_i2(:,:,:,1:2:end,:)),vox,TE(1:2:end),mask,'gaussian');
-% !mkdir odd_gaussian; mv offsets* odd_gaussian
-% [ph_corr(:,:,:,2:2:end),mag_corr(:,:,:,2:2:end)] = geme_cmb(mag_all_i2(:,:,:,2:2:end,:).*exp(1j*ph_all_i2(:,:,:,2:2:end,:)),vox,TE(2:2:end),mask,'gaussian');
-% !mkdir even_gaussian; mv offsets* even_gaussian
+% % unipolar
+if text(strfind(text,'ParamLong."ucReadOutMode"')+44) == '1'
+    [ph_corr,mag_corr] = geme_cmb(Mag_inv2.*exp(1j*Ph_inv2),vox,TE,mask);
+% bipolar
+elseif text(strfind(text,'ParamLong."ucReadOutMode"')+44) == '2'
+    ph_corr = zeros(imsize(1:4));
+    mag_corr = zeros(imsize(1:4));
+    [ph_corr(:,:,:,1:2:end),mag_corr(:,:,:,1:2:end)] = geme_cmb(Mag_inv2(:,:,:,1:2:end,:).*exp(1j*Ph_inv2(:,:,:,1:2:end,:)),vox,TE(1:2:end),mask);
+    !mkdir odd_box3d; mv offsets* odd_box3d
+    [ph_corr(:,:,:,2:2:end),mag_corr(:,:,:,2:2:end)] = geme_cmb(Mag_inv2(:,:,:,2:2:end,:).*exp(1j*Ph_inv2(:,:,:,2:2:end,:)),vox,TE(2:2:end),mask);
+    !mkdir even_box3d; mv offsets* even_box3d
+else
+    error('cannot determine readout mode, bipolar or unipolar');
+end
 
-clear mag_all_i2 ph_all_i2
+clear Mag_inv2 Ph_inv2
 
 % save niftis after coil combination
 mkdir('src');
@@ -346,7 +322,8 @@ save_nii(nii,'unph_bestpath_before_jump_correction.nii');
 nii = load_nii('unph_diff.nii');
 unph_diff = double(nii.img);
 
-% unph_diff = unph_diff/2;
+% bipolar
+unph_diff = unph_diff/2;
 
 for echo = 2:imsize(4)
     meandiff = unph(:,:,:,echo)-unph(:,:,:,1)-double(echo-1)*unph_diff;
@@ -369,7 +346,7 @@ save('raw.mat','unph','-append');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % set parameters
-fit_thr = 20;
+fit_thr = 10;
 tik_reg = 1e-6;
 cgs_num = 500;
 lsqr_num = 500;
@@ -445,8 +422,10 @@ for smv_rad = [1 2 3]
     % sus_resharp = tvdi(lfs_resharp_0,mask_resharp_0,vox,2e-4,iMag,z_prjs,500); 
     % nii = make_nii(sus_resharp.*mask_resharp_0,vox);
     % save_nii(nii,['RESHARP/TV_2e-4_smvrad' num2str(smv_rad) '.nii']);
-
 end
+
+
+load('raw.mat','mag_corr','TE','mask');
 
 [R2, T2, amp] = r2imgfit(double(mag_corr),TE,repmat(mask,[1 1 1 4]));
 nii = make_nii(R2,vox);
