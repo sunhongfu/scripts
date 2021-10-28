@@ -1,10 +1,10 @@
 addpath(genpath('/Users/uqhsun8/Documents/MATLAB/functions/GRAPPA_berkin/'))
 
-[prot,header,text] = read_meas_prot('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00341_FID05055_wip925b_TI2_ECHO2_VC_CS10_SAM54.dat');
+[prot,header,text] = read_meas_prot('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00351_FID05065_wip925b_TI2_ECHO2_VC_CS9_SAM54.dat');
 
 % CSPC recon
-for echo = 1:5
-    load(['/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00339_FID05053_wip925b_TI2_ECHO2_VC_CS10_SAM105/img_echo' num2str(echo) '_inv2.mat']);
+for echo = 1:prot.lContrasts
+    load(['/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00351_FID05065_wip925b_TI2_ECHO2_VC_CS9_SAM54/img_echo' num2str(echo) '_inv2.mat']);
     img(:,:,:,echo) = img_all;
 end
 
@@ -22,8 +22,8 @@ z_prjs = [0 0 1];
 
 imsize = size(img);
 
-mkdir /Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00339_FID05053_wip925b_TI2_ECHO2_VC_CS10_SAM105/cspc_qsm
-cd /Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00339_FID05053_wip925b_TI2_ECHO2_VC_CS10_SAM105/cspc_qsm
+mkdir /Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00351_FID05065_wip925b_TI2_ECHO2_VC_CS9_SAM54/cspc_qsm
+cd /Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00351_FID05065_wip925b_TI2_ECHO2_VC_CS9_SAM54/cspc_qsm
 % BEGIN THE QSM RECON PIPELINE
 % initial quick brain mask
 % simple sum-of-square combination
@@ -139,7 +139,7 @@ save('raw.mat','unph','-append');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % set parameters
-fit_thr = 10;
+fit_thr = 40;
 tik_reg = 1e-6;
 cgs_num = 500;
 lsqr_num = 500;

@@ -7,11 +7,11 @@ addpath(genpath('/Users/uqhsun8/Documents/MATLAB/functions/GRAPPA_berkin/'))
 
 
 % dt_fa04 = mapVBVD('meas_MID152_fl3d_mtv_FA_4_FID5350.dat', 'removeOS');
-dt_fa04 = mapVBVD('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00341_FID05055_wip925b_TI2_ECHO2_VC_CS10_SAM54.dat', 'removeOS');
-mkdir('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00341_FID05055_wip925b_TI2_ECHO2_VC_CS10_SAM54');
-cd('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00341_FID05055_wip925b_TI2_ECHO2_VC_CS10_SAM54');
+dt_fa04 = mapVBVD('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00351_FID05065_wip925b_TI2_ECHO2_VC_CS9_SAM54.dat', 'removeOS');
+mkdir('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00351_FID05065_wip925b_TI2_ECHO2_VC_CS9_SAM54');
+cd('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00351_FID05065_wip925b_TI2_ECHO2_VC_CS9_SAM54');
 
-[prot,header,text] = read_meas_prot('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00341_FID05055_wip925b_TI2_ECHO2_VC_CS10_SAM54.dat');
+[prot,header,text] = read_meas_prot('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00351_FID05065_wip925b_TI2_ECHO2_VC_CS9_SAM54.dat');
 
 
 %--------------------------------------------------------------------------
@@ -19,9 +19,22 @@ cd('/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/meas_MID00341_FID05055_wip
 %--------------------------------------------------------------------------
 
 k_full = squeeze(dt_fa04.image());
+
+% keep only second inversion
+k_full = k_full(:,:,:,:,:,2);
+
+
 k_full = permute(k_full, [1,3,4,2,5,6]);
 
 
+
+% zero padding for asymmetric sampling
+% asymmetric echo
+nRe = prot.lBaseResolution;
+if nRe - size(k_full,1) ~= 0
+    asym_flag = 1;
+    k_full = padarray(k_full,[nRe - size(k_full,1),0,0,0,0,0],'pre');
+end
 
 
 
@@ -29,17 +42,30 @@ k_full = permute(k_full, [1,3,4,2,5,6]);
 
 for necho = 1:size(k_full,5)
     for nset = 1:size(k_full,6)
+
+        % if asym_flag % seems not possible to do POCS
+        %     ksp = k_full(:,:,:,:,necho,nset);
+        %     [~, ksp] = pocs(permute(ksp,[4,1,2,3]),20);
+        %     ksp = permute(ksp, [2,3,4,1]);
+        %     k_full(:,:,:,:,necho,nset) = ksp;
+        % end
+
         % save kspace 
         ksp = k_full(:,:,:,:,necho,nset);
-        save(['ksp_echo' num2str(necho) '_inv' num2str(nset)],'ksp','-v7.3');
+        % save(['ksp_echo' num2str(necho) '_inv' num2str(nset)],'ksp','-v7.3');        
+        save(['ksp_echo' num2str(necho) '_inv2'],'ksp','-v7.3');
+
         k_full(:,:,:,:,necho,nset) = fftshift(fft(fftshift(fftshift(fft(fftshift(fftshift(fft(fftshift(ksp,1),[],1),1),3),[],3),3),2),[],2),2);
     end
 end
 
 clear ksp
 
+
 % keep only the 2nd inversion 
-Img_inv2 = k_full(:,:,:,:,:,2);
+% Img_inv2 = k_full(:,:,:,:,:,2);
+
+Img_inv2 = k_full;
 clear k_full
 Img_inv2 = flip(Img_inv2,1);
 
@@ -54,7 +80,7 @@ cd QSM_ZF_lr
 vox = [prot.sSliceArray.dReadoutFOV/prot.lBaseResolution, prot.sSliceArray.dPhaseFOV/prot.iNoOfFourierLines, prot.sSliceArray.dThickness*(1+prot.dSliceOversamplingForDialog)/prot.iNoOfFourierPartitions]
 
 % TE = [1.9 4.92 7.94 10.96]*1e-3;
-TE = prot.alTE*1e-6;
+TE = prot.alTE*1e-6
 
 z_prjs = [0 0 1];
 
@@ -203,7 +229,7 @@ save('raw.mat','unph','-append');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % set parameters
-fit_thr = 10;
+fit_thr = 40;
 tik_reg = 1e-6;
 cgs_num = 500;
 lsqr_num = 500;

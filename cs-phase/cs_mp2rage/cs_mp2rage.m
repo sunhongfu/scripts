@@ -10,8 +10,8 @@ addpath(genpath('/Users/uqhsun8/Documents/MATLAB/scripts/cs-phase/_src'));
 %--------------------------------------------------------------------------
 %% fixed file path option
 %--------------------------------------------------------------------------
-sFile = 'meas_MID00274_FID15744_wip925b_TI2_ECHO9_VC_CS9_SAM54.dat';
-sPath = '/Volumes/LaCie_Top/CS_MP2RAGE_19Aug21/';
+sFile = 'meas_MID00351_FID05065_wip925b_TI2_ECHO2_VC_CS9_SAM54.dat';
+sPath = '/Volumes/LaCie_Top/CSMEMP2RAGE/CS_MP2RAGE_24Sep21/';
 
 %--------------------------------------------------------------------------
 %% select a file (optional)
@@ -21,8 +21,8 @@ if exist('sFile', 'var')~=true
 end
 
 % cd(sPath)
-mkdir('meas_MID00274_FID15744_wip925b_TI2_ECHO9_VC_CS9_SAM54');
-cd('meas_MID00274_FID15744_wip925b_TI2_ECHO9_VC_CS9_SAM54');
+mkdir('meas_MID00351_FID05065_wip925b_TI2_ECHO2_VC_CS9_SAM54');
+cd('meas_MID00351_FID05065_wip925b_TI2_ECHO2_VC_CS9_SAM54');
 
 %--------------------------------------------------------------------------
 %% settings
@@ -70,7 +70,8 @@ end
 %--------------------------------------------------------------------------
 %% load twix object
 %--------------------------------------------------------------------------
-twix_obj = mapVBVD([sPath, sFile]);
+twix_obj = mapVBVD([sPath, sFile], 'removeOS');
+% twix_obj = mapVBVD([sPath, sFile]);
 
 if ARG.multiraid  == true
 %    twix_obj{1,2}.noise = twix_obj{1,1}.noise;
@@ -105,7 +106,9 @@ NEco = twix_obj.image.NEco;
 NSet = twix_obj.image.NSet;
 
 % k_full = zeros([nRe*2,nPh,nPa,NEco,nCh,NSet],'single');
-k_full = zeros([nRe*2,nPh,nPa,NEco,nCh],'single');
+% k_full = zeros([nRe*2,nPh,nPa,NEco,nCh],'single');
+k_full = zeros([nRe,nPh,nPa,NEco,nCh],'single');
+
 
 for echo = 1:NEco
 
