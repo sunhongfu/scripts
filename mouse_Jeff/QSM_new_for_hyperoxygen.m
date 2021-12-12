@@ -12,7 +12,7 @@ cd QSM_new
 % 2 thresholding magnitude of TE1
 % mask based on mag_cmb_mean
 mask = ones(size(mag(:,:,:,1)));
-mask(mag(:,:,:,1)<2000) = 0;
+mask(mag(:,:,:,1)<20000) = 0;
 nii = make_nii(mask,voxel_size);
 save_nii(nii,'mask_thr.nii');
 
@@ -27,7 +27,7 @@ for echo = 1:imsize(4)
 end
 
 
-!rm src/*.mnc src/*.imp
+% !rm src/*.mnc src/*.imp
 clear iField
 
 
@@ -103,10 +103,19 @@ fid = fopen(['unwrapped_ph_diff.dat'],'r');
 tmp = fread(fid,'float');
 % tmp = tmp - tmp(1);
 
-njumps = mean(tmp(mask==1))/(2*pi)
-if njumps>-1 & njumps<0
-    njumps = -1;
-end
+
+
+mask_roi = zeros(size(mask));
+% mask_roi(86:106,86:106,45:50) =1;
+
+mask_roi(round(imsize(1)/2)-5:round(imsize(1)/2)+5,round(imsize(2)/2)-5:round(imsize(2)/2)+5,round(imsize(3)/2)-5:round(imsize(3)/2)+5) =1;
+
+
+
+njumps = mean(tmp(mask_roi==1))/(2*pi)
+% if njumps>-1 & njumps<0
+%     njumps = -1;
+% end
 
 unph_diff = reshape(tmp - round(njumps)*2*pi ,imsize(1:3)).*mask;
 fclose(fid);
@@ -120,10 +129,10 @@ save_nii(nii,'unph_diff.nii');
 
 % correct for 2pi shifts in the first unwrapped echo
 tmp = unph(:,:,:,1);
-njumps = mean(tmp(mask==1))/(2*pi)
-if njumps>-1 & njumps<0
-    njumps = -1;
-end
+njumps = mean(tmp(mask_roi==1))/(2*pi)
+% if njumps>-1 & njumps<0
+%     njumps = -1;
+% end
 
 unph(:,:,:,1) = reshape(tmp - round(njumps)*2*pi ,imsize(1:3)).*mask;
 
@@ -140,8 +149,6 @@ disp('--> correct for potential 2pi jumps between TEs ...')
 % unph_diff = double(nii.img);
 
 % unph_diff = unph(:,:,:,2) - unph(:,:,:,1);
-mask_roi = zeros(size(mask));
-mask_roi(86:106,86:106,45:50) =1;
 
 for echo = 2:imsize(4)
     meandiff = unph(:,:,:,echo)-unph(:,:,:,1)-double(echo-1)*unph_diff;
@@ -172,7 +179,7 @@ save_nii(nii,'fit_residual0.nii');
 % save_nii(nii,'fit_residual1.nii');
 
 r_mask = 1;
-fit_thr = 20;
+fit_thr = 40;
 % extra filtering according to fitting residuals
 if r_mask
     % generate reliability map
@@ -200,12 +207,38 @@ clear ph_corr fit_residual0 fit_residual_blur mask_roi mask_unwrp ph_dif reliabi
 
 
 disp('--> RESHARP to remove background field ...');
-smv_rad = 0.2;
+smv_rad = 0.15;
 tik_reg = 1e-4;
 cgs_num = 200;
 tv_reg = 2e-4;
 z_prjs = B0_dir;
 inv_num = 500;
+
+[lfs_resharp, mask_resharp] = resharp_stencil(tfs,mask.*R,voxel_size,smv_rad,tik_reg,cgs_num);
+% % 3D 2nd order polyfit to remove any residual background
+% lfs_resharp= lfs_resharp - poly3d(lfs_resharp,mask_resharp);
+
+% save nifti
+[~,~,~] = mkdir('RESHARP_new');
+nii = make_nii(lfs_resharp,voxel_size);
+save_nii(nii,['RESHARP_new/lfs_resharp0_tik_', num2str(tik_reg), '_num_', num2str(cgs_num), '.nii']);
+
+% % inversion of susceptibility 
+% disp('--> TV susceptibility inversion on RESHARP...');
+% sus_resharp = tvdi(lfs_resharp,mask_resharp,voxel_size,tv_reg,mag(:,:,:,end),z_prjs,inv_num); 
+% % save nifti
+% nii = make_nii(sus_resharp.*mask_resharp,voxel_size);
+% save_nii(nii,['RESHARP/sus_resharp_tik_', num2str(tik_reg), '_tv_', num2str(tv_reg), '_num_', num2str(inv_num), '.nii']);
+
+% iLSQR method
+chi_iLSQR = QSM_iLSQR(lfs_resharp*(2.675e8*9.4)/1e6,mask_resharp,'H',z_prjs,'voxelsize',voxel_size,'niter',50,'TE',1000,'B0',9.4);
+nii = make_nii(chi_iLSQR,voxel_size);
+save_nii(nii,'RESHARP_new/chi_iLSQR0.nii');
+
+
+
+
+
 
 [lfs_resharp, mask_resharp] = resharp(tfs,mask.*R,voxel_size,smv_rad,tik_reg,cgs_num);
 % % 3D 2nd order polyfit to remove any residual background
@@ -227,6 +260,7 @@ save_nii(nii,['RESHARP/lfs_resharp0_tik_', num2str(tik_reg), '_num_', num2str(cg
 chi_iLSQR = QSM_iLSQR(lfs_resharp*(2.675e8*9.4)/1e6,mask_resharp,'H',z_prjs,'voxelsize',voxel_size,'niter',50,'TE',1000,'B0',9.4);
 nii = make_nii(chi_iLSQR,voxel_size);
 save_nii(nii,'RESHARP/chi_iLSQR0.nii');
+
 
 
 % % MEDI
@@ -251,34 +285,34 @@ save_nii(nii,'RESHARP/chi_iLSQR0.nii');
 
 
 
-% V-SHARP + iLSQR
-B0 =9.4;
-voxelsize = voxel_size;
-padsize = [12 12 12];
-smvsize = 12;
-[TissuePhase3d, mask_vsharp] = V_SHARP(tfs ,single(mask.*R),'smvsize',smvsize,'voxelsize',voxelsize*10);
-nii = make_nii(TissuePhase3d,voxel_size);
-% save nifti
-[~,~,~] = mkdir('VSHARP');
-save_nii(nii,'VSHARP/VSHARP.nii');
+% % V-SHARP + iLSQR
+% B0 =9.4;
+% voxelsize = voxel_size;
+% padsize = [12 12 12];
+% smvsize = 12;
+% [TissuePhase3d, mask_vsharp] = V_SHARP(tfs ,single(mask.*R),'smvsize',smvsize,'voxelsize',voxelsize*10);
+% nii = make_nii(TissuePhase3d,voxel_size);
+% % save nifti
+% [~,~,~] = mkdir('VSHARP');
+% save_nii(nii,'VSHARP/VSHARP.nii');
 
-chi_iLSQR_0 = QSM_iLSQR(TissuePhase3d*(2.675e8*9.4)/1e6,mask_vsharp,'H',z_prjs,'voxelsize',voxel_size,'niter',50,'TE',1000,'B0',9.4);
-nii = make_nii(chi_iLSQR_0,voxel_size);
-save_nii(nii,'VSHARP/chi_iLSQR_0_vsharp.nii');
-
-
+% chi_iLSQR_0 = QSM_iLSQR(TissuePhase3d*(2.675e8*9.4)/1e6,mask_vsharp,'H',z_prjs,'voxelsize',voxel_size,'niter',50,'TE',1000,'B0',9.4);
+% nii = make_nii(chi_iLSQR_0,voxel_size);
+% save_nii(nii,'VSHARP/chi_iLSQR_0_vsharp.nii');
 
 
-% R2* recon
-cd ..
-mkdir r2star
-cd r2star
-[R2 T2 amp] = r2imgfit2(double(mag),TE,repmat(mask,[1 1 1 imsize(4)]));
-delete(gcp('nocreate'))
-nii = make_nii(R2,voxel_size);
-save_nii(nii,'R2.nii');
-nii = make_nii(T2,voxel_size);
-save_nii(nii,'T2.nii');
-nii = make_nii(amp,voxel_size);
-save_nii(nii,'amp.nii');
+
+
+% % R2* recon
+% cd ..
+% mkdir r2star
+% cd r2star
+% [R2 T2 amp] = r2imgfit2(double(mag),TE,repmat(mask,[1 1 1 imsize(4)]));
+% delete(gcp('nocreate'))
+% nii = make_nii(R2,voxel_size);
+% save_nii(nii,'R2.nii');
+% nii = make_nii(T2,voxel_size);
+% save_nii(nii,'T2.nii');
+% nii = make_nii(amp,voxel_size);
+% save_nii(nii,'amp.nii');
 

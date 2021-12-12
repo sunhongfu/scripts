@@ -21,42 +21,85 @@
 %addpath('/home/hongfu/Documents/MATLAB/scripts/mouse_Jeff');
 %QSM_new_for_hyperoxygen
 
-cd '/media/pikelab/Hongfu/side_projects/mouse/QSM_max/Mouse-172' 
-addpath('/home/hongfu/Documents/MATLAB/scripts/mouse_Jeff');
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-01.aD1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
 QSM_new_for_hyperoxygen
 
-cd '/media/pikelab/Hongfu/side_projects/mouse/QSM_max/Mouse-160' 
-addpath('/home/hongfu/Documents/MATLAB/scripts/mouse_Jeff');
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-02.aD1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
 QSM_new_for_hyperoxygen
 
-cd '/media/pikelab/Hongfu/side_projects/mouse/QSM_max/Mouse-189' 
-addpath('/home/hongfu/Documents/MATLAB/scripts/mouse_Jeff');
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-03.aD1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
 QSM_new_for_hyperoxygen
 
-cd '/media/pikelab/Hongfu/side_projects/mouse/QSM_max/Mouse-174' 
-addpath('/home/hongfu/Documents/MATLAB/scripts/mouse_Jeff');
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-04.aD1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
 QSM_new_for_hyperoxygen
 
-cd '/media/pikelab/Hongfu/side_projects/mouse/QSM_max/Mouse-161' 
-addpath('/home/hongfu/Documents/MATLAB/scripts/mouse_Jeff');
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-05.aE1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
 QSM_new_for_hyperoxygen
 
-cd '/media/pikelab/Hongfu/side_projects/mouse/QSM_max/Mouse-190' 
-addpath('/home/hongfu/Documents/MATLAB/scripts/mouse_Jeff');
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-06.aE1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
 QSM_new_for_hyperoxygen
 
-cd '/media/pikelab/Hongfu/side_projects/mouse/QSM_max/Mouse-178' 
-addpath('/home/hongfu/Documents/MATLAB/scripts/mouse_Jeff');
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-07.aE1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
 QSM_new_for_hyperoxygen
 
-cd '/media/pikelab/Hongfu/side_projects/mouse/QSM_max/Mouse-162' 
-addpath('/home/hongfu/Documents/MATLAB/scripts/mouse_Jeff');
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-08.aE1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
 QSM_new_for_hyperoxygen
 
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-09.aJ1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
+QSM_new_for_hyperoxygen
 
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-10.aJ1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
+QSM_new_for_hyperoxygen
 
-            
-          
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-11.aJ1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
+QSM_new_for_hyperoxygen
+
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-12.aJ1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
+QSM_new_for_hyperoxygen
+
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-13.aK1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
+QSM_new_for_hyperoxygen
+
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-14.aK1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
+QSM_new_for_hyperoxygen
+
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-15.aK1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
+QSM_new_for_hyperoxygen
+
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-16.aK1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
+QSM_new_for_hyperoxygen
+
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-17.aL1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
+QSM_new_for_hyperoxygen
+
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-18.aL1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
+QSM_new_for_hyperoxygen
+
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-19.aL1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
+QSM_new_for_hyperoxygen
+
+cd '/Volumes/LaCie_Bottom/collaborators/Jeff_Dunn/QSM Study October_November 2021 Data/Dunn-Qandeel-QSM-20.aL1/14'
+addpath('/Users/uqhsun8/Documents/MATLAB/scripts/mouse_Jeff');
+QSM_new_for_hyperoxygen
 
 
 
