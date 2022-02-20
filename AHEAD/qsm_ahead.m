@@ -9,7 +9,32 @@ for echo = 1:4
 end
 ph = 2*pi.*(ph - min(ph(:)))/(max(ph(:)) - min(ph(:))) - pi;
 
-% % typecast corection
+
+% extract z_prjs from nifti header
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% for example:
+% srow_x: [-0.0163 0.0357 0.6987 -83.8686]
+% srow_y: [-0.6085 -0.2014 -0.0047 114.1026]
+% srow_z: [-0.2008 0.6075 -0.0426 -43.3919]
+
+% R = [ srow_x(1:3)
+%       srow_y(1:3)
+%       srow_z(1:3)]
+
+% R(:,1)=R(:,1)/pixdim(2)
+% R(:,2)=R(:,2)/pixdim(3)
+% R(:,3)=R(:,3)/pixdim(4)
+
+% R is the affine matrix map FOV to scanner coordinate
+% therefore R(3,:) is the z_prjs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+z_prjs = nii.hdr.hist.srow_z(1:3)./nii.hdr.dime.pixdim(2:4)
+vox = nii.hdr.dime.pixdim(2:4)
+TE = [3, 11.5, 19, 28.5]*1e-3;
+imsize = size(mag);
+% unipolar readout according to Caan paper
+
+% % typecast correction
 % imsize_ori = size(mag);
 % mag = double(reshape(typecast(mag(:),'uint16'),imsize_ori))-2^15;
 % ph = double(reshape(typecast(ph(:),'uint16'),imsize_ori))-2^15;
@@ -19,37 +44,31 @@ ph = 2*pi.*(ph - min(ph(:)))/(max(ph(:)) - min(ph(:))) - pi;
 
 % tmp_ph = 2*pi.*(tmp_ph - min(tmp_ph(:)))/(max(tmp_ph(:)) - min(tmp_ph(:))) - pi;
 
-% permute into axial
+% % permute into axial
 
-vox = [0.7 0.64 0.64];
+% vox = [0.7 0.64 0.64];
 
-ph_a = flip(permute(ph, [3 1 2 4]) ,1);
-nii = make_nii(ph_a);
-save_nii(nii,'ph_a_all.nii');
+% ph_a = flip(permute(ph, [3 1 2 4]) ,1);
+% nii = make_nii(ph_a);
+% save_nii(nii,'ph_a_all.nii');
 
-mag_a = flip(permute(mag, [3 1 2 4]) ,1);
-nii = make_nii(mag_a);
-save_nii(nii,'mag_a_all.nii');
-
-TE = [3, 11.5, 19, 28.5]*1e-3;
-% unipolar readout according to Caan paper
-
-z_prjs = [0 0 1];
-
-imsize = size(mag_a);
+% mag_a = flip(permute(mag, [3 1 2 4]) ,1);
+% nii = make_nii(mag_a);
+% save_nii(nii,'mag_a_all.nii');
 
 
-% ditch the first echo
-ph_a = ph_a(:,:,:,2:4);
-mag_a = mag_a(:,:,:,2:4);
-TE = [11.5, 19, 28.5]*1e-3;
-imsize = size(mag_a);
+
+% % ditch the first echo
+% ph_a = ph_a(:,:,:,2:4);
+% mag_a = mag_a(:,:,:,2:4);
+% TE = [11.5, 19, 28.5]*1e-3;
+% imsize = size(mag_a);
 
 
 % BEGIN THE QSM RECON PIPELINE
 % initial quick brain mask
 % simple sum-of-square combination
-nii = make_nii((mag_a(:,:,:,1)),vox);
+nii = make_nii((mag(:,:,:,1)),vox);
 save_nii(nii,'mag1_sos.nii');
 
 % unix('N4BiasFieldCorrection -i mag1_sos.nii -o mag1_sos_n4.nii');
@@ -63,10 +82,14 @@ nii = load_nii('BET_mask.nii');
 mask = double(nii.img);
 
 % coil combination % smoothing factor 10?
-% ph_corr = zeros(imsize(1:4));
-% mag_corr = zeros(imsize(1:4));
+[ph_corr,mag_corr] = poem(mag,ph,vox,TE,mask);
+nii = make_nii(ph_corr);
+save_nii(nii,'ph_corr.nii');
 
-[ph_corr,mag_corr] = poem(mag_a,ph_a,vox,TE,mask);
+% % no phase offset correction??
+% mag_corr = mag;
+% ph_corr = ph;
+
 
 
 % newStr = extractBetween(text,'ParamLong."ucReadOutMode"','}');
@@ -81,7 +104,7 @@ mask = double(nii.img);
 % end
 
 
-clear mag_a ph_a
+% clear mag_a ph_a
 
 % save niftis after coil combination
 mkdir('src');
@@ -134,13 +157,12 @@ save_nii(nii,'unph_bestpath_before_jump_correction.nii');
 % remove all the temp files
 ! rm *.dat
 
+
+
 % 2pi jumps correction
 nii = load_nii('unph_diff.nii');
 unph_diff = double(nii.img);
 
-% if newStr{1}(20) == '2' %bipolar 
-%     unph_diff = unph_diff/2;
-% end
 
 for echo = 2:imsize(4)
     meandiff = unph(:,:,:,echo)-unph(:,:,:,1)-double(echo-1)*unph_diff;
@@ -174,6 +196,7 @@ dicom_info.MagneticFieldStrength = 7;
 % fit phase images with echo times
 disp('--> magnitude weighted LS fit of phase to TE ...');
 [tfs_0, fit_residual_0] = echofit(unph,mag_corr,TE,0); 
+% [tfs_0, fit_residual_0] = echofit(unph,mag_corr,TE,1); 
 
 
 % normalize to main field

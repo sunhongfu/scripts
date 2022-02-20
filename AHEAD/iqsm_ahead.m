@@ -8,6 +8,50 @@
 clear 
 clc
 
+for echo = 1:4
+    nii = load_untouch_nii(['/Volumes/LaCie_Top/AHEAD/Mp2rageme/sub-091_ses-1_acq-wb_inv-2_echo-' num2str(echo) '_part-mag_mprage.nii']);
+    mag(:,:,:,echo) = double(nii.img +32768);
+    nii = load_untouch_nii(['/Volumes/LaCie_Top/AHEAD/Mp2rageme/sub-091_ses-1_acq-wb_inv-2_echo-' num2str(echo) '_part-ph_mprage.nii']);
+    ph(:,:,:,echo) = double(nii.img); 
+end
+ph = 2*pi.*(ph - min(ph(:)))/(max(ph(:)) - min(ph(:))) - pi;
+
+
+% load in the ph after offset correction
+load /Users/uqhsun8/Desktop/qsm_highres_mp2rageme_poem/src/mag_ph.mat
+
+
+for echo = 1:4
+    nii.img = real(mag(:,:,:,echo).*exp(1j*ph(:,:,:,echo)));
+    save_untouch_nii(nii,['real_e' num2str(echo) '.nii']);
+    nii.img = imag(mag(:,:,:,echo).*exp(1j*ph(:,:,:,echo)));
+    save_untouch_nii(nii,['imag_e' num2str(echo) '.nii']);
+end
+
+% reslice the nifti to scanner coordinate according to affine in the header
+% voxel_size = [1 1 1];
+voxel_size = [0.65 0.65 0.65];
+
+for echo = 1:4
+    nii_real = reslice_nii(['real_e' num2str(echo) '.nii'], voxel_size);
+    nii_imag = reslice_nii(['imag_e' num2str(echo) '.nii'], voxel_size);
+    img_resliced(:,:,:,echo) = nii_real.img + 1j*nii_imag.img;
+end
+
+nii = make_nii(abs(img_resliced(:,:,:,1)), voxel_size);
+save_nii(nii,'mag1.nii');
+
+unix('bet2 mag1.nii BET -f 0.4 -m');
+% set a lower threshold for postmortem
+% unix('bet2 mag1_sos.nii BET -f 0.1 -m');
+unix('gunzip -f BET.nii.gz');
+unix('gunzip -f BET_mask.nii.gz');
+nii = load_nii('BET_mask.nii');
+mask = double(nii.img);
+
+% try not giving mask
+% mask = ones(size(img_resliced(:,:,:,1)));
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % data preparation guide: 
 
@@ -26,82 +70,26 @@ clc
 %% Set your own data paths and parameters
 deepMRI_root = '/Users/uqhsun8/code/deepMRI'; % where deepMRI git repo is downloaded/cloned to
 checkpoints  = '/Users/uqhsun8/SunLab Dropbox/Admins Only/github/deepMRI_data/iQSM_data/checkpoints';
-PhasePath    = '/Users/uqhsun8/Desktop/ph_corr.nii';  % where raw phase data is (in NIFTI format)
-ReconDir     = '/Users/uqhsun8/Desktop/demo_recon/';  %% where to save reconstruction output
+  % where raw phase data is (in NIFTI format)
+ReconDir     = '/Users/uqhsun8/Desktop/iqsm_demo_recon_masked/';  %% where to save reconstruction output
 Eroded_voxel = 3;  %  set number of voxels for brain mask erosion; 0 means no erosion;
 TE           = [0.0030    0.0115    0.0190    0.0285]; % set Echo Times (in second)
 B0           = 7; % set B0 field (in Tesla)
-vox          = [0.7000    0.6400    0.6400]; % set voxel size a.k.a image resolution (in millimeter)
+vox          = voxel_size; % set voxel size a.k.a image resolution (in millimeter)
 NetworkType  = 0; % network type: 0 for original iQSM, 1 for networks trained with data fidelity,
                   % 2 for networks trained with learnable Lap-Layer (15 learnable kernels) and data fidelity;
-
-%% optional data paths to be set, simply comment out if not available
-MaskPath = '/Users/uqhsun8/Desktop/BET_mask.nii'; %% brain mask; set to one will skip brain masking
-MagPath = '/Users/uqhsun8/Desktop/mag_corr.nii'; % magnitude image; set to one will skip magnitude weights in echo fitting
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %% add MATLAB paths
 addpath(genpath([deepMRI_root,'/iQSM/iQSM_fcns/']));  % add necessary utility function for saving data and echo-fitting;
 addpath(genpath([deepMRI_root,'/utils']));  %  add NIFTI saving and loading functions;
 
+phase = -angle(img_resliced);
+mag = abs(img_resliced);
 
-%% 1. read in data
-nii = load_nii(PhasePath);
-phase = nii.img;
-
-phase = phase(:,:,:,2:4);
-TE           = [0.0115    0.0190    0.0285];
+imsize = size(mag)
 
 
-% % interpolate the phase to isotropic
-% imsize = size(phase);
-% imsize2 = [round(imsize(1:3).*vox/min(vox)), imsize(4)];
-% vox2 = imsize(1:3).*vox/imsize2(1:3);
-% interp_flag = ~isequal(imsize,imsize2);
-
-% interpolate into 1mm iso
-imsize = size(phase);
-vox2 = [1 1 1];
-imsize2 = [round(imsize(1:3).*vox), imsize(4)];
-interp_flag = ~isequal(imsize,imsize2);
-
-
-if interp_flag
-    for echo_num = 1:imsize(4)
-        phase2(:,:,:,echo_num) = angle(imresize3(exp(1j*phase(:,:,:,echo_num)),imsize2(1:3)));
-    end
-    phase = -phase2;
-    clear phase2
-end
-
-if ~ exist('MagPath','var') || isempty(MagPath)
-    mag = ones(imsize2);
-else
-    nii = load_nii(MagPath);
-    mag = nii.img;
-    % interpolate the mag to isotropic
-    if interp_flag
-        for echo_num = 1:imsize(4)
-            mag2(:,:,:,echo_num) = imresize3(mag(:,:,:,echo_num),imsize2(1:3));
-        end
-        mag = mag2;
-        clear mag2
-    end
-end
-
-
-
-if ~ exist('MaskPath','var') || isempty(MaskPath)
-    mask = ones(imsize2(1:3));
-else
-    nii = load_nii(MaskPath);
-    mask = nii.img;
-    % interpolate the mask to isotropic
-    if interp_flag
-        mask = imresize3(mask,imsize2(1:3));
-    end
-end
 
 %% mkdir for output folders
 if ~exist(ReconDir, 'dir')
@@ -153,10 +141,10 @@ end
 
 
 %% save results of all echoes before echo fitting
-nii = make_nii(chi, vox2);
+nii = make_nii(chi, vox);
 save_nii(nii, [ReconDir, 'iQSM_all_echoes.nii']);
 
-nii = make_nii(lfs, vox2);
+nii = make_nii(lfs, vox);
 save_nii(nii, [ReconDir, 'iQFM_all_echoes.nii']);
 
 
@@ -172,20 +160,6 @@ end
 chi_fitted = echofit(chi, mag, TE);
 lfs_fitted = echofit(lfs, mag, TE);
 
-if interp_flag
-    
-    nii = make_nii(chi_fitted, vox2);
-    save_nii(nii, [ReconDir, 'iQSM_interp_echo_fitted.nii']);
-    
-    nii = make_nii(lfs_fitted, vox2);
-    save_nii(nii, [ReconDir, 'iQFM_interp_echo_fitted.nii']);
-    
-    
-    % back to original resolution if anisotropic
-    chi_fitted = imresize3(chi_fitted,imsize(1:3));
-    lfs_fitted = imresize3(lfs_fitted,imsize(1:3));
-    
-end
 
 nii = make_nii(chi_fitted, vox);
 save_nii(nii, [ReconDir,'/iQSM_echo_fitted.nii']);
