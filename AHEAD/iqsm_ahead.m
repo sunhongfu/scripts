@@ -18,7 +18,7 @@ ph = 2*pi.*(ph - min(ph(:)))/(max(ph(:)) - min(ph(:))) - pi;
 
 
 % load in the ph after offset correction
-load /Users/uqhsun8/Desktop/qsm_highres_mp2rageme_poem/src/mag_ph.mat
+% load /Users/uqhsun8/Desktop/recon/qsm_highres_mp2rageme_poem/src/mag_ph.mat
 
 
 for echo = 1:4
@@ -29,14 +29,22 @@ for echo = 1:4
 end
 
 % reslice the nifti to scanner coordinate according to affine in the header
-% voxel_size = [1 1 1];
-voxel_size = [0.65 0.65 0.65];
+voxel_size = [1 1 1];
+% voxel_size = [0.65 0.65 0.65];
 
 for echo = 1:4
     nii_real = reslice_nii(['real_e' num2str(echo) '.nii'], voxel_size);
     nii_imag = reslice_nii(['imag_e' num2str(echo) '.nii'], voxel_size);
     img_resliced(:,:,:,echo) = nii_real.img + 1j*nii_imag.img;
 end
+
+nii = make_nii(abs(img_resliced),voxel_size);
+save_nii(nii,'mag_resliced.nii');
+
+nii = make_nii(angle(img_resliced),voxel_size);
+save_nii(nii,'ph_resliced.nii');
+
+
 
 nii = make_nii(abs(img_resliced(:,:,:,1)), voxel_size);
 save_nii(nii,'mag1.nii');
@@ -69,9 +77,9 @@ mask = double(nii.img);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Set your own data paths and parameters
 deepMRI_root = '/Users/uqhsun8/code/deepMRI'; % where deepMRI git repo is downloaded/cloned to
-checkpoints  = '/Users/uqhsun8/SunLab Dropbox/Admins Only/github/deepMRI_data/iQSM_data/checkpoints';
+checkpoints_dir  = '/Users/uqhsun8/SunLab Dropbox/Admins Only/github/deepMRI_data/iQSM_data/checkpoints';
   % where raw phase data is (in NIFTI format)
-ReconDir     = '/Users/uqhsun8/Desktop/iqsm_demo_recon_masked/';  %% where to save reconstruction output
+ReconDir     = '/Users/uqhsun8/Desktop/iqsm_demo_recon_masked_noiselayer_learnable/';  %% where to save reconstruction output
 Eroded_voxel = 3;  %  set number of voxels for brain mask erosion; 0 means no erosion;
 TE           = [0.0030    0.0115    0.0190    0.0285]; % set Echo Times (in second)
 B0           = 7; % set B0 field (in Tesla)
@@ -102,14 +110,14 @@ end
 %% set inference.py path; 
 switch NetworkType 
     case 0
-        InferencePath = [deepMRI_root, '/iQSM/PythonCodes/Evaluation/Inference.py']; 
-        checkpoints = [checkpoints, '/iQSM_and_iQFM'];
+        InferencePath = [deepMRI_root, '/iQSM/PythonCodes/Evaluation/Inference_16Learnable_noise_DF.py']; 
+        checkpoints = [checkpoints_dir, '/noise_layer_learnable'];
     case 1
         InferencePath = [deepMRI_root, '/iQSM/PythonCodes/Evaluation/DataFidelityVersion/Inference.py'];
-        checkpoints = [checkpoints, '/iQSM_iQFM_DataFidelity']; 
+        checkpoints = [checkpoints_dir, '/iQSM_iQFM_DataFidelity']; 
     case 2
         InferencePath = [deepMRI_root, '/iQSM/PythonCodes/Evaluation/LearnableLapLayer/Inference.py'];
-        checkpoints = [checkpoints, '/iQSM_learnableKernels']; 
+        checkpoints = [checkpoints_dir, '/noise_layer_learnable']; 
 end 
 
 for echo_num = 1 : imsize(4)

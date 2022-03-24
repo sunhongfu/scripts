@@ -34,37 +34,6 @@ TE = [3, 11.5, 19, 28.5]*1e-3;
 imsize = size(mag);
 % unipolar readout according to Caan paper
 
-% % typecast correction
-% imsize_ori = size(mag);
-% mag = double(reshape(typecast(mag(:),'uint16'),imsize_ori))-2^15;
-% ph = double(reshape(typecast(ph(:),'uint16'),imsize_ori))-2^15;
-
-
-
-
-% tmp_ph = 2*pi.*(tmp_ph - min(tmp_ph(:)))/(max(tmp_ph(:)) - min(tmp_ph(:))) - pi;
-
-% % permute into axial
-
-% vox = [0.7 0.64 0.64];
-
-% ph_a = flip(permute(ph, [3 1 2 4]) ,1);
-% nii = make_nii(ph_a);
-% save_nii(nii,'ph_a_all.nii');
-
-% mag_a = flip(permute(mag, [3 1 2 4]) ,1);
-% nii = make_nii(mag_a);
-% save_nii(nii,'mag_a_all.nii');
-
-
-
-% % ditch the first echo
-% ph_a = ph_a(:,:,:,2:4);
-% mag_a = mag_a(:,:,:,2:4);
-% TE = [11.5, 19, 28.5]*1e-3;
-% imsize = size(mag_a);
-
-
 % BEGIN THE QSM RECON PIPELINE
 % initial quick brain mask
 % simple sum-of-square combination
@@ -81,30 +50,10 @@ unix('gunzip -f BET_mask.nii.gz');
 nii = load_nii('BET_mask.nii');
 mask = double(nii.img);
 
-% coil combination % smoothing factor 10?
+% coil combination 
 [ph_corr,mag_corr] = poem(mag,ph,vox,TE,mask);
 nii = make_nii(ph_corr);
 save_nii(nii,'ph_corr.nii');
-
-% % no phase offset correction??
-% mag_corr = mag;
-% ph_corr = ph;
-
-
-
-% newStr = extractBetween(text,'ParamLong."ucReadOutMode"','}');
-
-% if newStr{1}(20) == '2' %bipolar 
-%     [ph_corr(:,:,:,1:2:end),mag_corr(:,:,:,1:2:end)] = poem(Mag_inv2(:,:,:,1:2:end,:),Ph_inv2(:,:,:,1:2:end,:),vox,TE(1:2:end),mask);
-%     !mkdir odd_box3d; mv offsets* odd_box3d
-%     [ph_corr(:,:,:,2:2:end),mag_corr(:,:,:,2:2:end)] = poem(Mag_inv2(:,:,:,2:2:end,:),Ph_inv2(:,:,:,2:2:end,:),vox,TE(2:2:end),mask);
-%     !mkdir even_box3d; mv offsets* even_box3d
-% else % unipolar
-%     [ph_corr,mag_corr] = poem(Mag_inv2,Ph_inv2,vox,TE,mask);
-% end
-
-
-% clear mag_a ph_a
 
 % save niftis after coil combination
 mkdir('src');
@@ -119,7 +68,7 @@ save('raw.mat','ph_corr','mag_corr','mask');
 
 
 
-% (1) unwrap the phase using best path
+% unwrap the phase using best path
 disp('--> unwrap aliasing phase using bestpath...');
 mask_unwrp = uint8(abs(mask)*255);
 fid = fopen('mask_unwrp.dat','w');
@@ -187,8 +136,8 @@ save('raw.mat','unph','-append');
 % set parameters
 fit_thr = 40;
 tik_reg = 1e-6;
-cgs_num = 500;
-lsqr_num = 500;
+% cgs_num = 500; % probably don't need this many, too slow
+lsqr_num = 500; % probably don't need this many, too slow
 % tv_reg = 2e-4;
 inv_num = 500;
 dicom_info.MagneticFieldStrength = 7; 
@@ -227,13 +176,13 @@ for smv_rad = [1 2 3]
 % for smv_rad = [1 2 3]
     % RE-SHARP (tik_reg: Tikhonov regularization parameter)
     disp('--> RESHARP to remove background field ...');
-    % [lfs_resharp_0, mask_resharp_0] = resharp_lsqr(tfs_0,mask.*R_0,vox,smv_rad,lsqr_num);
-    [lfs_resharp_0, mask_resharp_0] = resharp(tfs_0,mask.*R_0,vox,smv_rad,tik_reg,cgs_num);
+    [lfs_resharp_0, mask_resharp_0] = resharp_lsqr(tfs_0,mask.*R_0,vox,smv_rad,lsqr_num);
+    % [lfs_resharp_0, mask_resharp_0] = resharp(tfs_0,mask.*R_0,vox,smv_rad,tik_reg,cgs_num);
     % save nifti
     mkdir('RESHARP');
     nii = make_nii(lfs_resharp_0,vox);
-    % save_nii(nii,['RESHARP/lfs_resharp_0_smvrad' num2str(smv_rad) '_lsqr.nii']);
-    save_nii(nii,['RESHARP/lfs_resharp_0_smvrad' num2str(smv_rad) '_cgs_' num2str(tik_reg) '.nii']);
+    save_nii(nii,['RESHARP/lfs_resharp_0_smvrad' num2str(smv_rad) '_lsqr.nii']);
+    % save_nii(nii,['RESHARP/lfs_resharp_0_smvrad' num2str(smv_rad) '_cgs_' num2str(tik_reg) '.nii']);
 
     % iLSQR
     chi_iLSQR_0 = QSM_iLSQR(lfs_resharp_0*(2.675e8*dicom_info.MagneticFieldStrength)/1e6,mask_resharp_0,'H',z_prjs,'voxelsize',vox,'niter',50,'TE',1000,'B0',dicom_info.MagneticFieldStrength);
