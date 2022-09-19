@@ -34,8 +34,8 @@ tmp(:,251:500 ) = dictionary.atoms(:,252:501 );
 tmp(:,501:750 ) = dictionary.atoms(:,503:752 );
 tmp(:,751:1000) = dictionary.atoms(:,754:1003);
 
-dictionary.atoms  = tmp';
-dictionary.lookup = dictionary.lookup'; 
+dictionary.atoms  = tmp.';
+dictionary.lookup = dictionary.lookup.'; 
 clear('tmp');
 
 %% -----------------------------------------------------------------------%%

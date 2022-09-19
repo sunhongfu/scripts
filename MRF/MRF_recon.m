@@ -6,7 +6,7 @@
 %  [2] University of Queensland , https://cai.centre.uq.edu.au
 %%-----------------------------------------------------------------------%%sub-091_ses-1_acq-wb_inv-2_echo-1_part-mag_mprage
 clear all; close all; clc;
-addpath(genpath('./_src'));
+addpath(genpath('/Users/uqhsun8/Documents/MATLAB/scripts/MRF/recon/_src'));
 
 %%-----------------------------------------------------------------------%%
 % Settings:
@@ -20,12 +20,12 @@ refferen_rx = 'SOS';  % 'SOS'= square root of sum of squares % 'mode1' = first S
 matrix4__rx = 96;     % Centeral area of k-space used for RX estimation
 slice_range = 0;      % 0 is all slices 
 kShift      = 0; %-0.8;    % correction for gradient delay in dweltimes (1.0 is one dwelltime)
-svd_range   = 16; % may need more!
+svd_range   = 64; % may need more!
 
 %%-----------------------------------------------------------------------%%
 % load_dictionary
 %%-----------------------------------------------------------------------%%
-load('dictionary.mat');
+load('/Volumes/LaCie_Top/MRF_bSSFP/2022_01_12_Startup_package/recon/dictionary.mat');
 
 %remove delay's
 tmp = zeros(size(dictionary.atoms,1),size(dictionary.atoms,2)-3);
@@ -34,8 +34,8 @@ tmp(:,251:500 ) = dictionary.atoms(:,252:501 );
 tmp(:,501:750 ) = dictionary.atoms(:,503:752 );
 tmp(:,751:1000) = dictionary.atoms(:,754:1003);
 
-dictionary.atoms  = tmp';
-dictionary.lookup = dictionary.lookup'; 
+dictionary.atoms  = tmp.';
+dictionary.lookup = dictionary.lookup.'; 
 clear('tmp');
 
 %% -----------------------------------------------------------------------%%
@@ -60,7 +60,7 @@ disp('---dictionary compressed');
 %% -----------------------------------------------------------------------%%
 %  Load raw data (VB or VD)
 %%-----------------------------------------------------------------------%%
-MrData = RawDataObj( remove_os_before_FT, '/Volumes/LaCie_Top/MRF_bSSFP/2022_01_12_Startup_package/data/', 'meas_MID00019_FID13146_bsffp_MRF.dat' );
+MrData = RawDataObj( remove_os_before_FT );
 
 fileID = fopen([MrData.file_path '/' MrData.file_name]);
 bytes = fread(fileID,1000000,'char');% 'ubit8');

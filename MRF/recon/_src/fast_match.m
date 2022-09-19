@@ -15,7 +15,8 @@ index = 1;
 
 
 imv = reshape(img, [ nSl*nRe*nPh nSv ]);
-imv = single(imv');
+% imv = single(imv');
+imv = single(imv.');
 
 %%-----------------------------------------------------------------------%%
 % Matching
