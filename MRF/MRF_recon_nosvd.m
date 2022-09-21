@@ -34,9 +34,14 @@ load('/Volumes/LaCie_Top/MRF_bSSFP/2022_01_12_Startup_package/recon/dictionary_c
 % tmp(:,501:750 ) = dictionary.atoms(:,503:752 );
 % tmp(:,751:1000) = dictionary.atoms(:,754:1003);
 
-% dictionary.atoms  = tmp.';
-% dictionary.lookup = dictionary.lookup.'; 
-% clear('tmp');
+
+% dictionary.atoms  = tmp';
+% dictionary.lookup = dictionary.lookup'; 
+
+dictionary.atoms  = transpose(tmp);
+dictionary.lookup = transpose(dictionary.lookup); 
+
+clear('tmp');
 
 %% -----------------------------------------------------------------------%%
 % Singular value based fingerprint compression
