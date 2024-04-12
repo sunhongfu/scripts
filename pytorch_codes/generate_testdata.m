@@ -1,5 +1,5 @@
-load('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_LEFT/QSM_SPGR_GE/z_prjs.mat');
-nii = load_nii('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_LEFT/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
+load('/Volumes/LaCie_Bottom/COSMOS/COSMOS_3T/cosmos_ge3T_renzo/QSM_SPGRE_LEFT/QSM_SPGR_GE/z_prjs.mat');
+nii = load_nii('/Volumes/LaCie_Bottom/COSMOS/COSMOS_3T/cosmos_ge3T_renzo/QSM_SPGRE_LEFT/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
 field = single(nii.img);
 vox = nii.hdr.dime.pixdim(2:4);
 field_kspace = ifftshift(fftn(field));
@@ -19,8 +19,8 @@ save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_left_field_kspa
 
 
 
-load('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_RIGHT/QSM_SPGR_GE/z_prjs.mat');
-nii = load_nii('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_RIGHT/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
+load('/Volumes/LaCie_Bottom/COSMOS/COSMOS_3T/cosmos_ge3T_renzo/QSM_SPGRE_RIGHT/QSM_SPGR_GE/z_prjs.mat');
+nii = load_nii('/Volumes/LaCie_Bottom/COSMOS/COSMOS_3T/cosmos_ge3T_renzo/QSM_SPGRE_RIGHT/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
 field = single(nii.img);
 vox = nii.hdr.dime.pixdim(2:4);
 field_kspace = ifftshift(fftn(field));
@@ -41,8 +41,8 @@ save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_right_field_ksp
 
 
 
-load('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_BACKWARD/QSM_SPGR_GE/z_prjs.mat');
-nii = load_nii('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_BACKWARD/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
+load('/Volumes/LaCie_Bottom/COSMOS/COSMOS_3T/cosmos_ge3T_renzo/QSM_SPGRE_BACKWARD/QSM_SPGR_GE/z_prjs.mat');
+nii = load_nii('/Volumes/LaCie_Bottom/COSMOS/COSMOS_3T/cosmos_ge3T_renzo/QSM_SPGRE_BACKWARD/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
 field = single(nii.img);
 vox = nii.hdr.dime.pixdim(2:4);
 field_kspace = ifftshift(fftn(field));
@@ -63,8 +63,8 @@ save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_backward_field_
 
 
 
-load('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_FORWARD/QSM_SPGR_GE/z_prjs.mat');
-nii = load_nii('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
+load('/Volumes/LaCie_Bottom/COSMOS/COSMOS_3T/cosmos_ge3T_renzo/QSM_SPGRE_FORWARD/QSM_SPGR_GE/z_prjs.mat');
+nii = load_nii('/Volumes/LaCie_Bottom/COSMOS/COSMOS_3T/cosmos_ge3T_renzo/QSM_SPGRE_FORWARD/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
 field = single(nii.img);
 vox = nii.hdr.dime.pixdim(2:4);
 field_kspace = ifftshift(fftn(field));
@@ -84,8 +84,8 @@ save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_forward_field_k
 
 
 
-load('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/all.mat','z_prjs');
-nii = load_nii('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
+load('/Volumes/LaCie_Bottom/COSMOS/COSMOS_3T/cosmos_ge3T_renzo/QSM_SPGRE_CENTER/QSM_SPGR_GE/all.mat','z_prjs');
+nii = load_nii('/Volumes/LaCie_Bottom/COSMOS/COSMOS_3T/cosmos_ge3T_renzo/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/lfs_resharp_tik_0.0001_num_500.nii');
 field = single(nii.img);
 vox = nii.hdr.dime.pixdim(2:4);
 field_kspace = ifftshift(fftn(field));
@@ -122,7 +122,7 @@ save_nii(nii, '/Volumes/LaCie/CommQSM/invivo/testing/renzo/renzo_central_permute
 
 
 % big angle from forward calc
-nii = load_nii('/Volumes/LaCie/COSMOS_3T/RENZO_GE/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/chi_iLSQR_smvrad1.nii');
+nii = load_nii('/Volumes/LaCie_Bottom/COSMOS/COSMOS_3T/cosmos_ge3T_renzo/QSM_SPGRE_CENTER/QSM_SPGR_GE/RESHARP/chi_iLSQR_smvrad1.nii');
 chi = double(nii.img);
 vox = nii.hdr.dime.pixdim(2:4);
 
